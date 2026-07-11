@@ -1,0 +1,59 @@
+box {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.ws-btn {
+  margin: 0 3 0 0;
+}
+
+button {
+  padding: 0;
+  background: #1a1a1a;
+  border: none;
+  min-width: 15px;
+  color: #ffffff;
+  box-shadow: none;
+  text-shadow: none;
+
+  &.active {
+    background: #ffffff;
+    color: #000000;
+  }
+}
+
+button:hover {
+  background-color:#2e2d2d;
+}
+
+.battery {
+ padding: 0 4 0 0; 
+}
+
+.network {
+  padding: 0 3 0 0;
+}
+
+.spotify {
+  margin: 0 5 0 0;
+}
+
+.screenprint-btn {
+  margin: 3;
+
+  &.output {
+    padding: 0 4 0 0;
+  }
+
+  &.region {
+    padding: 0 4 0 0;
+  }
+}
+
+.volbar {
+  padding: 8px;
+}
+
+.brigbar {
+  padding: 8px;
+}

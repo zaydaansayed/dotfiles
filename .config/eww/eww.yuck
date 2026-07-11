@@ -1,0 +1,85 @@
+(deflisten batterypercentage :initial "" `~/.config/eww/scripts/battery.sh`)
+(deflisten neticon           :initial "" `~/.config/eww/scripts/network.sh`)
+(deflisten bticon            :initial "" `~/.config/eww/scripts/bluetooth.sh`)
+(deflisten active_workspace  :initial "" `~/.config/eww/scripts/workspaces.sh`)
+(deflisten spotify_data      :initial '{"text": "", "icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
+(deflisten volume  :initial "" `~/.config/eww/scripts/volume.sh`)
+(deflisten volicon  :initial "" `~/.config/eww/scripts/volicon.sh`)
+(deflisten brightness  :initial "" `~/.config/eww/scripts/brightness.sh`)
+(deflisten brigicon  :initial "" `~/.config/eww/scripts/brigicon.sh`)
+
+(defpoll timenum :interval "30s" `date +"%R"`)
+
+(defwidget spotify []
+  (box :class "spotify" 
+       :orientation "h" 
+       :space-evenly false
+       :spacing 10
+       :visible {spotify_data.visible}
+    (button :onclick "playerctl --player=spotify play-pause" 
+            :class "spotify-btn"
+            "${spotify_data.icon}")
+    (label :text {spotify_data.text} :class "spotify-text")))
+
+(defwidget workspaces []
+  (box :orientation "h"
+       :class "workspaces"
+    (for i in "[1, 2, 3, 4, 5]"
+      (button :onclick "hyprctl dispatch workspace ${i}"
+              :class {active_workspace == i ? "ws-btn active" : "ws-btn"}
+              (label :text i)))))
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "1273px" :height "25px" :anchor "top center")
+  :stacking "bg"
+  :exclusive true 
+  (centerbox :orientation "h"
+    (box :space-evenly false (spotify) (workspaces))
+    (box :space-evenly false (label :text timenum))
+    (box :space-evenly false :halign "end"
+         (label :text bticon)
+         (label :text neticon :class "network")
+         (label :text batterypercentage :class "battery"))))
+
+(defwindow screenprint
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "127px" :height "25px" :anchor "top center")
+  :stacking "fg"
+  :focusable true
+  (box :orientation "h"
+       (button :onclick "hyprshot -m output | eww close screenprint" :class "screenprint-btn output" "󰍹")
+       (button :onclick "hyprshot -m window | eww close screenprint" :class "screenprint-btn window" "󰖯")
+       (button :onclick "hyprshot -m region | eww close screenprint" :class "screenprint-btn region" "")
+       (button :onclick "eww close screenprint" :class "screenprint-btn close" "")))
+
+
+(defwindow volume
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+       (progress :orientation "h" 
+                 :value volume
+                 :class "volbar")
+       (label :text volicon)))
+
+(defwindow brightness
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+       (progress :orientation "h" 
+                 :value brightness
+                 :class "brigbar")
+       (label :text brigicon)))
+
+(defwindow notifications_centre
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "180px" :anchor "top right")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+       (label :text "blaaa")))

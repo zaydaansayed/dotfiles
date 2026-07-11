@@ -1,0 +1,21 @@
+[mgr]
+show_hidden = true
+
+[opener]
+edit = [
+    { run = 'nvim "$@"', block = true, for = "unix" }
+]
+extract = [
+    { run = 'unzip "%1" -d "${1%.*}"', desc = "Extract here", block = true }
+]
+
+[open]
+rules = [
+    { mime = "text/*", use = "edit" },
+    { url = "*.zip", use = "extract" }
+]
+
+[[manager.prepend_keymap]]
+on   = "M"
+run  = "plugin mount"
+desc = "Open Mount Manager"
