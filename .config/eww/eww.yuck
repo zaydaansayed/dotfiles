@@ -82,4 +82,4 @@
   :stacking "fg"
   (box :orientation "h"
        :space-evenly false
-       (label :text "blaaa")))
+       (label :text "blaaaaaaa")))
