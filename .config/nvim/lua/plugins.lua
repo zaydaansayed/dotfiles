@@ -8,6 +8,8 @@ return {
   "numToStr/Comment.nvim",
   "windwp/nvim-autopairs",
   "tpope/vim-fugitive",
+  "lewis6991/gitsigns.nvim",
+  "tpope/vim-surround",
   {
     'akinsho/bufferline.nvim',
     version = '*',
@@ -28,5 +30,19 @@ return {
         cmdline = { view = "cmdline_popup" },
       })
     end
+  },
+  {
+    "goolord/alpha-nvim",
+    -- dependencies = { 'nvim-mini/mini.icons' },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      local startify = require("alpha.themes.startify")
+      -- available: devicons, mini, default is mini
+      -- if provider not loaded and enabled is true, it will try to use another provider
+      startify.file_icons.provider = "devicons"
+      require("alpha").setup(
+        startify.config
+      )
+    end,
   },
 }
