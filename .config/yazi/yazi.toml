@@ -8,14 +8,16 @@ edit = [
 extract = [
     { run = 'unzip "%1" -d "${1%.*}"', desc = "Extract here", block = true }
 ]
+imv = [
+    { run = 'imv "$@"', desc = "Open with imv" }
+]
+imv_animated = [
+    { run = 'imv -u linear "$@"', desc = "Open WebP without scaling artifacts" }
+]
 
 [open]
 rules = [
     { mime = "text/*", use = "edit" },
-    { url = "*.zip", use = "extract" }
+    { url = "*.zip", use = "extract" },
+    { mime = "image/*", use = [ "imv", "imv_animated", "reveal" ] }
 ]
-
-[[manager.prepend_keymap]]
-on   = "M"
-run  = "plugin mount"
-desc = "Open Mount Manager"
