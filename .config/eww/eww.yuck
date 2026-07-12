@@ -48,9 +48,9 @@
   :stacking "fg"
   :focusable true
   (box :orientation "h"
-       (button :onclick "hyprshot -m output | eww close screenprint" :class "screenprint-btn output" "󰍹")
-       (button :onclick "hyprshot -m window | eww close screenprint" :class "screenprint-btn window" "󰖯")
-       (button :onclick "hyprshot -m region | eww close screenprint" :class "screenprint-btn region" "")
+       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn output" "󰍹")
+       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn window" "󰖯")
+       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn region" "")
        (button :onclick "eww close screenprint" :class "screenprint-btn close" "")))
 
 
