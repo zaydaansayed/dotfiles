@@ -25,7 +25,6 @@ require('gitsigns').setup{
       vim.keymap.set(mode, l, r, opts)
     end
 
-    -- Navigation
     map('n', ']c', function()
       if vim.wo.diff then
         vim.cmd.normal({']c', bang = true})
@@ -42,7 +41,6 @@ require('gitsigns').setup{
       end
     end)
 
-    -- Actions
     map('n', '<leader>hs', gitsigns.stage_hunk)
     map('n', '<leader>hr', gitsigns.reset_hunk)
 
@@ -71,16 +69,39 @@ require('gitsigns').setup{
 
     map('n', '<leader>hQ', function() gitsigns.setqflist('all') end)
     map('n', '<leader>hq', gitsigns.setqflist)
-
-    -- Toggles
     map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
     map('n', '<leader>tw', gitsigns.toggle_word_diff)
-
-    -- Text object
     map({'o', 'x'}, 'ih', gitsigns.select_hunk)
   end
 }
 
-vim.keymap.set('n', 'e ', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle NvimTree' })
-vim.keymap.set('n', 'es', '<cmd>Telescope find_files<CR>', { desc = 'Open telescope search' })
-vim.keymap.set('n', 'ec', '<cmd>vert term<CR>', { desc = 'Open terminal' })
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
+
+vim.filetype.add({ extension = { yuck = "yuck" } })
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldenable = false 
+
+local function setup_lsp(server_name)
+local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+    vim.lsp.config[server_name] = {
+    capabilities = capabilities,
+    cmd = { server_name, "--stdio" },
+  }
+  vim.lsp.enable(server_name)
+end
+
+local languages = { "lua_ls", "pyright", "ts_ls", "html", "cssls" }
+for _, server in ipairs(languages) do
+  pcall(setup_lsp, server)
+end
+
+vim.keymap.set('n', 'c ', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle NvimTree' })
+vim.keymap.set('n', 'cs', '<cmd>Telescope find_files<CR>', { desc = 'Open telescope search' })
+vim.keymap.set('n', 'cc', '<cmd>vert term<CR>', { desc = 'Open terminal' })

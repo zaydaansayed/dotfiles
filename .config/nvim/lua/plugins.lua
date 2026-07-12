@@ -33,16 +33,42 @@ return {
   },
   {
     "goolord/alpha-nvim",
-    -- dependencies = { 'nvim-mini/mini.icons' },
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       local startify = require("alpha.themes.startify")
-      -- available: devicons, mini, default is mini
-      -- if provider not loaded and enabled is true, it will try to use another provider
       startify.file_icons.provider = "devicons"
       require("alpha").setup(
         startify.config
       )
     end,
+  },
+  {
+    "neovim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    dependencies = {"neovim-treesitter/treesitter-parser-registry"},
+    config = function()
+    end,
+  },
+
+  {
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    opts = {},
+  },
+  {
+    "Saghen/blink.cmp",
+    version = "1.*",
+    opts = {
+      keymap = {
+        preset = 'default',
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide' },
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      sources = {
+        default = { 'lsp', 'path', 'buffer' },
+      },
+    },
   },
 }

@@ -35,6 +35,7 @@ hl.monitor({
 
 local terminal    = "kitty"
 local menu        = "fuzzel"
+local bar         = "eww open bar"
 
 -------------------
 ---- AUTOSTART ----
@@ -42,6 +43,7 @@ local menu        = "fuzzel"
 
  hl.on("hyprland.start", function () 
    hl.exec_cmd("udiskie --smart-tray")
+   hl.exec_cmd(bar)
 end)
 
 
@@ -82,7 +84,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.config({
     general = {
         gaps_in  = 5,
-        gaps_out = 20,
+	gaps_out = 10,
 
         border_size = 2,
 
