@@ -293,6 +293,7 @@ hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+ && ~/.config/eww/scripts/brightness_buttons.sh"),                  { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%- && ~/.config/eww/scripts/brightness_buttons.sh"),                  { locked = true, repeating = true })
 hl.bind("Print",                hl.dsp.exec_cmd("~/.config/eww/scripts/screenprint_button.sh"),       { locked = true, repeating = true })
+hl.bind("XF86Favorites",        hl.dsp.exec_cmd("wtype zaydaansayed@icloud.com"),                      { locked = true, repeating = true })
 
 -- Requires playerctl
 hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
