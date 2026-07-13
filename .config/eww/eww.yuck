@@ -10,6 +10,10 @@
 
 (defpoll timenum :interval "30s" `date +"%R"`)
 
+(defvar notif_app "")
+(defvar notif_title "")
+(defvar notif_body "")
+
 (defwidget spotify []
   (box :class "spotify" 
        :orientation "h" 
@@ -76,10 +80,17 @@
                  :class "brigbar")
        (label :text brigicon)))
 
-(defwindow notifications_centre
+(defwindow notification_popup
   :monitor 0
-  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "180px" :anchor "top right")
+  :geometry (geometry :x "0px" :y "3px" :width "190px" :height "50px" :anchor "top right")
   :stacking "fg"
-  (box :orientation "h"
-       :space-evenly false
-       (label :text "blaaaaaaa")))
+  (box :orientation "v"
+    (box :orientation "h"
+       (label :text "${notif_app}")
+       (button :onclick "eww close notification_popup"
+               :halign "end"
+         (label :text "")))
+    (label :text "${notif_title}"
+           :halign "start")
+    (label :text "${notif_body}"
+           :halign "start")))

@@ -7,8 +7,7 @@ if eww active-windows | grep -q "volume"; then
         OLD_PID=$(cat "$LOCKFILE")
         kill "$OLD_PID" 2>/dev/null
     fi
-else
-    
+else 
     eww open volume 2>/dev/null
 fi
 

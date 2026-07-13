@@ -36,6 +36,7 @@ hl.monitor({
 local terminal    = "kitty"
 local menu        = "fuzzel"
 local bar         = "eww open bar"
+local notification_daemon = "mako"
 
 -------------------
 ---- AUTOSTART ----
@@ -45,6 +46,8 @@ local bar         = "eww open bar"
    hl.exec_cmd("udiskie --smart-tray")
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd(bar)
+   hl.exec_cmd(notification_daemon)
+   hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
 end)
 
 
