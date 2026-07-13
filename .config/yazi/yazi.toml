@@ -14,10 +14,21 @@ imv = [
 imv_animated = [
     { run = 'imv -u linear "$@"', desc = "Open WebP without scaling artifacts" }
 ]
+play-wine = [
+    { run = 'export WINE_JOYSTICK_DISABLE_LO_DI=1 && cd "$(dirname "$1")" && wine "$(basename "$1")"', orphan = true, desc = "Run with Wine" }
+]
+vlc = [
+	{ run = 'vlc "$@"', orphan = true, desc = "VLC Media Player" }
+]
 
 [open]
 rules = [
     { mime = "text/*", use = "edit" },
     { url = "*.zip", use = "extract" },
-    { mime = "image/*", use = [ "imv", "imv_animated", "reveal" ] }
+    { mime = "image/*", use = [ "imv", "imv_animated", "reveal" ] },
+    { mime = "audio/*", use = "vlc" },
+    { mime = "video/*", use = "vlc" }
+]
+prepend_rules = [
+    { url = "*.exe", use = "play-wine" }
 ]

@@ -98,7 +98,7 @@ hl.config({
         },
 
         -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
-        resize_on_border = false,
+        resize_on_border = true,
 
         -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
         allow_tearing = false,
@@ -258,11 +258,12 @@ local mainMod = "SUPER"
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + S", hl.dsp.window.close())
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind("ALT  + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/dotfiles/.config/fuzzel/clipboard.sh"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("~/dotfiles/.config/fuzzel/clipboard.sh"))
+hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("bemoji"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
