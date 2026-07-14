@@ -57,3 +57,13 @@ button:hover {
 .brigbar {
   padding: 8px;
 }
+
+.notification-history {
+  padding: 10px;
+
+  &.text {
+    border: 1px solid #4d4c4c;
+    border-radius: 10px;
+    margin-bottom: 7px;
+  }
+}

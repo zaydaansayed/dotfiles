@@ -7,6 +7,8 @@
 (deflisten volicon  :initial "" `~/.config/eww/scripts/volicon.sh`)
 (deflisten brightness  :initial "" `~/.config/eww/scripts/brightness.sh`)
 (deflisten brigicon  :initial "" `~/.config/eww/scripts/brigicon.sh`)
+(deflisten notif_visibility :initial "false" "~/dotfiles/.config/eww/scripts/notification_visibility.sh")
+(deflisten notif :initial "" "~/dotfiles/.config/eww/scripts/notification_history.sh")
 
 (defpoll timenum :interval "30s" `date +"%R"`)
 
@@ -82,15 +84,40 @@
 
 (defwindow notification_popup
   :monitor 0
-  :geometry (geometry :x "0px" :y "3px" :width "190px" :height "50px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "200px" :height "50px" :anchor "top right")
   :stacking "fg"
   (box :orientation "v"
     (box :orientation "h"
-       (label :text "${notif_app}")
-       (button :onclick "eww close notification_popup"
+       (label :text notif_app)
+       (button :onclick "eww close notification_popup && makoctl dismiss"
                :halign "end"
          (label :text "")))
-    (label :text "${notif_title}"
+    (label :text notif_title
            :halign "start")
-    (label :text "${notif_body}"
+    (label :text notif_body
            :halign "start")))
+
+(defwindow quick_settings
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "240px" :height "0px" :anchor "top right")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+      (notification_history)))
+
+(defwidget notification_history []
+  (box :orientation "v"
+       :space-evenly false
+       :class "notification-history"
+       :visible notif_visibility
+    (scroll :vscroll true
+            :height 180
+            :class "notification-history text"
+      (box :orientation "v"   
+        (for entry in notif
+          (box :orientation "v"
+               :space-evenly false  
+            (label :text {entry.app})
+            (label :text {entry.title})))))
+    (button :onclick "killall mako && mako"
+      "Clear All")))
