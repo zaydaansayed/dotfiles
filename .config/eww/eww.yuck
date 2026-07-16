@@ -1,20 +1,26 @@
-(deflisten batterypercentage :initial "" `~/.config/eww/scripts/battery.sh`)
-(deflisten neticon           :initial "" `~/.config/eww/scripts/network.sh`)
-(deflisten bticon            :initial "" `~/.config/eww/scripts/bluetooth.sh`)
-(deflisten active_workspace  :initial "" `~/.config/eww/scripts/workspaces.sh`)
-(deflisten spotify_data      :initial '{"text": "", "icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
-(deflisten volume  :initial "" `~/.config/eww/scripts/volume.sh`)
-(deflisten volicon  :initial "" `~/.config/eww/scripts/volicon.sh`)
-(deflisten brightness  :initial "" `~/.config/eww/scripts/brightness.sh`)
-(deflisten brigicon  :initial "" `~/.config/eww/scripts/brigicon.sh`)
-(deflisten notif_visibility :initial "false" "~/dotfiles/.config/eww/scripts/notification_visibility.sh")
-(deflisten notif :initial "" "~/dotfiles/.config/eww/scripts/notification_history.sh")
+(deflisten batterypercentage      :initial ""          `~/.config/eww/scripts/battery.sh`)
+(deflisten neticon                :initial ""          `~/.config/eww/scripts/network.sh`)
+(deflisten bticon                 :initial ""          `~/.config/eww/scripts/bluetooth.sh`)
+(deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
+(deflisten spotify_data           :initial '{"text": "", "icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
+(deflisten volume                 :initial ""          `~/.config/eww/scripts/volume.sh`)
+(deflisten volicon                :initial ""          `~/.config/eww/scripts/volicon.sh`)
+(deflisten brightness             :initial ""          `~/.config/eww/scripts/brightness.sh`)
+(deflisten brigicon               :initial ""          `~/.config/eww/scripts/brigicon.sh`)
+(deflisten notif_visibility       :initial "false"     `~/dotfiles/.config/eww/scripts/notification_visibility.sh`)
+(deflisten notif                  :initial ""          `~/dotfiles/.config/eww/scripts/notification_history.sh`)
+(deflisten network_button         :initial "disabled"  `~/.config/eww/scripts/network_button.sh`)
+(deflisten bluetooth_button       :initial "disabled"  `~/.config/eww/scripts/bluetooth_button.sh`)
+(deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
+(deflisten quick_settings_monitor :initial ""          `~/.config/eww/scripts/quick_settings_monitor.sh`)
 
 (defpoll timenum :interval "30s" `date +"%R"`)
+(defpoll tlpicon :interval "200ms" `~/.config/eww/scripts/tlp.sh`)
 
-(defvar notif_app "")
+(defvar notif_app   "")
 (defvar notif_title "")
-(defvar notif_body "")
+(defvar notif_body  "")
+(defvar tlp_toggle  "false")
 
 (defwidget spotify []
   (box :class "spotify" 
@@ -44,9 +50,13 @@
     (box :space-evenly false (spotify) (workspaces))
     (box :space-evenly false (label :text timenum))
     (box :space-evenly false :halign "end"
-         (label :text bticon)
-         (label :text neticon :class "network")
-         (label :text batterypercentage :class "battery"))))
+         (label  :text bticon  :class "bluetooth")
+         (label  :text neticon :class "network")
+         (label  :text batterypercentage :class "battery")
+         (button :onclick "~/dotfiles/.config/eww/scripts/quick_settings_button.sh"
+                 :class {quick_settings_monitor == "open" ? "quick_center open" : "quick_center closed"}
+
+         ""))))
 
 (defwindow screenprint
   :monitor 0
@@ -84,7 +94,7 @@
 
 (defwindow notification_popup
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "200px" :height "50px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "75px" :anchor "top right")
   :stacking "fg"
   (box :orientation "v"
     (box :orientation "h"
@@ -99,11 +109,51 @@
 
 (defwindow quick_settings
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "240px" :height "0px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
+      (quick_controls)
+      (tlp_menu)
       (notification_history)))
+
+(defwidget quick_controls []
+  (box :orientation "h"
+       :space-evenly false
+       :class "quick_controls"
+   (button :class {network_button == "enabled" ? "quick_button net on" : "quick_button net off"}
+           :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
+           neticon)
+   (button :class {network_button == "enabled" ? "quick_extend net on" : "quick_extend net off"}
+           :onclick "networkmanager_dmenu | eww close quick_settings"
+           ">")
+   (button :class {bluetooth_button == "enabled" ? "quick_button bt on" : "quick_button bt off"}
+           :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+           bticon_button)
+    (button :class {bluetooth_button == "enabled" ? "quick_extend bt on" : "quick_extend bt off"}
+            :onclick "bzmenu -l fuzzel | eww close quick_settings"
+            ">")
+      (button :class {tlp_toggle == "true" ? "quick_button tlp_toggle on" : "quick_button tlp_toggle off"}
+              :onclick {tlp_toggle == "true" ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+              tlpicon)))
+
+(defwidget tlp_menu []
+  (box :orientation "h"
+       :space-evenly false
+       :class "tlp_menu"
+       :visible tlp_toggle
+   (button :class {tlpicon == "" ? "prfp_button power-saver on" : "prfp_button power-saver off"}
+           :onclick "tlpctl power-saver"
+           :timeout 10000
+           "")
+   (button :class {tlpicon == "" ? "prfp_button balanced on" : "prfp_button balanced off"}
+           :onclick "tlpctl balanced"
+           :timeout 10000
+           "")
+   (button :class {tlpicon == "󱐋" ? "prfp_button performance on" : "prfp_button performance off"}
+           :onclick "tlpctl performance"
+           :timeout 10000
+           "󱐋")))
 
 (defwidget notification_history []
   (box :orientation "v"
@@ -113,11 +163,14 @@
     (scroll :vscroll true
             :height 180
             :class "notification-history text"
-      (box :orientation "v"   
+      (box :orientation "v"
+           :space-evenly false
+        (label :text "---------------------------")
         (for entry in notif
           (box :orientation "v"
                :space-evenly false  
             (label :text {entry.app})
-            (label :text {entry.title})))))
+            (label :text {entry.title})
+            (label :text "---------------------------")))))
     (button :onclick "killall mako && mako"
       "Clear All")))

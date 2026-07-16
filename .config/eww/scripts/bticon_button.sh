@@ -6,12 +6,12 @@ get_bt() {
 
     if [[ "$bt_show" == *"Powered: yes"* ]]; then
         if [[ -n "$(bluetoothctl devices Connected 2>/dev/null)" ]]; then
-            echo "󰂱"
+            echo "󰂱 "
         else
             echo "󰂯"
         fi
     else
-        echo " "
+        echo "󰂲"
     fi
 }
 

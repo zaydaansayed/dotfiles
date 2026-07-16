@@ -23,30 +23,47 @@ button {
 }
 
 button:hover {
-  background-color:#2e2d2d;
+  background-color: #292929; 
 }
 
 .battery {
- padding: 0 4 0 0; 
+ padding-right: 4px; 
 }
 
 .network {
-  padding: 0 3 0 0;
+  padding-right: 3px;
+}
+
+.bluetooth {
+  margin-right: 6px;
+}
+
+.quick_center {
+  padding-right: 3px;
+
+  &.open {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  &.open:hover {
+    background-color: #d6d4d4;
+  }
 }
 
 .spotify {
-  margin: 0 5 0 0;
+  margin-right: 5px;
 }
 
 .screenprint-btn {
-  margin: 3;
+  margin: 3px;
 
   &.output {
-    padding: 0 4 0 0;
+    padding-right: 4px;
   }
 
   &.region {
-    padding: 0 4 0 0;
+    padding-right: 4px;
   }
 }
 
@@ -59,11 +76,99 @@ button:hover {
 }
 
 .notification-history {
-  padding: 10px;
+  padding: 0 10 10 10;
 
   &.text {
     border: 1px solid #4d4c4c;
     border-radius: 10px;
     margin-bottom: 7px;
+  }
+}
+
+.quick_controls {
+  padding: 10px;
+}
+
+.quick_button {
+  min-width: 60px;
+  min-height: 40px;
+    &.on {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  &.on:hover {
+    background-color: #d6d4d4;
+  }
+
+  &.off {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  &.off:hover {
+    background-color: #292929;
+  }
+
+  &.net {
+    padding-left: 2px;
+    margin-right: 2px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  &.bt {
+    margin-right: 2px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+}
+
+.quick_extend {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  &.on {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  &.on:hover {
+    background-color: #d6d4d4;
+  }
+
+  &.net {
+  margin-right: 5px;
+  }
+
+  &.bt {
+  margin-right: 5px;
+  }
+}
+
+.tlp_menu {
+    margin: 0 10 10 10;
+    border: 1px solid #4d4c4c;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.prfp_button {
+  min-width: 68px;
+  min-height: 40px;
+
+  &.power-saver {
+    margin-right: 5px;
+  }
+
+  &.balanced {
+    margin-right: 5px;
+  }
+  &.on {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  &.on:hover {
+    background-color: #d6d4d4;
   }
 }
