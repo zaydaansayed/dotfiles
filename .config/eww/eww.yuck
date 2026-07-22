@@ -2,7 +2,7 @@
 (deflisten neticon                :initial ""          `~/.config/eww/scripts/network.sh`)
 (deflisten bticon                 :initial ""          `~/.config/eww/scripts/bluetooth.sh`)
 (deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
-(deflisten spotify_data           :initial '{"text": "", "icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
+(deflisten player_data            :initial '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
 (deflisten volume                 :initial ""          `~/.config/eww/scripts/volume.sh`)
 (deflisten volicon                :initial ""          `~/.config/eww/scripts/volicon.sh`)
 (deflisten brightness             :initial ""          `~/.config/eww/scripts/brightness.sh`)
@@ -12,7 +12,7 @@
 (deflisten network_button         :initial "disabled"  `~/.config/eww/scripts/network_button.sh`)
 (deflisten bluetooth_button       :initial "disabled"  `~/.config/eww/scripts/bluetooth_button.sh`)
 (deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
-(deflisten quick_settings_monitor :initial ""          `~/.config/eww/scripts/quick_settings_monitor.sh`)
+(deflisten cava                   :initial "[0,0,0,0,0,0,0,0,0,0]"          `~/dotfiles/.config/eww/scripts/cava.sh`)
 
 (defpoll timenum :interval "30s" `date +"%R"`)
 (defpoll tlpicon :interval "200ms" `~/.config/eww/scripts/tlp.sh`)
@@ -22,20 +22,19 @@
 (defvar notif_body  "")
 (defvar tlp_toggle  "false")
 
-(defwidget spotify []
-  (box :class "spotify" 
+(defwidget player []
+  (box :class "player" 
        :orientation "h" 
        :space-evenly false
-       :spacing 10
-       :visible {spotify_data.visible}
-    (button :onclick "playerctl --player=spotify play-pause" 
-            :class "spotify-btn"
-            "${spotify_data.icon}")
-    (label :text {spotify_data.text} :class "spotify-text")))
+       :spacing 5
+       :visible {player_data.visible}
+    (button :onclick "playerctl play-pause"
+      "${player_data.icon}")
+    (button :onclick "eww open --toggle music_player"
+    (label :text {player_data.text}))))
 
 (defwidget workspaces []
   (box :orientation "h"
-       :class "workspaces"
     (for i in "[1, 2, 3, 4, 5]"
       (button :onclick "hyprctl dispatch workspace ${i}"
               :class {active_workspace == i ? "ws-btn active" : "ws-btn"}
@@ -47,16 +46,15 @@
   :stacking "bg"
   :exclusive true 
   (centerbox :orientation "h"
-    (box :space-evenly false (spotify) (workspaces))
+    (box :space-evenly false (player) (workspaces))
     (box :space-evenly false (label :text timenum))
     (box :space-evenly false :halign "end"
          (label  :text bticon  :class "bluetooth")
          (label  :text neticon :class "network")
          (label  :text batterypercentage :class "battery")
-         (button :onclick "~/dotfiles/.config/eww/scripts/quick_settings_button.sh"
-                 :class {quick_settings_monitor == "open" ? "quick_center open" : "quick_center closed"}
-
-         ""))))
+         (button :onclick "eww open --toggle quick_settings"
+                 :class "quick_center"
+                 ""))))
 
 (defwindow screenprint
   :monitor 0
@@ -64,10 +62,10 @@
   :stacking "fg"
   :focusable true
   (box :orientation "h"
-       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn output" "󰍹")
-       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn window" "󰖯")
-       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "screenprint-btn region" "")
-       (button :onclick "eww close screenprint" :class "screenprint-btn close" "")))
+       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button first" "󰍹")
+       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button after_first" "󰖯")
+       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button after_first" "")
+       (button :onclick "eww close screenprint" :class "quick_button after_first" "")))
 
 
 (defwindow volume
@@ -109,7 +107,7 @@
 
 (defwindow quick_settings
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "center")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
@@ -118,24 +116,36 @@
       (notification_history)))
 
 (defwidget quick_controls []
-  (box :orientation "h"
+  (box :orientation "v"
        :space-evenly false
-       :class "quick_controls"
-   (button :class {network_button == "enabled" ? "quick_button net on" : "quick_button net off"}
-           :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
-           neticon)
-   (button :class {network_button == "enabled" ? "quick_extend net on" : "quick_extend net off"}
-           :onclick "networkmanager_dmenu | eww close quick_settings"
-           ">")
-   (button :class {bluetooth_button == "enabled" ? "quick_button bt on" : "quick_button bt off"}
-           :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
-           bticon_button)
-    (button :class {bluetooth_button == "enabled" ? "quick_extend bt on" : "quick_extend bt off"}
-            :onclick "bzmenu -l fuzzel | eww close quick_settings"
-            ">")
+    (box :orientation "h"
+         :space-evenly false
+      (button :onclick "eww close quick_settings"
+              :halign "start"
+              :class "quick_close"
+              "")
+      (button :onclick "eww open power_menu && eww close quick_settings"
+              :halign "start"
+              :class "quick_power"
+              ""))
+    (box :orientation "h"
+         :space-evenly false
+         :class "quick_controls"
+      (button :class {network_button == "enabled" ? "quick_button net on" : "quick_button net off"}
+              :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
+              neticon)
+      (button :class {network_button == "enabled" ? "quick_extend net on" : "quick_extend net off"}
+              :onclick "networkmanager_dmenu | eww close quick_settings"
+              ">")
+      (button :class {bluetooth_button == "enabled" ? "quick_button bt on" : "quick_button bt off"}
+              :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+              bticon_button)
+      (button :class {bluetooth_button == "enabled" ? "quick_extend bt on" : "quick_extend bt off"}
+              :onclick "bzmenu -l fuzzel | eww close quick_settings"
+             ">")
       (button :class {tlp_toggle == "true" ? "quick_button tlp_toggle on" : "quick_button tlp_toggle off"}
               :onclick {tlp_toggle == "true" ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
-              tlpicon)))
+              tlpicon))))
 
 (defwidget tlp_menu []
   (box :orientation "h"
@@ -174,3 +184,74 @@
             (label :text "---------------------------")))))
     (button :onclick "killall mako && mako"
       "Clear All")))
+
+(defwindow power_menu
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "center")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+    (button :onclick "reboot"
+            :class "quick_button first"
+            "")
+    (button :onclick "poweroff"
+            :class "quick_button after_first"
+            "")
+    (button :onclick "systemctl hibernate"
+            :class "quick_button after_first"
+            "")
+    (button :onclick "systemctl suspend"
+            :class "quick_button after_first"
+            "")
+    (button :onclick "eww close power_menu"
+            :class "quick_button after_first"
+            "")))
+
+(defwindow music_player
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "205px" :height "110px" :anchor "center")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :class "music_player"
+      (music_info)
+      (music_buttons)))
+
+(defwidget music_info []
+  (box :orientation "h" 
+       :space-evenly false
+    (box :orientation "h"
+         :space-evenly false
+         :class "visualiser"
+      (progress :orientation "v" :value {cava[0]} :flipped true)
+      (progress :orientation "v" :value {cava[1]} :flipped true)
+      (progress :orientation "v" :value {cava[2]} :flipped true)
+      (progress :orientation "v" :value {cava[3]} :flipped true)
+      (progress :orientation "v" :value {cava[4]} :flipped true)
+      (progress :orientation "v" :value {cava[5]} :flipped true)
+      (progress :orientation "v" :value {cava[6]} :flipped true)
+      (progress :orientation "v" :value {cava[7]} :flipped true)
+      (progress :orientation "v" :value {cava[8]} :flipped true)
+      (progress :orientation "v" :value {cava[9]} :flipped true))
+    (box
+      (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"))
+    (button :onclick "eww close music_player"
+            :valign "start"
+      "")))
+
+(defwidget music_buttons []
+  (box :orientation "h" 
+       :space-evenly false
+       :spacing 5
+       :halign "center"
+    (button :onclick "playerctl shuffle toggle"
+      "${player_data.shuffle_icon}")
+    (button :onclick "playerctl previous"
+      "󰒮")
+    (button :onclick "playerctl play-pause"
+      "${player_data.icon}")
+    (button :onclick "playerctl next"
+      "󰒭")
+    (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" = \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
+      "${player_data.repeat_icon}")))
+

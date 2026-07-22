@@ -20,6 +20,9 @@ play-wine = [
 vlc = [
 	{ run = 'vlc "$@"', orphan = true, desc = "VLC Media Player" }
 ]
+pdf_viewer = [
+	{ run = 'zathura "$@"', description = "Open PDF", orphan = true }
+]
 
 [open]
 rules = [
@@ -27,8 +30,7 @@ rules = [
     { url = "*.zip", use = "extract" },
     { mime = "image/*", use = [ "imv", "imv_animated", "reveal" ] },
     { mime = "audio/*", use = "vlc" },
-    { mime = "video/*", use = "vlc" }
-]
-prepend_rules = [
+    { mime = "video/*", use = "vlc" },
+    { mime = "application/pdf", use = [ "pdf_viewer", "reveal" ] },
     { url = "*.exe", use = "play-wine" }
 ]

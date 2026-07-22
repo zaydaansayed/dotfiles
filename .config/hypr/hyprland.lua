@@ -255,14 +255,14 @@ hl.device({
 
 local mainMod = "SUPER"
 
-hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(terminal))
-local closeWindowBind = hl.bind(mainMod .. " + S", hl.dsp.window.close())
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
-hl.bind("ALT  + SPACE", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + D", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("~/dotfiles/.config/fuzzel/clipboard.sh"))
+hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + S",      hl.dsp.window.close())
+hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(mainMod .. " + F",      hl.dsp.window.float({ action = "toggle" }))
+hl.bind("ALT  + SPACE",         hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())
+hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("~/dotfiles/.config/fuzzel/clipboard.sh"))
 hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("bemoji"))
 
 -- Move focus with mainMod + arrow keys
@@ -298,7 +298,7 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+ && ~/.config/eww/scripts/brightness_buttons.sh"),                  { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%- && ~/.config/eww/scripts/brightness_buttons.sh"),                  { locked = true, repeating = true })
-hl.bind("Print",                hl.dsp.exec_cmd("~/.config/eww/scripts/screenprint_button.sh"),       { locked = true, repeating = true })
+hl.bind("Print",                hl.dsp.exec_cmd("eww open --toggle screenprint"),       { locked = true, repeating = true })
 hl.bind("XF86Favorites",        hl.dsp.exec_cmd("wtype zaydaansayed@icloud.com"),                      { locked = true, repeating = true })
 
 -- Requires playerctl

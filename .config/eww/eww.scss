@@ -40,31 +40,10 @@ button:hover {
 
 .quick_center {
   padding-right: 3px;
-
-  &.open {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  &.open:hover {
-    background-color: #d6d4d4;
-  }
 }
 
 .spotify {
   margin-right: 5px;
-}
-
-.screenprint-btn {
-  margin: 3px;
-
-  &.output {
-    padding-right: 4px;
-  }
-
-  &.region {
-    padding-right: 4px;
-  }
 }
 
 .volbar {
@@ -86,7 +65,7 @@ button:hover {
 }
 
 .quick_controls {
-  padding: 10px;
+  padding: 3px 10px 10px 10px;
 }
 
 .quick_button {
@@ -120,6 +99,12 @@ button:hover {
     margin-right: 2px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+  }
+  &.first {
+    margin: 3px;
+  }
+  &.after_first {
+    margin: 3px 3px 3px 0px;
   }
 }
 
@@ -171,4 +156,24 @@ button:hover {
   &.on:hover {
     background-color: #d6d4d4;
   }
+}
+
+.quick_close {
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: 3px;
+  padding: 0px 2px;
+}
+
+.quick_power {
+  margin-top: 3px;
+  padding-right: 4px;
+}
+
+.visualiser {
+  margin-right: 5px;
+}
+
+.music_player {
+  padding: 10px;
 }
