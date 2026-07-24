@@ -26,12 +26,13 @@
   (box :class "player" 
        :orientation "h" 
        :space-evenly false
-       :spacing 5
+       :spacing 3
        :visible {player_data.visible}
     (button :onclick "playerctl play-pause"
       "${player_data.icon}")
     (button :onclick "eww open --toggle music_player"
-    (label :text {player_data.text}))))
+            :class "music_player_button"
+      (label :text {player_data.text}))))
 
 (defwidget workspaces []
   (box :orientation "h"
@@ -46,9 +47,13 @@
   :stacking "bg"
   :exclusive true 
   (centerbox :orientation "h"
-    (box :space-evenly false (player) (workspaces))
+    (box :space-evenly false
+         :spacing 5
+         (player) (workspaces))
     (box :space-evenly false (label :text timenum))
-    (box :space-evenly false :halign "end"
+    (box :space-evenly false 
+         :halign "end"
+         :spacing 3
          (label  :text bticon  :class "bluetooth")
          (label  :text neticon :class "network")
          (label  :text batterypercentage :class "battery")
@@ -62,10 +67,12 @@
   :stacking "fg"
   :focusable true
   (box :orientation "h"
-       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button first" "󰍹")
-       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button after_first" "󰖯")
-       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button after_first" "")
-       (button :onclick "eww close screenprint" :class "quick_button after_first" "")))
+       :spacing 3
+       :class "screenprint"
+       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "󰍹")
+       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "󰖯")
+       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "")
+       (button :onclick "eww close screenprint" :class "quick_button" "")))
 
 
 (defwindow volume
@@ -152,15 +159,16 @@
        :space-evenly false
        :class "tlp_menu"
        :visible tlp_toggle
-   (button :class {tlpicon == "" ? "prfp_button power-saver on" : "prfp_button power-saver off"}
+       :spacing 5
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button off"}
            :onclick "tlpctl power-saver"
            :timeout 10000
            "")
-   (button :class {tlpicon == "" ? "prfp_button balanced on" : "prfp_button balanced off"}
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button off"}
            :onclick "tlpctl balanced"
            :timeout 10000
            "")
-   (button :class {tlpicon == "󱐋" ? "prfp_button performance on" : "prfp_button performance off"}
+   (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button off"}
            :onclick "tlpctl performance"
            :timeout 10000
            "󱐋")))
@@ -220,6 +228,7 @@
 (defwidget music_info []
   (box :orientation "h" 
        :space-evenly false
+       :spacing 5
     (box :orientation "h"
          :space-evenly false
          :class "visualiser"
@@ -235,8 +244,8 @@
       (progress :orientation "v" :value {cava[9]} :flipped true))
     (box
       (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"))
-    (button :onclick "eww close music_player"
-            :valign "start"
+      (button :onclick "eww close music_player"
+              :valign "start"
       "")))
 
 (defwidget music_buttons []
@@ -245,6 +254,7 @@
        :spacing 5
        :halign "center"
     (button :onclick "playerctl shuffle toggle"
+      :class "shuffle_button"
       "${player_data.shuffle_icon}")
     (button :onclick "playerctl previous"
       "󰒮")
@@ -252,6 +262,6 @@
       "${player_data.icon}")
     (button :onclick "playerctl next"
       "󰒭")
-    (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" = \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
+    (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" =       \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
+      :class "repeat_button"
       "${player_data.repeat_icon}")))
-

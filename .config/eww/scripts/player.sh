@@ -6,17 +6,15 @@ print_status() {
     local status="$1"
     local shuffle_status="$2"
     local loop_status="$3"
-    
-    local artist
-    artist=$(playerctl metadata --format "{{ artist }}" 2>/dev/null)
-    local title
-    title=$(playerctl metadata --format "{{ title }}" 2>/dev/null)
+    local artist="$4"
+    local title="$5"
 
     if [[ -z "$status" || -z "$title" ]]; then
-        echo '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
+        echo '{"text": "", "artist": "", "title": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
         return
     fi
 
+    # Escape quotes for valid JSON
     artist=$(echo "$artist" | sed 's/"/\\"/g')
     title=$(echo "$title" | sed 's/"/\\"/g')
 
@@ -43,19 +41,27 @@ print_status() {
     local repeat_icon="󰑗"
     if [[ "$loop_status" == "Track" ]] || [[ "$loop_status" == "Single" ]]; then
         repeat_icon="󰑘"
-    elif [[ "$loop_status" == "Playlist" ]] || [[ "$loop_status" == "Playlist" ]]; then
-        repeat_icon="󰕇"
+    elif [[ "$loop_status" == "Playlist" ]]; then
+        repeat_icon="󰑖"
     fi
 
-    echo "{\"text\": \"$text\", \"icon\": \"$icon\", \"shuffle_icon\": \"$shuffle_icon\", \"repeat_icon\": \"$repeat_icon\", \"visible\": true}"
+    echo "{\"text\": \"$text\", \"artist\": \"$artist\", \"title\": \"$title\", \"icon\": \"$icon\", \"shuffle_icon\": \"$shuffle_icon\", \"repeat_icon\": \"$repeat_icon\", \"visible\": true}"
 }
 
-if playerctl -l 2>/dev/null ; then
-    print_status "$(playerctl status 2>/dev/null)" "$(playerctl shuffle 2>/dev/null)" "$(playerctl loop 2>/dev/null)"
+# Initial trigger when script starts
+if playerctl -l 2>/dev/null >/dev/null; then
+    print_status \
+        "$(playerctl status 2>/dev/null)" \
+        "$(playerctl shuffle 2>/dev/null)" \
+        "$(playerctl loop 2>/dev/null)" \
+        "$(playerctl metadata --format "{{ artist }}" 2>/dev/null)" \
+        "$(playerctl metadata --format "{{ title }}" 2>/dev/null)"
 else
-    echo '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
+    echo '{"text": "", "artist": "", "title": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
 fi
 
-playerctl metadata --follow --format "{{ status }}|{{ shuffle }}|{{ loop }}" 2>/dev/null | while IFS='|' read -r status shuffle loop; do
-    print_status "$status" "$shuffle" "$loop"
+# Live event stream loop
+playerctl metadata --follow --format "{{ status }}|{{ shuffle }}|{{ loop }}|{{ artist }}|{{ title }}" 2>/dev/null | while IFS='|' read -r status shuffle loop artist title; do
+    print_status "$status" "$shuffle" "$loop" "$artist" "$title"
 done
+

@@ -5,18 +5,18 @@ get_internet() {
     net_state=$(nmcli -t -f NETWORKING networking 2>/dev/null)
     
     if [[ "$net_state" != "enabled" ]]; then
-        echo "󰤭 "
+        echo "󰤭"
     elif ip route | grep -q "dev eth" || ip route | grep -q "dev enp"; then
-        echo " "
+        echo ""
     else
         local strength
         strength=$(nmcli -t -f SIGNAL,ACTIVE dev wifi 2>/dev/null | awk -F: '$2=="yes" {print $1}')
         
-        if [[ -z "$strength" || "$strength" -eq 0 ]]; then icon="󰤯 "
-        elif [[ $strength -le 25 ]]; then icon="󰤟 " 
-        elif [[ $strength -le 50 ]]; then icon="󰤢 " 
-        elif [[ $strength -le 75 ]]; then icon="󰤥 " 
-        else icon="󰤨 "
+        if [[ -z "$strength" || "$strength" -eq 0 ]]; then icon="󰤯"
+        elif [[ $strength -le 25 ]]; then icon="󰤟" 
+        elif [[ $strength -le 50 ]]; then icon="󰤢" 
+        elif [[ $strength -le 75 ]]; then icon="󰤥" 
+        else icon="󰤨"
         fi
         echo "$icon"
     fi

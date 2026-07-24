@@ -3,10 +3,6 @@ box {
   color: #ffffff;
 }
 
-.ws-btn {
-  margin: 0 3 0 0;
-}
-
 button {
   padding: 0;
   background: #1a1a1a;
@@ -26,24 +22,28 @@ button:hover {
   background-color: #292929; 
 }
 
-.battery {
- padding-right: 4px; 
+.music_player_button {
+  padding: 0 4;
 }
 
-.network {
-  padding-right: 3px;
+.ws-btn {
+  margin: 0 3 0 0;
 }
 
 .bluetooth {
-  margin-right: 6px;
+  padding-right: 4px;
+}
+
+.network {
+  padding-right: 7px;
 }
 
 .quick_center {
   padding-right: 3px;
 }
 
-.spotify {
-  margin-right: 5px;
+.screenprint {
+  padding: 3px;
 }
 
 .volbar {
@@ -54,14 +54,16 @@ button:hover {
   padding: 8px;
 }
 
-.notification-history {
-  padding: 0 10 10 10;
+.quick_close {
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: 3px;
+  padding: 0px 2px;
+}
 
-  &.text {
-    border: 1px solid #4d4c4c;
-    border-radius: 10px;
-    margin-bottom: 7px;
-  }
+.quick_power {
+  margin-top: 3px;
+  padding-right: 4px;
 }
 
 .quick_controls {
@@ -100,12 +102,6 @@ button:hover {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
-  &.first {
-    margin: 3px;
-  }
-  &.after_first {
-    margin: 3px 3px 3px 0px;
-  }
 }
 
 .quick_extend {
@@ -141,13 +137,6 @@ button:hover {
   min-width: 68px;
   min-height: 40px;
 
-  &.power-saver {
-    margin-right: 5px;
-  }
-
-  &.balanced {
-    margin-right: 5px;
-  }
   &.on {
     background-color: #ffffff;
     color: #000000;
@@ -158,22 +147,24 @@ button:hover {
   }
 }
 
-.quick_close {
-  margin-left: 3px;
-  margin-right: 3px;
-  margin-top: 3px;
-  padding: 0px 2px;
-}
+.notification-history {
+  padding: 0 10 10 10;
 
-.quick_power {
-  margin-top: 3px;
-  padding-right: 4px;
-}
-
-.visualiser {
-  margin-right: 5px;
+  &.text {
+    border: 1px solid #4d4c4c;
+    border-radius: 10px;
+    margin-bottom: 7px;
+  }
 }
 
 .music_player {
   padding: 10px;
+}
+
+.repeat_button {
+  padding-right: 3px;
+}
+
+.shuffle_button {
+  padding-right: 1px;
 }
