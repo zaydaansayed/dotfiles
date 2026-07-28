@@ -45,6 +45,8 @@ local notification_daemon = "mako"
  hl.on("hyprland.start", function () 
    hl.exec_cmd("udiskie --smart-tray")
    hl.exec_cmd("wl-paste --watch cliphist store")
+   hl.exec_cmd("hypridle")
+   hl.exec_cmd("kdeconnectd")
    hl.exec_cmd(bar)
    hl.exec_cmd(notification_daemon)
    hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")

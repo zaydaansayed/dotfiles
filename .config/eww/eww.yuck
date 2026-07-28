@@ -1,6 +1,6 @@
-(deflisten batterypercentage      :initial ""          `~/.config/eww/scripts/battery.sh`)
+(deflisten batinfo                :initial ""          `~/.config/eww/scripts/batinfo.sh`)
 (deflisten neticon                :initial ""          `~/.config/eww/scripts/network.sh`)
-(deflisten bticon                 :initial ""          `~/.config/eww/scripts/bluetooth.sh`)
+(deflisten bticon                 :initial ""          `~/.config/eww/scripts/bticon.sh`)
 (deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
 (deflisten player_data            :initial '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
 (deflisten volume                 :initial ""          `~/.config/eww/scripts/volume.sh`)
@@ -56,7 +56,7 @@
          :spacing 3
          (label  :text bticon  :class "bluetooth")
          (label  :text neticon :class "network")
-         (label  :text batterypercentage :class "battery")
+         (label  :text batinfo :class "battery")
          (button :onclick "eww open --toggle quick_settings"
                  :class "quick_center"
                  ""))))
@@ -79,6 +79,9 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
   :stacking "fg"
+  (volbar))
+
+(defwidget volbar []
   (box :orientation "h"
        :space-evenly false
        (progress :orientation "h" 
@@ -90,6 +93,9 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
   :stacking "fg"
+  (brigbar))
+
+(defwidget brigbar []
   (box :orientation "h"
        :space-evenly false
        (progress :orientation "h" 
@@ -119,6 +125,8 @@
     (box :orientation "v"
          :space-evenly false
       (quick_controls)
+      ;(volbar)
+      ;(brigbar)
       (tlp_menu)
       (notification_history)))
 
@@ -199,20 +207,22 @@
   :stacking "fg"
   (box :orientation "h"
        :space-evenly false
+       :spacing 3
+       :class "power_menu"
     (button :onclick "reboot"
-            :class "quick_button first"
+            :class "quick_button"
             "")
     (button :onclick "poweroff"
-            :class "quick_button after_first"
+            :class "quick_button"
             "")
     (button :onclick "systemctl hibernate"
-            :class "quick_button after_first"
+            :class "quick_button"
             "")
     (button :onclick "systemctl suspend"
-            :class "quick_button after_first"
+            :class "quick_button"
             "")
     (button :onclick "eww close power_menu"
-            :class "quick_button after_first"
+            :class "quick_button"
             "")))
 
 (defwindow music_player
