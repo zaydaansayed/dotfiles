@@ -12,9 +12,13 @@ button {
   box-shadow: none;
   text-shadow: none;
 
-  &.active {
-    background: #ffffff;
+  &.on {
+    background-color: #ffffff;
     color: #000000;
+  }
+
+  &.on:hover {
+    background-color: #d6d4d4;
   }
 }
 
@@ -22,19 +26,25 @@ button:hover {
   background-color: #292929; 
 }
 
+scale {
+  min-width: 154px;
+  margin: 0px;
+  padding: 0px;
+}
+
 .music_player_button {
   padding: 0 4;
 }
 
-.ws-btn {
+.ws_btn {
   margin: 0 3 0 0;
 }
 
-.bluetooth {
+.bticon {
   padding-right: 4px;
 }
 
-.network {
+.neticon {
   padding-right: 7px;
 }
 
@@ -54,42 +64,30 @@ button:hover {
   padding: 8px;
 }
 
+.notification_popup {
+  padding: 8px;
+}
+
 .quick_close {
-  margin-left: 3px;
   margin-right: 3px;
-  margin-top: 3px;
   padding: 0px 2px;
 }
 
 .quick_power {
-  margin-top: 3px;
   padding-right: 4px;
 }
 
-.quick_controls {
-  padding: 3px 10px 10px 10px;
+.quick_settings {
+  padding: 5px;
+}
+
+.quick_controls_top {
+  margin: 5px 0px;
 }
 
 .quick_button {
   min-width: 60px;
   min-height: 40px;
-    &.on {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  &.on:hover {
-    background-color: #d6d4d4;
-  }
-
-  &.off {
-    background-color: #1a1a1a;
-    color: #ffffff;
-  }
-
-  &.off:hover {
-    background-color: #292929;
-  }
 
   &.net {
     padding-left: 2px;
@@ -97,26 +95,22 @@ button:hover {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+
   &.bt {
     margin-right: 2px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+  }
+
+  &.localsend {
+  padding-right: 1px;
   }
 }
 
 .quick_extend {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-
-  &.on {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  &.on:hover {
-    background-color: #d6d4d4;
-  }
-
+ 
   &.net {
   margin-right: 5px;
   }
@@ -127,34 +121,41 @@ button:hover {
 }
 
 .tlp_menu {
-    margin: 0 10 10 10;
     border: 1px solid #4d4c4c;
     border-radius: 10px;
     padding: 5px;
+    margin: 5px 0px;
 }
 
 .prfp_button {
   min-width: 68px;
   min-height: 40px;
-
-  &.on {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  &.on:hover {
-    background-color: #d6d4d4;
-  }
 }
 
-.notification-history {
-  padding: 0 10 10 10;
+.quick_sliders {
+  margin-bottom: 5px;
+}
 
-  &.text {
+.quickV_scale {
+  margin-bottom: 5px;
+}
+
+.vol_settings {
+  padding-right: 4px;
+  min-width: 42px;
+}
+
+.nhtext_box {
     border: 1px solid #4d4c4c;
     border-radius: 10px;
-    margin-bottom: 7px;
+    padding: 5px;
+    margin-bottom: 5px;
   }
+
+.nhis_box {
+  margin-bottom: 5px;
+  background-color: #1a1a1a;
+  border-radius: 7px;
 }
 
 .power_menu {
@@ -171,4 +172,32 @@ button:hover {
 
 .shuffle_button {
   padding-right: 1px;
+}
+
+.music_text {
+  margin-left: 5px;
+}
+
+.localsend {
+  padding: 5px;
+}
+
+.lstab {
+  min-width: 70px;
+}
+
+.localsendtextr {
+  color: #515152;
+
+  &.icon {
+    font-size: 90px;
+  }
+}
+
+.system_notification {
+  padding: 5px;
+}
+
+.sysnotif_but {
+  padding: 3px;
 }

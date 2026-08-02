@@ -3,11 +3,12 @@
 get_internet() {
     local net_state
     net_state=$(nmcli -t -f NETWORKING networking 2>/dev/null)
+    netname=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes' | cut -d: -f2)
     
     if [[ "$net_state" != "enabled" ]]; then
-        echo "󰤭"
+        icon="󰤭"
     elif ip route | grep -q "dev eth" || ip route | grep -q "dev enp"; then
-        echo ""
+        icon=""
     else
         local strength
         strength=$(nmcli -t -f SIGNAL,ACTIVE dev wifi 2>/dev/null | awk -F: '$2=="yes" {print $1}')
@@ -18,8 +19,8 @@ get_internet() {
         elif [[ $strength -le 75 ]]; then icon="󰤥" 
         else icon="󰤨"
         fi
-        echo "$icon"
     fi
+  echo "{\"icon\": \"$icon\", \"netname\": \"$netname\"}"
 }
 
 get_internet

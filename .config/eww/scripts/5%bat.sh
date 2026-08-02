@@ -1,0 +1,7 @@
+#!/bin/bash
+eww update sysnotif_text_main="Battery low 5%"
+eww update sysnotif_text_butr="Low power mode"
+eww update sysnotif_text_butl="Cancel"
+eww update sysnotif_commandr="tlpctl power-saver && eww close system_notification"
+eww update sysnotif_commandl="eww close system_notification"
+eww open system_notification

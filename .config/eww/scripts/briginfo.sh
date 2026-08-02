@@ -1,7 +1,8 @@
 #!/bin/bash
 
-print_brightness() {
+brightness() {
   brightness=$(brightnessctl i | grep -oP '\(\K[0-9]+(?=%\))')
+  
 
   if [[ $brightness -le 10 ]]; then
       icon="󰃞 "
@@ -13,12 +14,12 @@ print_brightness() {
       icon="󰃠 "
   fi
 
-  echo "$icon"
+  echo "{\"icon\": \"$icon\", \"brightness\": \"$brightness\"}"
 }
 
-print_brightness
+brightness
 
 udevadm monitor --subsystem=backlight --property | grep --line-buffered "POWER_SUPPLY_CAPACITY\|CURRENT" | while read -r event; do
-    print_brightness
+    brightness
 done
 

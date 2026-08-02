@@ -16,7 +16,7 @@ print_volume() {
       icon=" "
   fi
   
-  echo "$icon"
+  echo "{\"icon\": \"$icon\", \"volume\": \"$volume\"}"
 }
 
 print_volume

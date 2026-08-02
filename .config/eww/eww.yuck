@@ -1,26 +1,36 @@
 (deflisten batinfo                :initial ""          `~/.config/eww/scripts/batinfo.sh`)
-(deflisten neticon                :initial ""          `~/.config/eww/scripts/network.sh`)
-(deflisten bticon                 :initial ""          `~/.config/eww/scripts/bticon.sh`)
+(deflisten netinfo                :initial ""          `~/.config/eww/scripts/netinfo.sh`)
+(deflisten btinfo                 :initial ""          `~/.config/eww/scripts/btinfo.sh`)
 (deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
-(deflisten player_data            :initial '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}' "~/.config/eww/scripts/player.sh")
-(deflisten volume                 :initial ""          `~/.config/eww/scripts/volume.sh`)
-(deflisten volicon                :initial ""          `~/.config/eww/scripts/volicon.sh`)
-(deflisten brightness             :initial ""          `~/.config/eww/scripts/brightness.sh`)
-(deflisten brigicon               :initial ""          `~/.config/eww/scripts/brigicon.sh`)
-(deflisten notif_visibility       :initial "false"     `~/dotfiles/.config/eww/scripts/notification_visibility.sh`)
-(deflisten notif                  :initial ""          `~/dotfiles/.config/eww/scripts/notification_history.sh`)
+(deflisten player_data            :initial '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}' `~/.config/eww/scripts/player_data.sh`)
+(deflisten volinfo                :initial ""          `~/.config/eww/scripts/volinfo.sh`)
+(deflisten briginfo               :initial ""          `~/.config/eww/scripts/briginfo.sh`)
+(deflisten notif_visibility       :initial "false"     `~/dotfiles/.config/eww/scripts/notif_visibility.sh`)
+(deflisten notif_history          :initial ""          `~/dotfiles/.config/eww/scripts/notif_history.sh`)
 (deflisten network_button         :initial "disabled"  `~/.config/eww/scripts/network_button.sh`)
 (deflisten bluetooth_button       :initial "disabled"  `~/.config/eww/scripts/bluetooth_button.sh`)
 (deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
-(deflisten cava                   :initial "[0,0,0,0,0,0,0,0,0,0]"          `~/dotfiles/.config/eww/scripts/cava.sh`)
+(deflisten cava                   :initial "[0,0,0,0,0,0,0,0,0,0]" `~/dotfiles/.config/eww/scripts/cava.sh`)
 
 (defpoll timenum :interval "30s" `date +"%R"`)
-(defpoll tlpicon :interval "200ms" `~/.config/eww/scripts/tlp.sh`)
+(defpoll tlpicon :interval "1s" `~/.config/eww/scripts/tlpicon.sh`)
+(defpoll date    :interval "30s" `date "+%A, %B %d"`)
 
-(defvar notif_app   "")
-(defvar notif_title "")
-(defvar notif_body  "")
-(defvar tlp_toggle  "false")
+(defvar notif_app      "")
+(defvar notif_title    "")
+(defvar notif_body     "")
+(defvar tlp_toggle     "false")
+(defvar quick_toggle   "false")
+(defvar music_toggle   "false")
+(defvar localsend_tabR "true")
+(defvar localsend_tabS "false")
+(defvar sysnotif_text_main "")
+(defvar sysnotif_text_butr "")
+(defvar sysnotif_text_butl "")
+(defvar sysnotif_commandr "")
+(defvar sysnotif_command_timeoutr "999999999")
+(defvar sysnotif_commandl "")
+(defvar sysnotif_command_timeoutl "999999999")
 
 (defwidget player []
   (box :class "player" 
@@ -29,16 +39,18 @@
        :spacing 3
        :visible {player_data.visible}
     (button :onclick "playerctl play-pause"
+            :tooltip "Play/Pause"
       "${player_data.icon}")
-    (button :onclick "eww open --toggle music_player"
-            :class "music_player_button"
+    (button :onclick {music_toggle == "true" ? "eww update music_toggle=false && eww close music_player" : "eww update music_toggle=true && eww open music_player"}
+            :class {music_toggle == "true" ? "music_player_button on" : "music_player_button"}
       (label :text {player_data.text}))))
 
 (defwidget workspaces []
   (box :orientation "h"
     (for i in "[1, 2, 3, 4, 5]"
       (button :onclick "hyprctl dispatch workspace ${i}"
-              :class {active_workspace == i ? "ws-btn active" : "ws-btn"}
+              :class {active_workspace == i ? "ws_btn on" : "ws_btn"}
+              :tooltip "Switch to workspace ${i}"
               (label :text i)))))
 
 (defwindow bar
@@ -50,15 +62,22 @@
     (box :space-evenly false
          :spacing 5
          (player) (workspaces))
-    (box :space-evenly false (label :text timenum))
+    (box :space-evenly false 
+         :tooltip date 
+      (label :text timenum))
     (box :space-evenly false 
          :halign "end"
          :spacing 3
-         (label  :text bticon  :class "bluetooth")
-         (label  :text neticon :class "network")
-         (label  :text batinfo :class "battery")
-         (button :onclick "eww open --toggle quick_settings"
-                 :class "quick_center"
+         (label  :text {btinfo.icon}  
+                 :class "bticon"
+                 :tooltip {btinfo.devcname})
+         (label  :text {netinfo.icon} 
+                 :class "neticon"
+                 :tooltip {netinfo.netname})
+         (label  :text batinfo)
+         (button :onclick {quick_toggle == "true" ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
+                 :class {quick_toggle == "true" ? "quick_center on" : "quick_center"}
+                 :tooltip "Open Quick Settings"
                  ""))))
 
 (defwindow screenprint
@@ -69,98 +88,126 @@
   (box :orientation "h"
        :spacing 3
        :class "screenprint"
-       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "󰍹")
-       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "󰖯")
-       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" :class "quick_button" "")
-       (button :onclick "eww close screenprint" :class "quick_button" "")))
-
+       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :tooltip "Fullscreen"
+               :class "quick_button" 
+               "󰍹")
+       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :class "quick_button" 
+               :tooltip "Window"
+               "󰖯")
+       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :class "quick_button" 
+               :tooltip "Region"
+               "")
+       (button :onclick "eww close screenprint" 
+               :class "quick_button"                
+               :tooltip "Close"
+               "")))
 
 (defwindow volume
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
-  :stacking "fg"
-  (volbar))
-
-(defwidget volbar []
-  (box :orientation "h"
-       :space-evenly false
-       (progress :orientation "h" 
-                 :value volume
-                 :class "volbar")
-       (label :text volicon)))
+  :stacking "fg" 
+    (box :orientation "h"
+         :space-evenly false
+      (progress :orientation "h" 
+                :value {volinfo.volume}
+               :class "volbar")
+        (label :text {volinfo.icon})))
 
 (defwindow brightness
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
   :stacking "fg"
-  (brigbar))
-
-(defwidget brigbar []
-  (box :orientation "h"
-       :space-evenly false
-       (progress :orientation "h" 
-                 :value brightness
-                 :class "brigbar")
-       (label :text brigicon)))
+    (box :orientation "h"
+         :space-evenly false
+      (progress :orientation "h" 
+                :value {briginfo.brightness}
+                :class "brigbar")
+        (label :text {briginfo.icon})))
 
 (defwindow notification_popup
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "75px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "0px" :anchor "top right")
   :stacking "fg"
   (box :orientation "v"
+       :space-evenly false
+       :class "notification_popup"
     (box :orientation "h"
+         :space-evenly false
        (label :text notif_app)
        (button :onclick "eww close notification_popup && makoctl dismiss"
                :halign "end"
+               :hexpand true
          (label :text "")))
-    (label :text notif_title
+    (label :show-truncated false
+           :wrap true
+           :text notif_title
            :halign "start")
-    (label :text notif_body
-           :halign "start")))
+    (label :show-truncated false
+           :wrap true
+           :text notif_body
+           :xalign 0)))
 
 (defwindow quick_settings
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "center")
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
+         :class "quick_settings"
+      (quickS_topbar)
       (quick_controls)
-      ;(volbar)
-      ;(brigbar)
       (tlp_menu)
+      (quick_sliders)
       (notification_history)))
+
+(defwidget quickS_topbar []
+  (box :orientation "h"
+       :space-evenly false
+    (button :onclick "eww close quick_settings && eww update quick_toggle=false"
+            :class "quick_close"
+            :tooltip "Close"
+      "")
+    (button :onclick "eww open power_menu && eww close quick_settings && eww update quick_toggle=false"
+            :class "quick_power"
+            :tooltip "Open Power Menu"
+      "")))
 
 (defwidget quick_controls []
   (box :orientation "v"
        :space-evenly false
     (box :orientation "h"
          :space-evenly false
-      (button :onclick "eww close quick_settings"
-              :halign "start"
-              :class "quick_close"
-              "")
-      (button :onclick "eww open power_menu && eww close quick_settings"
-              :halign "start"
-              :class "quick_power"
-              ""))
+         :class "quick_controls_top"
+      (button :class {netinfo.icon == "󰤭" ? "quick_button net" : "quick_button net on"}
+              :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
+              :tooltip {netinfo.netname}
+              {netinfo.icon})
+      (button :class {netinfo.icon == "󰤭" ? "quick_extend net" : "quick_extend net on"}
+              :onclick "networkmanager_dmenu | eww close quick_settings | eww update quick_toggle=false"
+              :tooltip {netinfo.netname}
+              ">")
+      (button :class {btinfo.button == "󰂲" ? "quick_button bt" : "quick_button bt on"}
+              :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+              :tooltip {btinfo.devcname}
+              {btinfo.button})
+      (button :class {btinfo.button == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
+              :onclick "bzmenu -l fuzzel | eww close quick_settings | eww update quick_toggle=false"
+              :tooltip {btinfo.devcname}
+             ">")
+      (button :class {tlp_toggle == "true" ? "quick_button on" : "quick_button"}
+              :onclick {tlp_toggle == "true" ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+              :tooltip "Power Profiles"
+              tlpicon))
     (box :orientation "h"
          :space-evenly false
-         :class "quick_controls"
-      (button :class {network_button == "enabled" ? "quick_button net on" : "quick_button net off"}
-              :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
-              neticon)
-      (button :class {network_button == "enabled" ? "quick_extend net on" : "quick_extend net off"}
-              :onclick "networkmanager_dmenu | eww close quick_settings"
-              ">")
-      (button :class {bluetooth_button == "enabled" ? "quick_button bt on" : "quick_button bt off"}
-              :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
-              bticon_button)
-      (button :class {bluetooth_button == "enabled" ? "quick_extend bt on" : "quick_extend bt off"}
-              :onclick "bzmenu -l fuzzel | eww close quick_settings"
-             ">")
-      (button :class {tlp_toggle == "true" ? "quick_button tlp_toggle on" : "quick_button tlp_toggle off"}
-              :onclick {tlp_toggle == "true" ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
-              tlpicon))))
+      (button :class "quick_button localsend_button"
+              :onclick "eww open localsend && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh"
+              :timeout 999999999
+              :tooltip "Share files"
+        ""))))
 
 (defwidget tlp_menu []
   (box :orientation "h"
@@ -168,36 +215,65 @@
        :class "tlp_menu"
        :visible tlp_toggle
        :spacing 5
-   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button off"}
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
            :onclick "tlpctl power-saver"
-           :timeout 10000
+           :timeout  999999999
+           :tooltip "Low power mode"
            "")
-   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button off"}
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
            :onclick "tlpctl balanced"
-           :timeout 10000
+           :timeout  999999999
+           :tooltip "Balanced"
            "")
-   (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button off"}
+   (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button"}
            :onclick "tlpctl performance"
-           :timeout 10000
+           :timeout  999999999
+           :tooltip "Performance"
            "󱐋")))
+
+(defwidget quick_sliders []
+  (box :orientation "h"
+       :space-evenly false
+       :class "quick_sliders"
+       :spacing 4
+    (box :orientation "v"
+         :space-evenly false
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {volinfo.volume}
+           :spacing 4
+           :class "quickV_scale"
+        (scale :value {volinfo.volume}
+               :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")
+        (label :text {volinfo.icon}))
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {briginfo.brightness}
+           :spacing 4
+        (scale :value {briginfo.brightness}
+               :onchange "brightnessctl set {}%"
+                :min 1)
+        (label :text {briginfo.icon})))
+      (button :onclick "pwmenu --launcher fuzzel | eww close quick_settings | eww update quick_toggle=false"
+                :class "vol_settings"
+                :tooltip "Volume Settings"
+        "")))
 
 (defwidget notification_history []
   (box :orientation "v"
        :space-evenly false
-       :class "notification-history"
        :visible notif_visibility
     (scroll :vscroll true
             :height 180
-            :class "notification-history text"
+            :class "nhtext_box"
       (box :orientation "v"
            :space-evenly false
-        (label :text "---------------------------")
-        (for entry in notif
+        (for entry in notif_history
           (box :orientation "v"
-               :space-evenly false  
+               :space-evenly false
+               :class "nhis_box"
             (label :text {entry.app})
-            (label :text {entry.title})
-            (label :text "---------------------------")))))
+            (label :text {entry.title})))))
     (button :onclick "killall mako && mako"
       "Clear All")))
 
@@ -211,23 +287,28 @@
        :class "power_menu"
     (button :onclick "reboot"
             :class "quick_button"
+            :tooltip "Reboot"
             "")
     (button :onclick "poweroff"
             :class "quick_button"
+            :tooltip "Shut-down"
             "")
-    (button :onclick "systemctl hibernate"
+    (button :onclick "systemctl hibernate && eww close power_menu"
             :class "quick_button"
+            :tooltip "Hibernate"
             "")
-    (button :onclick "systemctl suspend"
+    (button :onclick "systemctl suspend && eww close power_menu"
             :class "quick_button"
+            :tooltip "Sleep"
             "")
     (button :onclick "eww close power_menu"
             :class "quick_button"
+            :tooltip "Close"
             "")))
 
 (defwindow music_player
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "205px" :height "110px" :anchor "center")
+  :geometry (geometry :x "6px" :y "3px" :width "210px" :height "110px" :anchor "top left")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
@@ -238,10 +319,6 @@
 (defwidget music_info []
   (box :orientation "h" 
        :space-evenly false
-       :spacing 5
-    (box :orientation "h"
-         :space-evenly false
-         :class "visualiser"
       (progress :orientation "v" :value {cava[0]} :flipped true)
       (progress :orientation "v" :value {cava[1]} :flipped true)
       (progress :orientation "v" :value {cava[2]} :flipped true)
@@ -251,11 +328,14 @@
       (progress :orientation "v" :value {cava[6]} :flipped true)
       (progress :orientation "v" :value {cava[7]} :flipped true)
       (progress :orientation "v" :value {cava[8]} :flipped true)
-      (progress :orientation "v" :value {cava[9]} :flipped true))
-    (box
-      (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"))
-      (button :onclick "eww close music_player"
+      (progress :orientation "v" :value {cava[9]} :flipped true)
+      (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"
+             :class "music_text")
+      (button :onclick "eww close music_player && eww update music_toggle=false"
               :valign "start"
+              :halign "end"
+              :hexpand true
+              :tooltip "Close"
       "")))
 
 (defwidget music_buttons []
@@ -264,14 +344,89 @@
        :spacing 5
        :halign "center"
     (button :onclick "playerctl shuffle toggle"
-      :class "shuffle_button"
+            :class "shuffle_button"
+            :tooltip "Shuffle"
       "${player_data.shuffle_icon}")
     (button :onclick "playerctl previous"
+            :tooltip "Previous"
       "󰒮")
     (button :onclick "playerctl play-pause"
+            :tooltip "Play/Pause"
       "${player_data.icon}")
     (button :onclick "playerctl next"
+            :tooltip "Next"
       "󰒭")
     (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" =       \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
-      :class "repeat_button"
+            :class "repeat_button"
+            :tooltip "Repeat"
       "${player_data.repeat_icon}")))
+
+(defwindow localsend
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "220px" :anchor "top center")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :class "localsend"
+      (box :orientation "h"
+           :spac"e-evenly false
+           :halign "center"
+           :spacing 3
+        (button :class {localsend_tabR == "true" ? "lstab on" : "lstab"}
+                :onclick "eww update localsend_tabR=true && eww update localsend_tabS=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh"
+                :timeout 999999999
+          "Receive")
+        (button :class {localsend_tabS == "true" ? "lstab on" : "lstab"}
+                :onclick "eww update localsend_tabR=false && eww update localsend_tabS=true && killall localsend-cli"
+          "Send"))
+      (receive)
+      (send)
+      (button :onclick "eww close localsend && killall localsend-cli"
+              :valign "end"
+              :vexpand true
+              :tooltip "Close"
+        "")))
+
+(defwidget receive []
+  (box :orientation "v" 
+       :space-evenly false
+       :visible localsend_tabR
+       :hexpand true
+       :vexpand true
+       :halign "center"
+       :valign "center"
+         (label :text " "
+                :class "localsendtextr icon")
+         (label :text "You can now receive files"
+                :class "localsendtextr")))
+
+(defwidget send []
+  (box :orientation "h" 
+       :space-evenly false
+       :visible localsend_tabS
+         (label :text "send")))
+
+(defwindow system_notification []
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
+  :stacking "fg"
+  (box :orientation "v"
+       :space-evenly false
+       :class "system_notification"
+    (label :text sysnotif_text_main
+           :valign "center"
+           :vexpand true)
+    (box :orientation "h"
+         :space-evenly false
+         :valign "end"
+         :vexpand true
+      (button :onclick sysnotif_commandl
+              :timeout sysnotif_command_timeoutl
+              :class "sysnotif_but"
+        sysnotif_text_butl)
+      (button :onclick sysnotif_commandr
+              :timeout sysnotif_command_timeoutr
+              :class "sysnotif_but"
+              :halign "end"
+              :hexpand true
+        sysnotif_text_butr))))
