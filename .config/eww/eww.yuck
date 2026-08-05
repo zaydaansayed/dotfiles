@@ -2,35 +2,40 @@
 (deflisten netinfo                :initial ""          `~/.config/eww/scripts/netinfo.sh`)
 (deflisten btinfo                 :initial ""          `~/.config/eww/scripts/btinfo.sh`)
 (deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
-(deflisten player_data            :initial '{"text": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}' `~/.config/eww/scripts/player_data.sh`)
+(deflisten player_data            :initial ""          `~/.config/eww/scripts/player_data.sh`)
 (deflisten volinfo                :initial ""          `~/.config/eww/scripts/volinfo.sh`)
 (deflisten briginfo               :initial ""          `~/.config/eww/scripts/briginfo.sh`)
-(deflisten notif_visibility       :initial "false"     `~/dotfiles/.config/eww/scripts/notif_visibility.sh`)
+(deflisten notif_visibility       :initial ""          `~/dotfiles/.config/eww/scripts/notif_visibility.sh`)
 (deflisten notif_history          :initial ""          `~/dotfiles/.config/eww/scripts/notif_history.sh`)
-(deflisten network_button         :initial "disabled"  `~/.config/eww/scripts/network_button.sh`)
-(deflisten bluetooth_button       :initial "disabled"  `~/.config/eww/scripts/bluetooth_button.sh`)
+(deflisten bluetooth_button       :initial ""          `~/.config/eww/scripts/bluetooth_button.sh`)
 (deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
-(deflisten cava                   :initial "[0,0,0,0,0,0,0,0,0,0]" `~/dotfiles/.config/eww/scripts/cava.sh`)
+(deflisten cava                   :initial ""          `~/dotfiles/.config/eww/scripts/cava.sh`)
+(deflisten active_apps            :initial ""          `~/dotfiles/.config/eww/scripts/active_apps.sh`)
 
 (defpoll timenum :interval "30s" `date +"%R"`)
-(defpoll tlpicon :interval "1s" `~/.config/eww/scripts/tlpicon.sh`)
+(defpoll tlpicon :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
 (defpoll date    :interval "30s" `date "+%A, %B %d"`)
+(defpoll ai_txt  :interval "1s"  `cat /home/zaydaansayed/Documents/.ai.txt`)
 
-(defvar notif_app      "")
-(defvar notif_title    "")
-(defvar notif_body     "")
-(defvar tlp_toggle     "false")
-(defvar quick_toggle   "false")
-(defvar music_toggle   "false")
-(defvar localsend_tabR "true")
-(defvar localsend_tabS "false")
+(defvar notif_app          "")
+(defvar notif_title        "")
+(defvar notif_body         "")
+(defvar tlp_toggle         "false")
+(defvar quick_toggle       "false")
+(defvar music_toggle       "false")
+(defvar localsend_tabR     "true")
+(defvar localsend_tabS     "false")
 (defvar sysnotif_text_main "")
 (defvar sysnotif_text_butr "")
 (defvar sysnotif_text_butl "")
-(defvar sysnotif_commandr "")
-(defvar sysnotif_command_timeoutr "999999999")
-(defvar sysnotif_commandl "")
-(defvar sysnotif_command_timeoutl "999999999")
+(defvar sysnotif_commandr  "")
+(defvar sysnotif_commandl  "")
+(defvar dock_visibility    "false")
+(defvar tray_toggle        "false")
+(defvar ai_prompt          "who is donald trump")
+(defvar ai_toggle          "false")
+(defvar ai_loading         "false")
+(defvar ai_input           "")
 
 (defwidget player []
   (box :class "player" 
@@ -78,7 +83,11 @@
          (button :onclick {quick_toggle == "true" ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
                  :class {quick_toggle == "true" ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
-                 ""))))
+           "")
+         (button :onclick {ai_toggle ? "" : "eww update ai_toggle=true && eww open ai && ollama serve &"}
+                 :class {ai_toggle ? "ai_center on" : "ai_center"}
+                 :tooltip "Open Ai companion"
+           "󰚩"))))
 
 (defwindow screenprint
   :monitor 0
@@ -204,8 +213,7 @@
     (box :orientation "h"
          :space-evenly false
       (button :class "quick_button localsend_button"
-              :onclick "eww open localsend && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh"
-              :timeout 999999999
+              :onclick "eww open localsend && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
               :tooltip "Share files"
         ""))))
 
@@ -216,18 +224,15 @@
        :visible tlp_toggle
        :spacing 5
    (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
-           :onclick "tlpctl power-saver"
-           :timeout  999999999
+           :onclick "tlpctl power-saver &"
            :tooltip "Low power mode"
            "")
    (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
-           :onclick "tlpctl balanced"
-           :timeout  999999999
+           :onclick "tlpctl balanced &"
            :tooltip "Balanced"
            "")
    (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button"}
-           :onclick "tlpctl performance"
-           :timeout  999999999
+           :onclick "tlpctl performance &"
            :tooltip "Performance"
            "󱐋")))
 
@@ -279,7 +284,7 @@
 
 (defwindow power_menu
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "center")
+  :geometry (geometry :x "0px" :y "0px" :width "0px" :height "0px" :anchor "center")
   :stacking "fg"
   (box :orientation "h"
        :space-evenly false
@@ -363,7 +368,7 @@
 
 (defwindow localsend
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "220px" :anchor "top center")
+  :geometry (geometry :x "0px" :y "0px" :width "300px" :height "220px" :anchor "top center")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
@@ -373,8 +378,7 @@
            :halign "center"
            :spacing 3
         (button :class {localsend_tabR == "true" ? "lstab on" : "lstab"}
-                :onclick "eww update localsend_tabR=true && eww update localsend_tabS=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh"
-                :timeout 999999999
+                :onclick "eww update localsend_tabR=true && eww update localsend_tabS=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
           "Receive")
         (button :class {localsend_tabS == "true" ? "lstab on" : "lstab"}
                 :onclick "eww update localsend_tabR=false && eww update localsend_tabS=true && killall localsend-cli"
@@ -396,17 +400,17 @@
        :halign "center"
        :valign "center"
          (label :text " "
-                :class "localsendtextr icon")
+                :class "placeholder_txt icon")
          (label :text "You can now receive files"
-                :class "localsendtextr")))
+                :class "placeholder_txt")))
 
 (defwidget send []
   (box :orientation "h" 
        :space-evenly false
        :visible localsend_tabS
-         (label :text "send")))
+         (button :onclick "zenity --multiple --file-selection &")))
 
-(defwindow system_notification []
+(defwindow system_notification
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
   :stacking "fg"
@@ -421,12 +425,100 @@
          :valign "end"
          :vexpand true
       (button :onclick sysnotif_commandl
-              :timeout sysnotif_command_timeoutl
               :class "sysnotif_but"
         sysnotif_text_butl)
       (button :onclick sysnotif_commandr
-              :timeout sysnotif_command_timeoutr
               :class "sysnotif_but"
               :halign "end"
               :hexpand true
         sysnotif_text_butr))))
+
+(defwindow dock
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "0px" :height "3px" :anchor "bottom center")
+  :stacking "fg"
+  (eventbox :onhover "eww update dock_visibility=true"
+            :onhoverlost "eww update dock_visibility=false" 
+    (revealer :transition "slideup"
+              :reveal dock_visibility
+      (box :class "dock"
+           :orientation "h"
+           :space-evenly false
+           :spacing {arraylength(active_apps) > 0 ? "10" : "5"}
+        (button :onclick "fuzzel &"
+                :class "fuzzel_button"
+                :tooltip "fuzzel"
+                    (image :path "/home/zaydaansayed/dotfiles/.config/eww/scripts/hyprland_logo.png"
+                   :image-width 50
+                   :image-height 50))
+        (apps)
+        (button :onclick {tray_toggle ? "eww update tray_toggle=false" : "eww update tray_toggle=true"}
+                :class "tray_button"
+                :tooltip "System tray"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 5
+            (label :text {tray_toggle ? "" : ""})
+            (systray :visible tray_toggle
+                     :class "systemtray")))))))
+
+(defwidget apps []
+  (box :orientation "h"
+       :space-evenly false
+    (for app in active_apps
+          (box :orientation "h"
+               :space-evenly false
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "pid:${app.pid}" })'`
+                    :class {app.focused ? "dock_button on" : "dock_button"}
+                    :tooltip {app.title}
+            (image :icon {app.icon}
+                   :icon-size "dialog"))))))
+
+(defwindow ai
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "500px" :anchor "top right")
+  :stacking "fg"
+  :focusable true
+  (box :orientation "v"
+       :space-evenly false
+       :class "ai"
+    (box :orientation "v"
+         :space-evenly false
+         :class "ai_main"
+         :visible {ai_txt == "empty" ? "true" : "false"}
+      (box :orientation "v"
+           :space-evenly false
+           :valign "center"
+           :vexpand true
+      (label :text "󰚩"
+             :class "placeholder_txt ai icon")
+      (label :text "Your Ai companion is ready!"
+             :class "placeholder_txt message")))
+    (scroll :vscroll true
+            :class "ai_main"
+            :visible {ai_txt == "empty" ? "false" : "true"}
+      (box :orientation "v"
+           :space-evenly false
+        (for ai in ai_txt
+          (box :orientation "v"
+               :space-evenly false
+            (label :show-truncated false
+                   :wrap true
+                   :text {ai.prompt}
+                   :halign "end"
+                   :valign "start"
+                   :class "ai_txt")
+            (label :show-truncated false
+                   :wrap true
+                   :text {ai.response}
+                   :halign "start"
+                   :valign "start"
+                   :class "ai_txt")))))
+    (label :text "Loading..."
+           :class "placeholder_txt ai_loading"
+           :visible ai_loading)
+    (input :value ai_input
+           :onaccept "eww update ai_prompt=\"{}\" && eww update ai_loading=true && eww update ai_input= && /home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &"
+           :class "ai_input")
+    (button :onclick "eww update ai_toggle=false && eww close ai && killall ollama && echo 'empty' > /home/zaydaansayed/Documents/.ai.txt"
+      "")))

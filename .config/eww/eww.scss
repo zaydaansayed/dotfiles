@@ -1,4 +1,8 @@
-box {
+* {
+  -gtk-icon-shadow: none;
+}
+
+window {
   background-color: #000000;
   color: #ffffff;
 }
@@ -30,6 +34,21 @@ scale {
   min-width: 154px;
   margin: 0px;
   padding: 0px;
+}
+
+.placeholder_txt {
+  color: #515152;
+
+  &.icon {
+    font-size: 90px;
+
+    &.ai {
+      padding-right: 27px;
+    }
+  }
+  &.ai_loading {
+    margin-bottom: 3px;
+  }
 }
 
 .music_player_button {
@@ -186,18 +205,51 @@ scale {
   min-width: 70px;
 }
 
-.localsendtextr {
-  color: #515152;
-
-  &.icon {
-    font-size: 90px;
-  }
-}
-
 .system_notification {
   padding: 5px;
 }
 
 .sysnotif_but {
   padding: 3px;
+}
+
+.dock {
+  min-height: 50px;
+  padding: 5px 5px 5px 5px;
+}
+
+.dock_button {
+  margin-right: 3px;
+  padding: 3px;
+}
+
+.tray_button {
+  padding-left: 6px;
+}
+
+.systemtray {
+  padding-right: 4px;
+}
+
+.ai_main {
+  min-height: 442px;
+}
+
+.ai_center {
+  padding-right: 5px;
+}
+
+.ai {
+  padding: 5px;
+}
+
+.ai_input {
+  margin-bottom: 3px;
+}
+
+.ai_txt {
+  background-color: #1a1a1a;
+  border-radius: 15px;
+  padding: 5px;
+  margin-bottom: 4px;
 }

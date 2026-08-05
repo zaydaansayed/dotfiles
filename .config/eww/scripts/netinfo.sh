@@ -2,7 +2,7 @@
 
 get_internet() {
     local net_state
-    net_state=$(nmcli -t -f NETWORKING networking 2>/dev/null)
+    net_state=$(nmcli networking)
     netname=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes' | cut -d: -f2)
     
     if [[ "$net_state" != "enabled" ]]; then

@@ -35,20 +35,22 @@ hl.monitor({
 
 local terminal    = "kitty"
 local menu        = "fuzzel"
-local bar         = "eww open bar"
+local bar         = "eww open bar" 
 local notification_daemon = "mako"
 
 -------------------
 ---- AUTOSTART ----
 -------------------
 
- hl.on("hyprland.start", function () 
-   hl.exec_cmd("udiskie --smart-tray")
+ hl.on("hyprland.start", function ()
+   hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
+   hl.exec_cmd("udiskie --tray")
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
    hl.exec_cmd("kdeconnectd")
    hl.exec_cmd(bar)
    hl.exec_cmd(notification_daemon)
+   hl.exec_cmd("sleep 0.5 && eww open dock")
    hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
 end)
 
