@@ -15,7 +15,8 @@
 (defpoll timenum :interval "30s" `date +"%R"`)
 (defpoll tlpicon :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
 (defpoll date    :interval "30s" `date "+%A, %B %d"`)
-(defpoll ai_txt  :interval "1s"  `cat /home/zaydaansayed/Documents/.ai.txt`)
+(defpoll ai_txt :interval "1s" "jq --arg id \"$(eww get ai_chat_id 2>/dev/null || echo 'current')\" '.[$id].history // []' /home/zaydaansayed/Documents/ai.txt 2>/dev/null || echo '[]'")
+(defpoll ai_menu_chats :interval "2s" "jq -r 'to_entries | map({id: .key, title: .value.title})' /home/zaydaansayed/Documents/ai.txt 2>/dev/null || echo '[]'")
 
 (defvar notif_app          "")
 (defvar notif_title        "")
@@ -32,10 +33,14 @@
 (defvar sysnotif_commandl  "")
 (defvar dock_visibility    "false")
 (defvar tray_toggle        "false")
-(defvar ai_prompt          "who is donald trump")
+(defvar ai_prompt          "")
 (defvar ai_toggle          "false")
 (defvar ai_loading         "false")
-(defvar ai_input           "")
+(defvar ai_dinput          "")
+(defvar ai_file_paths      "[]")
+(defvar ai_image           "false")
+(defvar ai_dynamic_context "")
+(defvar ai_chat_id         "")
 
 (defwidget player []
   (box :class "player" 
@@ -52,9 +57,10 @@
 
 (defwidget workspaces []
   (box :orientation "h"
+       :spacing 3
     (for i in "[1, 2, 3, 4, 5]"
-      (button :onclick "hyprctl dispatch workspace ${i}"
-              :class {active_workspace == i ? "ws_btn on" : "ws_btn"}
+      (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'"
+              :class {active_workspace == i ? "on" : ""}
               :tooltip "Switch to workspace ${i}"
               (label :text i)))))
 
@@ -84,19 +90,18 @@
                  :class {quick_toggle == "true" ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "")
-         (button :onclick {ai_toggle ? "" : "eww update ai_toggle=true && eww open ai && ollama serve &"}
-                 :class {ai_toggle ? "ai_center on" : "ai_center"}
-                 :tooltip "Open Ai companion"
-           "󰚩"))))
+         (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_toggle=true && eww open ai && ollama serve &"}
+        :class {ai_toggle ? "ai_center on" : "ai_center"}
+        :tooltip "Open Ai companion"
+  "󰚩"))))
 
 (defwindow screenprint
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "127px" :height "25px" :anchor "top center")
   :stacking "fg"
-  :focusable true
   (box :orientation "h"
        :spacing 3
-       :class "screenprint"
+       :class "window_small"
        (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
                :tooltip "Fullscreen"
                :class "quick_button" 
@@ -142,11 +147,11 @@
   :stacking "fg"
   (box :orientation "v"
        :space-evenly false
-       :class "notification_popup"
+       :class "window"
     (box :orientation "h"
          :space-evenly false
-       (label :text notif_app)
-       (button :onclick "eww close notification_popup && makoctl dismiss"
+      (label :text notif_app)
+      (button :onclick "eww close notification_popup && makoctl dismiss"
                :halign "end"
                :hexpand true
          (label :text "")))
@@ -165,7 +170,7 @@
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
-         :class "quick_settings"
+         :class "window"
       (quickS_topbar)
       (quick_controls)
       (tlp_menu)
@@ -269,6 +274,7 @@
        :space-evenly false
        :visible notif_visibility
     (scroll :vscroll true
+            :hscroll false
             :height 180
             :class "nhtext_box"
       (box :orientation "v"
@@ -276,7 +282,7 @@
         (for entry in notif_history
           (box :orientation "v"
                :space-evenly false
-               :class "nhis_box"
+               :class "l2 nhis_box"
             (label :text {entry.app})
             (label :text {entry.title})))))
     (button :onclick "killall mako && mako"
@@ -289,7 +295,7 @@
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-       :class "power_menu"
+       :class "window_small"
     (button :onclick "reboot"
             :class "quick_button"
             :tooltip "Reboot"
@@ -317,7 +323,7 @@
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
-         :class "music_player"
+         :class "window"
       (music_info)
       (music_buttons)))
 
@@ -372,7 +378,7 @@
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
-         :class "localsend"
+         :class "window"
       (box :orientation "h"
            :spac"e-evenly false
            :halign "center"
@@ -414,9 +420,10 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
   :stacking "fg"
+  :focusable true
   (box :orientation "v"
        :space-evenly false
-       :class "system_notification"
+       :class "window"
     (label :text sysnotif_text_main
            :valign "center"
            :vexpand true)
@@ -441,7 +448,7 @@
             :onhoverlost "eww update dock_visibility=false" 
     (revealer :transition "slideup"
               :reveal dock_visibility
-      (box :class "dock"
+      (box :class "window dock"
            :orientation "h"
            :space-evenly false
            :spacing {arraylength(active_apps) > 0 ? "10" : "5"}
@@ -458,7 +465,7 @@
           (box :orientation "h"
                :space-evenly false
                :spacing 5
-            (label :text {tray_toggle ? "" : ""})
+            (label :text {tray_toggle ? "" : ""})
             (systray :visible tray_toggle
                      :class "systemtray")))))))
 
@@ -481,44 +488,159 @@
   :focusable true
   (box :orientation "v"
        :space-evenly false
-       :class "ai"
+       :class "window"
+    (ai_placeholder)
+    (ai_chat)
+    (ai_bottom)
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 3
+      (button :onclick "eww open ai_menu"
+              :class "ai_menu_button"
+              :tooltip "Open Menu"
+        "")
+    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama && echo '[]' > /home/zaydaansayed/Documents/.ai.txt"
+            :class "ai_close"
+            :tooltip "Close"
+      ""))))
+
+(defwidget ai_placeholder []
+  (box :orientation "v"
+       :space-evenly false
+       :class "ai_main"
+       :visible {arraylength(ai_txt) < 1}
     (box :orientation "v"
          :space-evenly false
-         :class "ai_main"
-         :visible {ai_txt == "empty" ? "true" : "false"}
-      (box :orientation "v"
-           :space-evenly false
-           :valign "center"
-           :vexpand true
+         :valign "center"
+         :vexpand true
       (label :text "󰚩"
              :class "placeholder_txt ai icon")
       (label :text "Your Ai companion is ready!"
-             :class "placeholder_txt message")))
-    (scroll :vscroll true
-            :class "ai_main"
-            :visible {ai_txt == "empty" ? "false" : "true"}
-      (box :orientation "v"
-           :space-evenly false
-        (for ai in ai_txt
-          (box :orientation "v"
-               :space-evenly false
-            (label :show-truncated false
-                   :wrap true
-                   :text {ai.prompt}
-                   :halign "end"
-                   :valign "start"
-                   :class "ai_txt")
-            (label :show-truncated false
-                   :wrap true
-                   :text {ai.response}
-                   :halign "start"
-                   :valign "start"
-                   :class "ai_txt")))))
+             :class "placeholder_txt message"))))
+
+(defwidget ai_chat []
+  (scroll :vscroll true
+          :class "ai_main"
+          :visible {arraylength(ai_txt) > 0}
+    (box :orientation "v"
+         :space-evenly false
+      (for ai in ai_txt
+        (box :orientation "v"
+             :space-evenly false
+          (for att in {ai.attachments ?: []}
+            (box :orientation "v"
+                 :space-evenly false
+              (box :class "ai_image prompt"
+                   :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                   :style "background-image: url('${att}');"
+                   :halign "end")
+                (box :orientation "v"
+                     :space-evenly false
+                     :class "l2 ai_txt attachment"
+                     :visible {att != "" && !matches(att, "(?i)\\.(png|jpg|jpeg|webp)$")}
+                  (label :text "󰈙" :class "ai_txt document")
+                  (label :text att))))
+          (label :show-truncated false
+                 :wrap true
+                 :text {ai.prompt}
+                 :halign "end"
+                 :valign "start"
+                 :class "l2 ai_txt prompt")
+          (for block in {ai.response}
+            (box :orientation "v"
+                 :space-evenly false
+              (label :show-truncated false
+                     :wrap true
+                     :text {block.content}
+                     :halign "start"
+                     :valign "start"
+                     :class "l2 ai_txt"
+                     :visible {block.type == "text"})
+              (box :orientation "v"
+                   :space-evenly false
+                   :class "l2 ai_txt"
+                   :visible {block.type == "code"}
+                (box :orientation "h"
+                     :space-evenly false
+                  (label :text "Code" 
+                         :halign "start" 
+                         :hexpand true)
+                  (button :onclick "echo '${block.content}' | wl-copy"
+                          :class "ai_code_copy"
+                          :tooltip "Copy Code"
+                    "󰆏 Copy"))
+                (input :value {block.content}
+                       :class "ai_code_input")))))))))
+(defwidget ai_bottom []
+  (box :orientation "v"
+       :space-evenly false
     (label :text "Loading..."
            :class "placeholder_txt ai_loading"
            :visible ai_loading)
-    (input :value ai_input
-           :onaccept "eww update ai_prompt=\"{}\" && eww update ai_loading=true && eww update ai_input= && /home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &"
-           :class "ai_input")
-    (button :onclick "eww update ai_toggle=false && eww close ai && killall ollama && echo 'empty' > /home/zaydaansayed/Documents/.ai.txt"
-      "")))
+    (scroll :hscroll false
+            :vscroll true
+            :visible {arraylength(ai_file_paths) > 0}
+            :class "l2 ai_iattached"
+      (box :orientation "v"
+           :space-evenly false
+        (box :orientation "v"
+             :space-evenly false
+             :halign "center"
+             :spacing 4
+             :class "ai_att_top"
+          (label :text "${arraylength(ai_file_paths)} File(s) Attached")
+          (button :onclick "eww update ai_file_paths='[]'"
+                  :tooltip "Clear All Attachments"
+            "Clear"))
+        (for path in ai_file_paths
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 5
+               :class "ai_ifiles"
+            (box :class "ai_image input"
+                 :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                 :style "background-image: url('${path}');")
+            (label :text path 
+                   :show-truncated true
+                   :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))
+    (box :orientation "h"
+         :space-evenly false
+      (input :value ai_dinput
+             :onchange "eww update ai_prompt=\"{}\""
+             :onaccept {strlength(ai_prompt) > 0 ? "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &" : ""}
+             :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
+      (button :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &"
+              :visible {strlength(ai_prompt) > 0}
+              :class "ai_ibutton send"
+              :tooltip "Send"
+        "")
+      (button :class "ai_ibutton"
+              :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/file_picker.sh &"
+              :tooltip "Attach file"
+        "󰁦"))))
+
+(defwindow ai_menu
+  :monitor 0
+  :geometry (geometry :x "156px" :y "3px" :width "180px" :height "510px" :anchor "top right")
+  :stacking "overlay"
+  :focusable true
+  (box :orientation "v"
+       :space-evenly false
+       :class "window"
+    (button :onclick "eww update ai_chat_id='' && eww close ai_menu"
+            :class "l2"
+            "+ New Chat")
+    (scroll :vscroll true
+            :vexpand true
+            :class "ai_menu_scroll"
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 3
+        (for chat in ai_menu_chats
+          (button :onclick "eww update ai_chat_id='${chat.id}' && eww close ai_menu"
+                  :class {ai_chat_id == chat.id ? "on" : "l2"}
+            (label :text {chat.title} :limit-width 18 :show-truncated true)))))
+    (button :onclick "eww close ai_menu"
+            :valign "end"
+            :tooltip "Close"
+      "")))

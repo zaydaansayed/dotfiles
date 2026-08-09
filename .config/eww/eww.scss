@@ -51,12 +51,65 @@ scale {
   }
 }
 
-.music_player_button {
-  padding: 0 4;
+.l2 {
+  background-color: #1a1a1a;
+  border-radius: 7px;
+
+  &.nhis_box {
+    margin-bottom: 5px;
+  }
+
+  &.ai_txt {
+  padding: 5px 8px;
+  margin-bottom: 4px;
+
+    &.prompt {
+      margin-left: 30px;
+    }
+
+    &.attachment {
+      margin-left: 150px;
+    }
+
+    &.document {
+      font-size: 50px;
+    }
+  }
+
+  &.ai_iattached {
+    margin-bottom: 3px;
+    padding: 5px;
+    min-height: 47px;
+  }
+
+  &.ai_iattached button {
+    padding: 0px 3px;
+    margin-bottom: 3px;
+  }
 }
 
-.ws_btn {
-  margin: 0 3 0 0;
+.l2 button {
+    background-color: #2b2b2b;
+}
+
+.l2 button:hover {
+  background-color: #333232;
+}
+
+.window {
+  padding: 5px;
+
+  &.dock {
+    min-height: 50px;
+  }
+}
+
+.window_small {
+  padding: 3px;
+}
+
+.music_player_button {
+  padding: 0px 4px;
 }
 
 .bticon {
@@ -71,19 +124,11 @@ scale {
   padding-right: 3px;
 }
 
-.screenprint {
-  padding: 3px;
-}
-
 .volbar {
   padding: 8px;
 }
 
 .brigbar {
-  padding: 8px;
-}
-
-.notification_popup {
   padding: 8px;
 }
 
@@ -94,10 +139,6 @@ scale {
 
 .quick_power {
   padding-right: 4px;
-}
-
-.quick_settings {
-  padding: 5px;
 }
 
 .quick_controls_top {
@@ -171,20 +212,6 @@ scale {
     margin-bottom: 5px;
   }
 
-.nhis_box {
-  margin-bottom: 5px;
-  background-color: #1a1a1a;
-  border-radius: 7px;
-}
-
-.power_menu {
-  padding: 3px;
-}
-
-.music_player {
-  padding: 10px;
-}
-
 .repeat_button {
   padding-right: 3px;
 }
@@ -197,29 +224,16 @@ scale {
   margin-left: 5px;
 }
 
-.localsend {
-  padding: 5px;
-}
-
 .lstab {
   min-width: 70px;
-}
-
-.system_notification {
-  padding: 5px;
 }
 
 .sysnotif_but {
   padding: 3px;
 }
 
-.dock {
-  min-height: 50px;
-  padding: 5px 5px 5px 5px;
-}
-
 .dock_button {
-  margin-right: 3px;
+  margin: 0px 2px;
   padding: 3px;
 }
 
@@ -239,17 +253,55 @@ scale {
   padding-right: 5px;
 }
 
-.ai {
-  padding: 5px;
+.ai_input {
+  margin-bottom: 3px;
+  min-width: 212px;
+  margin-right: 3px;
+  &.empty {
+    min-width: 242px;
+  }
 }
 
-.ai_input {
+.ai_ibutton {
+  min-width: 23px;
+  padding-right: 4px;
+  margin-bottom: 3px;
+
+  &.send {
+    margin-right: 3px;
+  }
+}
+
+.ai_image {
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  min-width: 100px;
+  min-height: 100px; 
+
+  &.prompt {
+    margin-bottom: 3px;
+  }
+
+  &.input {
+    margin-right: 4px;
+  }
+}
+
+.ai_att_top {
+  border-bottom: 1px solid #7a7a7a;
   margin-bottom: 3px;
 }
 
-.ai_txt {
-  background-color: #1a1a1a;
-  border-radius: 15px;
-  padding: 5px;
-  margin-bottom: 4px;
+.ai_code_copy {
+  padding: 0px 5px;
+  margin-bottom: 3px;
+}
+
+.ai_menu_button {
+  padding-right: 2px;
+}
+
+.ai_close {
+  min-width: 270px;
 }
