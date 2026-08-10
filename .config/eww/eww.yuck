@@ -15,9 +15,6 @@
 (defpoll timenum :interval "30s" `date +"%R"`)
 (defpoll tlpicon :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
 (defpoll date    :interval "30s" `date "+%A, %B %d"`)
-(defpoll ai_txt  :interval "1s" "cat /home/zaydaansayed/Documents/ai_chats/$(eww get ai_chat_id).json 2>/dev/null || echo '[]'")
-
-(defpoll ai_menu_chats :interval "100ms" "cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]'")
 
 (defvar notif_app           "")
 (defvar notif_title         "")
@@ -45,6 +42,8 @@
 (defvar ai_file_paths       "[]")
 (defvar ai_image            "false")
 (defvar ai_chat_id          "")
+(defvar ai_txt "[]")
+(defvar ai_menu_chats "[]")
 
 (defwidget player []
   (box :class "player" 
@@ -94,7 +93,7 @@
                  :class {quick_toggle == "true" ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "")
-         (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_toggle=true && eww open ai && ollama serve &"}
+         (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_toggle=true && eww open ai && ollama serve &"}
         :class {ai_toggle ? "ai_center on" : "ai_center"}
         :tooltip "Open Isaac AI"
   "󰚩"))))
@@ -510,8 +509,7 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick "eww open ai_menu"
-              :class "ai_menu_button"
+      (button :onclick "eww update ai_menu_chats=\"$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"                                                                                                                                                :class "ai_menu_button"
               :tooltip "Open Menu"
         "")
     (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
@@ -646,7 +644,7 @@ EOF_SAFE
        :space-evenly false
        :class "window"
        :spacing 3
-    (button :onclick "eww update ai_chat_id='' && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww close ai_menu"
             :class "ai_new_chat"
             :tooltip "Create New Chat"
             "+ New Chat")
@@ -661,7 +659,7 @@ EOF_SAFE
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-    (button :onclick "eww update ai_chat_id='${chat.id}' && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat /home/zaydaansayed/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww close ai_menu"
             :tooltip {chat.title}
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
@@ -669,9 +667,9 @@ EOF_SAFE
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
             :tooltip "Rename Chat"
       "󰏫")
-    (button :onclick "rm -f /home/zaydaansayed/Documents/ai_chats/${chat.id}.json && jq 'del(.[] | select(.id == \"${chat.id}\"))' /home/zaydaansayed/Documents/ai_chats/index.json > /home/zaydaansayed/Documents/ai_chats/index.json.tmp && mv /home/zaydaansayed/Documents/ai_chats/index.json.tmp /home/zaydaansayed/Documents/ai_chats/index.json"
-            :tooltip "Delete Chat"
-      "󰆴")))))
+   (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
+          :tooltip "Delete Chat"
+     "󰆴")))))
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_input_val=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Context' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")

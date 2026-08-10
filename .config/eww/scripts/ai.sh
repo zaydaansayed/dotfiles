@@ -43,3 +43,5 @@ jq --arg prompt "$prompt" --argjson response "$response" --argjson attachments "
 eww update ai_loading=false
 eww update ai_dinput=""
 eww update ai_file_paths="[]"
+eww update ai_txt="$(cat /home/zaydaansayed/Documents/ai_chats/${chat_id}.json 2>/dev/null || echo '[]')"
+eww update ai_menu_chats="$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')"
