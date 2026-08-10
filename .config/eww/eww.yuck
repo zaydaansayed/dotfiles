@@ -15,32 +15,36 @@
 (defpoll timenum :interval "30s" `date +"%R"`)
 (defpoll tlpicon :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
 (defpoll date    :interval "30s" `date "+%A, %B %d"`)
-(defpoll ai_txt :interval "1s" "jq --arg id \"$(eww get ai_chat_id 2>/dev/null || echo 'current')\" '.[$id].history // []' /home/zaydaansayed/Documents/ai.txt 2>/dev/null || echo '[]'")
-(defpoll ai_menu_chats :interval "2s" "jq -r 'to_entries | map({id: .key, title: .value.title})' /home/zaydaansayed/Documents/ai.txt 2>/dev/null || echo '[]'")
+(defpoll ai_txt  :interval "1s" "cat /home/zaydaansayed/Documents/ai_chats/$(eww get ai_chat_id).json 2>/dev/null || echo '[]'")
 
-(defvar notif_app          "")
-(defvar notif_title        "")
-(defvar notif_body         "")
-(defvar tlp_toggle         "false")
-(defvar quick_toggle       "false")
-(defvar music_toggle       "false")
-(defvar localsend_tabR     "true")
-(defvar localsend_tabS     "false")
-(defvar sysnotif_text_main "")
-(defvar sysnotif_text_butr "")
-(defvar sysnotif_text_butl "")
-(defvar sysnotif_commandr  "")
-(defvar sysnotif_commandl  "")
-(defvar dock_visibility    "false")
-(defvar tray_toggle        "false")
-(defvar ai_prompt          "")
-(defvar ai_toggle          "false")
-(defvar ai_loading         "false")
-(defvar ai_dinput          "")
-(defvar ai_file_paths      "[]")
-(defvar ai_image           "false")
-(defvar ai_dynamic_context "")
-(defvar ai_chat_id         "")
+(defpoll ai_menu_chats :interval "100ms" "cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]'")
+
+(defvar notif_app           "")
+(defvar notif_title         "")
+(defvar notif_body          "")
+(defvar tlp_toggle          "false")
+(defvar quick_toggle        "false")
+(defvar music_toggle        "false")
+(defvar localsend_tabR      "true")
+(defvar localsend_tabS      "false")
+(defvar sysnotif_type       "information")
+(defvar sysnotif_text_main  "")
+(defvar sysnotif_text_butr  "")
+(defvar sysnotif_text_butl  "")
+(defvar sysnotif_commandr   "")
+(defvar sysnotif_commandl   "")
+(defvar sysnotif_commandi-c "")
+(defvar sysnotif_commandi-a "")
+(defvar sysnotif_input_val  "")
+(defvar dock_visibility     "false")
+(defvar tray_toggle         "false")
+(defvar ai_prompt           "")
+(defvar ai_toggle           "false")
+(defvar ai_loading          "false")
+(defvar ai_dinput           "")
+(defvar ai_file_paths       "[]")
+(defvar ai_image            "false")
+(defvar ai_chat_id          "")
 
 (defwidget player []
   (box :class "player" 
@@ -92,7 +96,7 @@
            "")
          (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_toggle=true && eww open ai && ollama serve &"}
         :class {ai_toggle ? "ai_center on" : "ai_center"}
-        :tooltip "Open Ai companion"
+        :tooltip "Open Isaac AI"
   "󰚩"))))
 
 (defwindow screenprint
@@ -429,6 +433,17 @@
            :vexpand true)
     (box :orientation "h"
          :space-evenly false
+         :visible {sysnotif_type == "input"}
+      (input :value {sysnotif_input_val == "{}" ? "" : sysnotif_input_val}
+             :onchange sysnotif_commandi-c
+             :onaccept sysnotif_commandi-a
+             :class "sysnotif_input")
+      (button :onclick sysnotif_commandi-a
+              :class "sysnotif_iconfirm"
+        ""))
+    (box :orientation "h"
+         :space-evenly false
+         :visible {sysnotif_type == "information"}
          :valign "end"
          :vexpand true
       (button :onclick sysnotif_commandl
@@ -499,7 +514,7 @@
               :class "ai_menu_button"
               :tooltip "Open Menu"
         "")
-    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama && echo '[]' > /home/zaydaansayed/Documents/.ai.txt"
+    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -515,7 +530,7 @@
          :vexpand true
       (label :text "󰚩"
              :class "placeholder_txt ai icon")
-      (label :text "Your Ai companion is ready!"
+      (label :text "Isaac is Ready!"
              :class "placeholder_txt message"))))
 
 (defwidget ai_chat []
@@ -605,8 +620,11 @@
                    :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))
     (box :orientation "h"
          :space-evenly false
-      (input :value ai_dinput
-             :onchange "eww update ai_prompt=\"{}\""
+(input :value ai_dinput
+             :onchange "eww update ai_prompt=\"$(cat << 'EOF_SAFE'
+{}
+EOF_SAFE
+)\""
              :onaccept {strlength(ai_prompt) > 0 ? "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &" : ""}
              :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
       (button :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &"
@@ -621,25 +639,42 @@
 
 (defwindow ai_menu
   :monitor 0
-  :geometry (geometry :x "156px" :y "3px" :width "180px" :height "510px" :anchor "top right")
+  :geometry (geometry :x "106px" :y "3px" :width "200px" :height "510px" :anchor "top right")
   :stacking "overlay"
   :focusable true
   (box :orientation "v"
        :space-evenly false
        :class "window"
+       :spacing 3
     (button :onclick "eww update ai_chat_id='' && eww close ai_menu"
-            :class "l2"
+            :class "ai_new_chat"
+            :tooltip "Create New Chat"
             "+ New Chat")
     (scroll :vscroll true
+            :hscroll false
             :vexpand true
             :class "ai_menu_scroll"
       (box :orientation "v"
            :space-evenly false
            :spacing 3
         (for chat in ai_menu_chats
-          (button :onclick "eww update ai_chat_id='${chat.id}' && eww close ai_menu"
-                  :class {ai_chat_id == chat.id ? "on" : "l2"}
-            (label :text {chat.title} :limit-width 18 :show-truncated true)))))
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 3
+    (button :onclick "eww update ai_chat_id='${chat.id}' && eww close ai_menu"
+            :tooltip {chat.title}
+            :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
+      (label :text {chat.title}
+             :show-truncated true))
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
+            :tooltip "Rename Chat"
+      "󰏫")
+    (button :onclick "rm -f /home/zaydaansayed/Documents/ai_chats/${chat.id}.json && jq 'del(.[] | select(.id == \"${chat.id}\"))' /home/zaydaansayed/Documents/ai_chats/index.json > /home/zaydaansayed/Documents/ai_chats/index.json.tmp && mv /home/zaydaansayed/Documents/ai_chats/index.json.tmp /home/zaydaansayed/Documents/ai_chats/index.json"
+            :tooltip "Delete Chat"
+      "󰆴")))))
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_input_val=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Context' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
+            :tooltip "Change AI Personality"
+      "")
     (button :onclick "eww close ai_menu"
             :valign "end"
             :tooltip "Close"

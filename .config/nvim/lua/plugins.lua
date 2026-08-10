@@ -10,6 +10,7 @@ return {
   "tpope/vim-fugitive",
   "lewis6991/gitsigns.nvim",
   "tpope/vim-surround",
+
   {
     'akinsho/bufferline.nvim',
     version = '*',
@@ -17,6 +18,11 @@ return {
     config = function()
       require("bufferline").setup({})
     end
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {},
   },
   {
     "folke/noice.nvim",

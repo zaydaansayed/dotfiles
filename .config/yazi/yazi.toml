@@ -2,9 +2,6 @@
 show_hidden = true
 
 [opener]
-edit = [
-    { run = 'nvim "$@"', block = true, for = "unix" }
-]
 extract = [
     { run = 'unzip "%1" -d "${1%.*}"', desc = "Extract here", block = true }
 ]
@@ -23,6 +20,9 @@ vlc = [
 pdf_viewer = [
 	{ run = 'zathura "$@"', description = "Open PDF", orphan = true }
 ]
+edit = [
+    { run = 'nvim "$@"', block = true, desc = "Neovim", for = "unix" }
+]
 
 [open]
 rules = [
@@ -32,5 +32,6 @@ rules = [
     { mime = "audio/*", use = "vlc" },
     { mime = "video/*", use = "vlc" },
     { mime = "application/pdf", use = [ "pdf_viewer", "reveal" ] },
-    { url = "*.exe", use = "play-wine" }
+    { url = "*.exe", use = "play-wine" },
+    { url = "*", use = "edit" }
 ]

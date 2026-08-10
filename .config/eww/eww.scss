@@ -232,6 +232,15 @@ scale {
   padding: 3px;
 }
 
+.sysnotif_input {
+  min-width: 204px;
+  margin-right: 3px;
+}
+
+.sysnotif_iconfirm {
+  padding-right: 3px;
+}
+
 .dock_button {
   margin: 0px 2px;
   padding: 3px;
@@ -305,3 +314,14 @@ scale {
 .ai_close {
   min-width: 270px;
 }
+
+.ai_new_chat {
+  margin-bottom: 6px;
+}
+
+.ai_chat {
+  padding: 3px;
+  min-width: 149px;
+}
+
+
