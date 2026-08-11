@@ -2,7 +2,6 @@
 
 export PATH="$PATH:/usr/local/bin:$HOME/.local/bin:$HOME/.cargo/bin"
 
-# Get local IP addresses and hostname to filter out self-discovery
 MY_IPS=$(hostname -I 2>/dev/null || ip route get 1.1.1.1 2>/dev/null | grep -oP 'src \K\S+')
 MY_HOST=$(hostname 2>/dev/null)
 
@@ -36,11 +35,11 @@ parsed_output=$(localsend-cli discover 2>/dev/null | awk -v my_ips="$MY_IPS" -v 
     } else if (tolower(device) ~ /android|samsung|pixel/ || tolower(info) ~ /android/) {
       icon = "";
     } else if (tolower(device) ~ /mac|macbook|apple/ || tolower(info) ~ /mac/) {
-      icon = "󰌢";
+      icon = "󰌢 ";
     } else if (tolower(device) ~ /linux|arch/ || tolower(info) ~ /linux/) {
-      icon = "";
+      icon = " ";
     } else {
-      icon = "";
+      icon = " ";
     }
 
     if (device != "") {

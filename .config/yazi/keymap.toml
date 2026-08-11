@@ -2,3 +2,103 @@
 on   = "M" 
 run  = "plugin mount"
 desc = "Open mount manager"
+
+# sudo cp/mv
+[[mgr.prepend_keymap]]
+on = ["R", "p", "p"]
+run = "plugin sudo -- paste"
+desc = "sudo paste"
+
+# sudo cp/mv --force
+[[mgr.prepend_keymap]]
+on = ["R", "P"]
+run = "plugin sudo -- paste --force"
+desc = "sudo paste"
+
+# sudo mv
+[[mgr.prepend_keymap]]
+on = ["R", "r"]
+run = "plugin sudo -- rename"
+desc = "sudo rename"
+
+# sudo ln -s (absolute-path)
+[[mgr.prepend_keymap]]
+on = ["R", "p", "l"]
+run = "plugin sudo -- link"
+desc = "sudo link"
+
+# sudo ln -s (relative-path)
+[[mgr.prepend_keymap]]
+on = ["R", "p", "r"]
+run = "plugin sudo -- link --relative"
+desc = "sudo link relative path"
+
+# sudo ln
+[[mgr.prepend_keymap]]
+on = ["R", "p", "L"]
+run = "plugin sudo -- hardlink"
+desc = "sudo hardlink"
+
+# sudo touch/mkdir
+[[mgr.prepend_keymap]]
+on = ["R", "a"]
+run = "plugin sudo -- create"
+desc = "sudo create"
+
+# sudo trash
+[[mgr.prepend_keymap]]
+on = ["R", "d"]
+run = "plugin sudo -- remove"
+desc = "sudo trash"
+
+# sudo delete
+[[mgr.prepend_keymap]]
+on = ["R", "D"]
+run = "plugin sudo -- remove --permanently"
+desc = "sudo delete"
+
+# sudo chmod
+[[mgr.prepend_keymap]]
+on = ["R", "m"]
+run = "plugin sudo -- chmod"
+desc = "sudo chmod"
+
+[[mgr.prepend_keymap]]
+on   = [ "f","g" ]
+run  = "plugin fg"
+desc = "find file by content (fuzzy match)"
+
+[[mgr.prepend_keymap]]
+on   = [ "f","G" ]
+run  = "plugin fg -- rg"
+desc = "find file by content (ripgrep match)"
+
+[[mgr.prepend_keymap]]
+on   = [ "f","f" ]
+run  = "plugin fg -- fzf"
+desc = "find file by filename"
+
+[[mgr.prepend_keymap]]
+on   = [ "m", "g" ]
+run  = "linemode git"
+desc = "Set linemode to git"
+
+[[mgr.prepend_keymap]]
+on   = [ "g", "i" ]
+run  = "plugin lazygit"
+desc = "run lazygit"
+
+[[mgr.prepend_keymap]]
+on   = [ "R", "b" ]
+run  = "plugin recycle-bin"
+desc = "Open Recycle Bin menu"
+
+[[mgr.prepend_keymap]]
+on   = [ "<C-s>" ]
+run  = "plugin kdeconnect-send"
+desc = "Send selected files via KDE Connect"
+
+[[mgr.prepend_keymap]]
+on   = [ "c", "x" ]
+run  = "shell 'chmod +x \"$@\"'"
+desc = "Make selected file(s) executable"

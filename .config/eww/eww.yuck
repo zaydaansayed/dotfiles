@@ -12,9 +12,11 @@
 (deflisten cava                   :initial ""          `~/dotfiles/.config/eww/scripts/cava.sh`)
 (deflisten active_apps            :initial ""          `~/dotfiles/.config/eww/scripts/active_apps.sh`)
 
-(defpoll timenum :interval "30s" `date +"%R"`)
-(defpoll tlpicon :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
-(defpoll date    :interval "30s" `date "+%A, %B %d"`)
+(defpoll timenum           :interval "30s" `date +"%R"`)
+(defpoll tlpicon           :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
+(defpoll date              :interval "30s" `date "+%A, %B %d"`)
+(defpoll localsend_devices :interval "4s"
+  "/home/zaydaansayed/dotfiles/.config/eww/scripts/localsend_devices.sh")
 
 (defvar notif_app           "")
 (defvar notif_title         "")
@@ -22,17 +24,17 @@
 (defvar tlp_toggle          "false")
 (defvar quick_toggle        "false")
 (defvar music_toggle        "false")
-(defvar localsend_tabR      "true")
-(defvar localsend_tabS      "false")
+(defvar localsend_tab       "receive")
+(defvar localsend_files     "[]")
 (defvar sysnotif_type       "information")
 (defvar sysnotif_text_main  "")
 (defvar sysnotif_text_butr  "")
 (defvar sysnotif_text_butl  "")
-(defvar sysnotif_commandr   "")
-(defvar sysnotif_commandl   "")
+(defvar sysnotif_commandbr  "eww close system_notification")
+(defvar sysnotif_commandbl  "eww close system_notification")
 (defvar sysnotif_commandi-c "")
-(defvar sysnotif_commandi-a "")
-(defvar sysnotif_input_val  "")
+(defvar sysnotif_commandi-a "eww close system_notification")
+(defvar sysnotif_text_input "")
 (defvar dock_visibility     "false")
 (defvar tray_toggle         "false")
 (defvar ai_prompt           "")
@@ -42,8 +44,9 @@
 (defvar ai_file_paths       "[]")
 (defvar ai_image            "false")
 (defvar ai_chat_id          "")
-(defvar ai_txt "[]")
-(defvar ai_menu_chats "[]")
+(defvar ai_txt              "[]")
+(defvar ai_menu_chats       "[]")
+(defvar ls_recipient        "")
 
 (defwidget player []
   (box :class "player" 
@@ -221,7 +224,7 @@
     (box :orientation "h"
          :space-evenly false
       (button :class "quick_button localsend_button"
-              :onclick "eww open localsend && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
+              :onclick "eww open localsend && eww update localsend_tab=receive && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
               :tooltip "Share files"
         ""))))
 
@@ -377,24 +380,26 @@
 
 (defwindow localsend
   :monitor 0
-  :geometry (geometry :x "0px" :y "0px" :width "300px" :height "220px" :anchor "top center")
+  :geometry (geometry :x "0px" :y "0px" :width "400px" :height "250px" :anchor "top center")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
+         :spacing 3
          :class "window"
       (box :orientation "h"
            :spac"e-evenly false
            :halign "center"
            :spacing 3
-        (button :class {localsend_tabR == "true" ? "lstab on" : "lstab"}
-                :onclick "eww update localsend_tabR=true && eww update localsend_tabS=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
+        (button :class {localsend_tab == "receive" ? "lstab on" : "lstab"}
+                :onclick "eww update localsend_tab=receive && pkill -f localsend-cli && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
           "Receive")
-        (button :class {localsend_tabS == "true" ? "lstab on" : "lstab"}
-                :onclick "eww update localsend_tabR=false && eww update localsend_tabS=true && killall localsend-cli"
+        (button :class {localsend_tab == "send" ? "lstab on" : "lstab"}
+                :onclick "eww update localsend_tab=send && pkill -f localsend-cli"
           "Send"))
       (receive)
       (send)
-      (button :onclick "eww close localsend && killall localsend-cli"
+      (send_dialogue)
+      (button :onclick "eww close localsend && eww update localsend_files='[]' && pkill -f localsend-cli"
               :valign "end"
               :vexpand true
               :tooltip "Close"
@@ -403,21 +408,79 @@
 (defwidget receive []
   (box :orientation "v" 
        :space-evenly false
-       :visible localsend_tabR
+       :visible {localsend_tab == "receive"}
        :hexpand true
        :vexpand true
        :halign "center"
        :valign "center"
          (label :text " "
                 :class "placeholder_txt icon")
-         (label :text "You can now receive files"
+         (label :text "You can now receive files via Localsend"
                 :class "placeholder_txt")))
 
 (defwidget send []
   (box :orientation "h" 
        :space-evenly false
-       :visible localsend_tabS
-         (button :onclick "zenity --multiple --file-selection &")))
+       :visible {localsend_tab == "send"}
+    (box :orientation "v"
+         :space-evenly false
+      (label :text "Devices:"
+             :valign "start"
+             :halign "start")
+      (label :text "Searching..."
+             :visible {arraylength(localsend_devices) < 1})
+      (for each in localsend_devices
+        (button :onclick {arraylength(localsend_files) > 0 ? "eww update localsend_tab=send_dialogue && eww update ls_recipient=\"${each.icon} ${each.device}\" && localsend-cli send --to \"${each.device}\" $(echo '${localsend_files}' | jq -r '.[]') &" : "eww update sysnotif_type=information&& eww update sysnotif_text_main=\"Choose atleast 1 file\" && eww update sysnotif_text_butr=Ok && eww update sysnotif_text_butl=Cancel && eww update sysnotif_commandbr=\"eww close system_notification\" && eww update sysnotif_commandbl=\"eww close system_notification\" && eww open system_notification"}
+                :class "ls_device_button"
+          {each.device})))
+    (scroll :hscroll true
+            :vscroll false
+            :halign "end"
+            :hexpand true
+            :class "l2 localsend_files"
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 3
+        (button :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/localsend_file_picker.sh &"
+                :class "quick_button"
+          "󰁦")
+        (box :orientation "v"
+             :space-evenly false
+             :halign "center"
+             :spacing 4
+             :style  {arraylength(localsend_files) > 0 ? "border-bottom: 1px solid #7a7a7a;" : ""}
+          (label :text "${arraylength(localsend_files)} File(s) Attached")
+          (button :onclick "eww update localsend_files='[]'"
+                  :tooltip "Clear All Attachments"
+                  :class "localsend_clear_files"
+                  :visible {arraylength(localsend_files) > 0}
+            "Clear"))
+        (for path in localsend_files
+          (box :orientation "v"
+               :space-evenly false
+               :vexpand false
+               :spacing 5
+            (box :class "image localsend"
+                 :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                 :style "background-image: url('${path}');")
+            (label :text path 
+                   :show-truncated true
+                   :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))))
+
+(defwidget send_dialogue []
+  (box :orientation "v"
+       :visible {localsend_tab == "send_dialogue"}
+    (label :text "  Linux"
+           :class "ls_receive_txt")
+    (label :text ""
+           :class "ls_receive_txt")
+    (label :text ls_recipient
+           :class "ls_receive_txt")
+    (button :onclick "eww update localsend_tab=send && pkill -f localsend-cli"
+            :valign "end"
+            :vexpand true
+            :tooltip "Go back"
+      "")))
 
 (defwindow system_notification
   :monitor 0
@@ -432,12 +495,15 @@
            :vexpand true)
     (box :orientation "h"
          :space-evenly false
+         :spacing 3
          :visible {sysnotif_type == "input"}
-      (input :value {sysnotif_input_val == "{}" ? "" : sysnotif_input_val}
+      (input :value {sysnotif_text_input == "{}" ? "" : sysnotif_text_input}
              :onchange sysnotif_commandi-c
              :onaccept sysnotif_commandi-a
              :class "sysnotif_input")
       (button :onclick sysnotif_commandi-a
+              :halign "end"
+              :hexpand true
               :class "sysnotif_iconfirm"
         ""))
     (box :orientation "h"
@@ -445,10 +511,10 @@
          :visible {sysnotif_type == "information"}
          :valign "end"
          :vexpand true
-      (button :onclick sysnotif_commandl
+      (button :onclick sysnotif_commandbl
               :class "sysnotif_but"
         sysnotif_text_butl)
-      (button :onclick sysnotif_commandr
+      (button :onclick sysnotif_commandbr
               :class "sysnotif_but"
               :halign "end"
               :hexpand true
@@ -481,6 +547,7 @@
                :spacing 5
             (label :text {tray_toggle ? "" : ""})
             (systray :visible tray_toggle
+                     :spacing 4
                      :class "systemtray")))))))
 
 (defwidget apps []
@@ -512,7 +579,7 @@
       (button :onclick "eww update ai_menu_chats=\"$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"                                                                                                                                                :class "ai_menu_button"
               :tooltip "Open Menu"
         "")
-    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
+    (button :onclick "eww close ai && eww update ai_prompt='' && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -543,7 +610,7 @@
           (for att in {ai.attachments ?: []}
             (box :orientation "v"
                  :space-evenly false
-              (box :class "ai_image prompt"
+              (box :class "image ai_prompt"
                    :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
                    :style "background-image: url('${att}');"
                    :halign "end")
@@ -584,6 +651,7 @@
                     "󰆏 Copy"))
                 (input :value {block.content}
                        :class "ai_code_input")))))))))
+
 (defwidget ai_bottom []
   (box :orientation "v"
        :space-evenly false
@@ -596,6 +664,7 @@
             :class "l2 ai_iattached"
       (box :orientation "v"
            :space-evenly false
+           :spacing 3
         (box :orientation "v"
              :space-evenly false
              :halign "center"
@@ -610,7 +679,7 @@
                :space-evenly false
                :spacing 5
                :class "ai_ifiles"
-            (box :class "ai_image input"
+            (box :class "image ai_input"
                  :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
                  :style "background-image: url('${path}');")
             (label :text path 
@@ -631,13 +700,13 @@ EOF_SAFE
               :tooltip "Send"
         "")
       (button :class "ai_ibutton"
-              :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/file_picker.sh &"
+              :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_file_picker.sh &"
               :tooltip "Attach file"
         "󰁦"))))
 
 (defwindow ai_menu
   :monitor 0
-  :geometry (geometry :x "106px" :y "3px" :width "200px" :height "510px" :anchor "top right")
+  :geometry (geometry :x "310px" :y "3px" :width "200px" :height "510px" :anchor "top right")
   :stacking "overlay"
   :focusable true
   (box :orientation "v"
@@ -670,10 +739,10 @@ EOF_SAFE
    (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
           :tooltip "Delete Chat"
      "󰆴")))))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_input_val=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Context' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
     (button :onclick "eww close ai_menu"
             :valign "end"
             :tooltip "Close"
-      "")))
+      "")))

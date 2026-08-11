@@ -1,7 +1,32 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "1cf48ea"
-hash = "e3260d0b1feded8c8e3ae3afa1169e30"
+rev = "0be29a9"
+hash = "46cbdc05596a3ecd730b288e28c7079d"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:git"
+rev = "0be29a9"
+hash = "fbb53c3c04f816d737f9f4b1d29f3310"
+
+[[plugin.deps]]
+use = "imsi32/yatline"
+rev = "c5d4b48"
+hash = "e6e98d12b1648d1894c2b560d85eeaa7"
+
+[[plugin.deps]]
+use = "Lil-Dank/lazygit"
+rev = "e73fd74"
+hash = "6ea5f37c7f219671ec504cb8311f889d"
+
+[[plugin.deps]]
+use = "uhs-robert/recycle-bin"
+rev = "82da16a"
+hash = "7383d80862d3cdcc85f8658dac7b90c2"
+
+[[plugin.deps]]
+use = "Deepak22903/kdeconnect-send"
+rev = "06674d1"
+hash = "869884767c2ef592bfb7f5764f8fcae3"
 
 [flavor]
 deps = []

@@ -1,0 +1,6 @@
+[binds]
+u = rotate by 90
+<Shift+U> = rotate by -90
+
+<Ctrl+g> = exec gimp "$imv_current_file" &
+<Ctrl+p> = exec /home/zaydaansayed/dotfiles/.config/eww/scripts/print_dialogue.sh && eww update sysnotif_commandbr="lp '$imv_current_file' && eww close system_notification"

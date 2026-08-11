@@ -86,6 +86,12 @@ scale {
     padding: 0px 3px;
     margin-bottom: 3px;
   }
+
+  &.localsend_files {
+    min-width: 170px;
+    min-height: 175px;
+    padding: 5px;
+  }
 }
 
 .l2 button {
@@ -106,6 +112,27 @@ scale {
 
 .window_small {
   padding: 3px;
+}
+
+.image {
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  min-width: 100px;
+  min-height: 100px; 
+
+  &.ai_prompt {
+    margin-bottom: 3px;
+  }
+
+  &.ai_input {
+    margin-right: 4px;
+    margin-bottom: 3px;
+  }
+
+  &.localsend {
+    margin-bottom: 3px;
+  }
 }
 
 .music_player_button {
@@ -224,8 +251,21 @@ scale {
   margin-left: 5px;
 }
 
+.localsend_clear_files {
+  margin-bottom: 5px;
+}
+
 .lstab {
   min-width: 70px;
+}
+
+.ls_device_button {
+  padding: 3px;
+  margin-bottom: 3px;
+}
+
+.ls_receive_txt {
+  font-size: 35px;
 }
 
 .sysnotif_but {
@@ -234,7 +274,6 @@ scale {
 
 .sysnotif_input {
   min-width: 204px;
-  margin-right: 3px;
 }
 
 .sysnotif_iconfirm {
@@ -281,25 +320,8 @@ scale {
   }
 }
 
-.ai_image {
-  background-size: cover;
-  background-position: center;
-  border-radius: 15px;
-  min-width: 100px;
-  min-height: 100px; 
-
-  &.prompt {
-    margin-bottom: 3px;
-  }
-
-  &.input {
-    margin-right: 4px;
-  }
-}
-
 .ai_att_top {
   border-bottom: 1px solid #7a7a7a;
-  margin-bottom: 3px;
 }
 
 .ai_code_copy {
@@ -323,5 +345,3 @@ scale {
   padding: 3px;
   min-width: 149px;
 }
-
-

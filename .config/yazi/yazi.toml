@@ -6,10 +6,10 @@ extract = [
     { run = 'unzip "%1" -d "${1%.*}"', desc = "Extract here", block = true }
 ]
 imv = [
-    { run = 'imv "$@"', desc = "Open with imv" }
+    { run = 'imv "$@" &', desc = "Open with imv" }
 ]
 imv_animated = [
-    { run = 'imv -u linear "$@"', desc = "Open WebP without scaling artifacts" }
+    { run = 'imv -u linear "$@" &', desc = "Open WebP without scaling artifacts" }
 ]
 play-wine = [
     { run = 'export WINE_JOYSTICK_DISABLE_LO_DI=1 && cd "$(dirname "$1")" && wine "$(basename "$1")"', orphan = true, desc = "Run with Wine" }
@@ -35,3 +35,15 @@ rules = [
     { url = "*.exe", use = "play-wine" },
     { url = "*", use = "edit" }
 ]
+
+[[plugin.prepend_fetchers]]
+id    = "git"
+url   = "*"
+run   = "git"
+group = "git"
+
+[[plugin.prepend_fetchers]]
+id    = "git"
+url   = "*/"
+run   = "git"
+group = "git"

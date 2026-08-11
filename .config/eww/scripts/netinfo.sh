@@ -1,7 +1,10 @@
 #!/bin/bash
 
+LAST_OUTPUT=""
+
 get_internet() {
-    local net_state
+    local net_state netname icon strength new_output
+    
     net_state=$(nmcli networking)
     netname=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes' | cut -d: -f2)
     
@@ -10,7 +13,6 @@ get_internet() {
     elif ip route | grep -q "dev eth" || ip route | grep -q "dev enp"; then
         icon=""
     else
-        local strength
         strength=$(nmcli -t -f SIGNAL,ACTIVE dev wifi 2>/dev/null | awk -F: '$2=="yes" {print $1}')
         
         if [[ -z "$strength" || "$strength" -eq 0 ]]; then icon="󰤯"
@@ -20,21 +22,24 @@ get_internet() {
         else icon="󰤨"
         fi
     fi
-  echo "{\"icon\": \"$icon\", \"netname\": \"$netname\"}"
+
+    new_output="{\"icon\": \"$icon\", \"netname\": \"$netname\"}"
+
+    if [[ "$new_output" != "$LAST_OUTPUT" ]]; then
+        echo "$new_output"
+        LAST_OUTPUT="$new_output"
+    fi
 }
 
 get_internet
 
-awk_poll() {
+(
     while true; do
-        sleep 5
+        sleep 60
         get_internet
     done
-}
-awk_poll &
+) &
 
-nmcli monitor 2>/dev/null | while read -r line; do
-    if echo "$line" | grep -qE "connected|disconnected|unavailable"; then
-        get_internet
-    fi
+nmcli monitor 2>/dev/null | while read -r _; do
+    get_internet
 done
