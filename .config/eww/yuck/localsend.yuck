@@ -1,6 +1,6 @@
 (defwindow localsend
   :monitor 0
-  :geometry (geometry :x "0px" :y "0px" :width "400px" :height "250px" :anchor "top center")
+  :geometry (geometry :x "0px" :y "3px" :width "400px" :height "250px" :anchor "top center")
   :stacking "fg"
     (box :orientation "v"
          :space-evenly false
@@ -53,8 +53,8 @@
         (button :onclick {arraylength(localsend_files) > 0 ? "eww update localsend_tab=send_dialogue && eww update ls_recipient=\"${each.icon} ${each.device}\" && localsend-cli send --to \"${each.device}\" $(echo '${localsend_files}' | jq -r '.[]') &" : "eww update sysnotif_type=information&& eww update sysnotif_text_main=\"Choose atleast 1 file\" && eww update sysnotif_text_butr=Ok && eww update sysnotif_text_butl=Cancel && eww update sysnotif_commandbr=\"eww close system_notification\" && eww update sysnotif_commandbl=\"eww close system_notification\" && eww open system_notification"}
                 :class "ls_device_button"
           {each.device})))
-    (scroll :hscroll true
-            :vscroll false
+    (scroll :hscroll false
+            :vscroll true
             :halign "end"
             :hexpand true
             :class "l2 localsend_files"

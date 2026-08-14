@@ -12,7 +12,7 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick {ai_menu_toggle ? "eww update ai_menu_toggle=false && eww close ai_menu" : "eww update ai_menu_toggle=true && eww open ai_menu"}                                                                                                                                                   :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
+      (button :onclick {ai_menu_toggle ? "eww update ai_menu_toggle=false && eww close ai_menu" : "eww update ai_menu_toggle=true && eww open ai_menu"}                                                                                     :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
               :tooltip "Open Menu"
         "")
     (button :onclick "eww close ai && eww update ai_prompt='' && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
@@ -149,7 +149,7 @@ EOF_SAFE
        :space-evenly false
        :class "window"
        :spacing 3
-    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='' && eww update ai_menu_toggle='false' && eww update ai_txt='[]' && eww close ai_menu"
             :class "ai_new_chat"
             :tooltip "Create New Chat"
             "+ New Chat")
