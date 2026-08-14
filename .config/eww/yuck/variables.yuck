@@ -55,5 +55,6 @@
 (defvar ai_image                 "false")
 (defvar ai_chat_id               "")
 (defvar ai_txt                   "[]")
+(defvar ai_menu_toggle           "false")
 (defvar ai_menu_chats            "[]")
 (defvar ls_recipient             "")
