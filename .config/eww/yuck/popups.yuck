@@ -1,0 +1,45 @@
+(defwindow volume
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
+  :stacking "fg" 
+    (box :orientation "h"
+         :space-evenly false
+      (progress :orientation "h" 
+                :value {volinfo.volume}
+               :class "volbar")
+        (label :text {volinfo.icon})))
+
+(defwindow brightness
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
+  :stacking "fg"
+    (box :orientation "h"
+         :space-evenly false
+      (progress :orientation "h" 
+                :value {briginfo.brightness}
+                :class "brigbar")
+        (label :text {briginfo.icon})))
+
+(defwindow notification_popup
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "0px" :anchor "top right")
+  :stacking "fg"
+  (box :orientation "v"
+       :space-evenly false
+       :class "window"
+    (box :orientation "h"
+         :space-evenly false
+      (label :text notif_app)
+      (button :onclick "eww close notification_popup && makoctl dismiss"
+               :halign "end"
+               :hexpand true
+         (label :text "")))
+    (label :show-truncated false
+           :wrap true
+           :text notif_title
+           :halign "start")
+    (label :show-truncated false
+           :wrap true
+           :text notif_body
+           :xalign 0)))
+

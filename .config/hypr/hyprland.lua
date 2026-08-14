@@ -48,6 +48,7 @@ local notification_daemon = "mako"
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
    hl.exec_cmd("kdeconnectd")
+   hl.exec_cmd("rclone mount Icloud_Photos: /home/zaydaansayed/Icloud_Photos")
    hl.exec_cmd(bar)
    hl.exec_cmd(notification_daemon)
    hl.exec_cmd("sleep 0.5 && eww open dock")

@@ -1,52 +1,54 @@
-(deflisten batinfo                :initial ""          `~/.config/eww/scripts/batinfo.sh`)
-(deflisten netinfo                :initial ""          `~/.config/eww/scripts/netinfo.sh`)
-(deflisten btinfo                 :initial ""          `~/.config/eww/scripts/btinfo.sh`)
-(deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
-(deflisten player_data            :initial ""          `~/.config/eww/scripts/player_data.sh`)
-(deflisten volinfo                :initial ""          `~/.config/eww/scripts/volinfo.sh`)
-(deflisten briginfo               :initial ""          `~/.config/eww/scripts/briginfo.sh`)
-(deflisten notif_visibility       :initial ""          `~/dotfiles/.config/eww/scripts/notif_visibility.sh`)
-(deflisten notif_history          :initial ""          `~/dotfiles/.config/eww/scripts/notif_history.sh`)
-(deflisten bluetooth_button       :initial ""          `~/.config/eww/scripts/bluetooth_button.sh`)
-(deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
-(deflisten cava                   :initial ""          `~/dotfiles/.config/eww/scripts/cava.sh`)
-(deflisten active_apps            :initial ""          `~/dotfiles/.config/eww/scripts/active_apps.sh`)
+(deflisten batinfo                :initial ""          "~/.config/eww/scripts/batinfo.sh")
+(deflisten netinfo                :initial ""          "~/.config/eww/scripts/netinfo.sh")
+(deflisten btinfo                 :initial ""          "~/.config/eww/scripts/btinfo.sh")
+(deflisten active_workspace       :initial ""          "~/.config/eww/scripts/workspaces.sh")
+(deflisten player_data            :initial ""          "~/.config/eww/scripts/player_data.sh")
+(deflisten volinfo                :initial ""          "~/.config/eww/scripts/volinfo.sh")
+(deflisten briginfo               :initial ""          "~/.config/eww/scripts/briginfo.sh")
+(deflisten notif_visibility       :initial ""          "~/dotfiles/.config/eww/scripts/notif_visibility.sh")
+(deflisten notif_history          :initial ""          "~/dotfiles/.config/eww/scripts/notif_history.sh")
+(deflisten bluetooth_button       :initial ""          "~/.config/eww/scripts/bluetooth_button.sh")
+(deflisten bticon_button          :initial ""          "~/.config/eww/scripts/bticon_button.sh")
+(deflisten cava                   :initial ""          "~/dotfiles/.config/eww/scripts/cava.sh")
+(deflisten active_apps            :initial ""          "~/dotfiles/.config/eww/scripts/active_apps.sh")
+(deflisten pinned_apps            :initial ""          "~/dotfiles/.config/eww/scripts/pinned_apps.sh")
 
-(defpoll timenum           :interval "30s" `date +"%R"`)
-(defpoll tlpicon           :interval "1s"  `~/.config/eww/scripts/tlpicon.sh`)
-(defpoll date              :interval "30s" `date "+%A, %B %d"`)
-(defpoll localsend_devices :interval "4s"
-  "/home/zaydaansayed/dotfiles/.config/eww/scripts/localsend_devices.sh")
+(defpoll timenum           :interval "30s" "date +'%R'")
+(defpoll tlpicon           :interval "1s"  "~/.config/eww/scripts/tlpicon.sh")
+(defpoll date              :interval "30s" "cal")
+(defpoll localsend_devices :interval "4s" "/home/zaydaansayed/dotfiles/.config/eww/scripts/localsend_devices.sh")
 
-(defvar notif_app           "")
-(defvar notif_title         "")
-(defvar notif_body          "")
-(defvar tlp_toggle          "false")
-(defvar quick_toggle        "false")
-(defvar music_toggle        "false")
-(defvar localsend_tab       "receive")
-(defvar localsend_files     "[]")
-(defvar sysnotif_type       "information")
-(defvar sysnotif_text_main  "")
-(defvar sysnotif_text_butr  "")
-(defvar sysnotif_text_butl  "")
-(defvar sysnotif_commandbr  "eww close system_notification")
-(defvar sysnotif_commandbl  "eww close system_notification")
-(defvar sysnotif_commandi-c "")
-(defvar sysnotif_commandi-a "eww close system_notification")
-(defvar sysnotif_text_input "")
-(defvar dock_visibility     "false")
-(defvar tray_toggle         "false")
-(defvar ai_prompt           "")
-(defvar ai_toggle           "false")
-(defvar ai_loading          "false")
-(defvar ai_dinput           "")
-(defvar ai_file_paths       "[]")
-(defvar ai_image            "false")
-(defvar ai_chat_id          "")
-(defvar ai_txt              "[]")
-(defvar ai_menu_chats       "[]")
-(defvar ls_recipient        "")
+(defvar notif_app                "")
+(defvar notif_title              "")
+(defvar notif_body               "")
+(defvar tlp_toggle               "false")
+(defvar quick_toggle             "false")
+(defvar music_toggle             "false")
+(defvar localsend_tab            "receive")
+(defvar localsend_files          "[]")
+(defvar sysnotif_type            "information")
+(defvar sysnotif_text_main       "")
+(defvar sysnotif_text_butr       "")
+(defvar sysnotif_text_butl       "")
+(defvar sysnotif_commandbr       "eww close system_notification")
+(defvar sysnotif_commandbl       "eww close system_notification")
+(defvar sysnotif_commandi-c      "")
+(defvar sysnotif_commandi-a      "eww close system_notification")
+(defvar sysnotif_text_input      "")
+(defvar dock_visibility          "false")
+(defvar selected_app             "")
+(defvar tray_toggle              "false")
+(defvar ai_prompt                "")
+(defvar ai_toggle                "false")
+(defvar ai_loading               "false")
+(defvar ai_dinput                "")
+(defvar ai_file_paths            "[]")
+(defvar ai_image                 "false")
+(defvar ai_chat_id               "")
+(defvar ai_txt                   "[]")
+(defvar ai_menu_toggle           "false")
+(defvar ai_menu_chats            "[]")
+(defvar ls_recipient             "")
 
 (defwidget player []
   (box :class "player" 
@@ -57,8 +59,8 @@
     (button :onclick "playerctl play-pause"
             :tooltip "Play/Pause"
       "${player_data.icon}")
-    (button :onclick {music_toggle == "true" ? "eww update music_toggle=false && eww close music_player" : "eww update music_toggle=true && eww open music_player"}
-            :class {music_toggle == "true" ? "music_player_button on" : "music_player_button"}
+    (button :onclick {music_toggle ? "eww update music_toggle=false && eww close music_player" : "eww update music_toggle=true && eww open music_player"}
+            :class {music_toggle ? "music_player_button on" : "music_player_button"}
       (label :text {player_data.text}))))
 
 (defwidget workspaces []
@@ -92,8 +94,8 @@
                  :class "neticon"
                  :tooltip {netinfo.netname})
          (label  :text batinfo)
-         (button :onclick {quick_toggle == "true" ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
-                 :class {quick_toggle == "true" ? "quick_center on" : "quick_center"}
+         (button :onclick {quick_toggle ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
+                 :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "")
          (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_toggle=true && eww open ai && ollama serve &"}
@@ -217,8 +219,8 @@
               :onclick "bzmenu -l fuzzel | eww close quick_settings | eww update quick_toggle=false"
               :tooltip {btinfo.devcname}
              ">")
-      (button :class {tlp_toggle == "true" ? "quick_button on" : "quick_button"}
-              :onclick {tlp_toggle == "true" ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+      (button :class {tlp_toggle ? "quick_button on" : "quick_button"}
+              :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
               :tooltip "Power Profiles"
               tlpicon))
     (box :orientation "h"
@@ -257,15 +259,15 @@
       (box :orientation "h"
            :space-evenly false
            :tooltip {volinfo.volume}
-           :spacing 4
+           :spacing 15
            :class "quickV_scale"
         (scale :value {volinfo.volume}
-               :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")
+                :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")        
         (label :text {volinfo.icon}))
       (box :orientation "h"
            :space-evenly false
            :tooltip {briginfo.brightness}
-           :spacing 4
+           :spacing 15
         (scale :value {briginfo.brightness}
                :onchange "brightnessctl set {}%"
                 :min 1)
@@ -273,6 +275,8 @@
       (button :onclick "pwmenu --launcher fuzzel | eww close quick_settings | eww update quick_toggle=false"
                 :class "vol_settings"
                 :tooltip "Volume Settings"
+                :halign "end"
+                :hexpand true
         "")))
 
 (defwidget notification_history []
@@ -387,7 +391,7 @@
          :spacing 3
          :class "window"
       (box :orientation "h"
-           :spac"e-evenly false
+           :space-evenly false
            :halign "center"
            :spacing 3
         (button :class {localsend_tab == "receive" ? "lstab on" : "lstab"}
@@ -531,13 +535,13 @@
       (box :class "window dock"
            :orientation "h"
            :space-evenly false
-           :spacing {arraylength(active_apps) > 0 ? "10" : "5"}
+           :spacing "10"
         (button :onclick "fuzzel &"
                 :class "fuzzel_button"
                 :tooltip "fuzzel"
                     (image :path "/home/zaydaansayed/dotfiles/.config/eww/scripts/hyprland_logo.png"
-                   :image-width 50
-                   :image-height 50))
+                           :image-width 50
+                           :image-height 50))
         (apps)
         (button :onclick {tray_toggle ? "eww update tray_toggle=false" : "eww update tray_toggle=true"}
                 :class "tray_button"
@@ -553,7 +557,34 @@
 (defwidget apps []
   (box :orientation "h"
        :space-evenly false
-    (for app in active_apps
+       :spacing 0
+    (box :orientation "h"
+         :space-evenly false
+         :style {arraylength(active_apps) > 0 ? "border-right: 1px solid #7a7a7a; margin-right: 7px;" : ""}
+      (button :onclick "${jq(pinned_apps, '.[] | select(.name == \"firefox\")') != '' ? 'eww update selected_app=firefox && /home/zaydaansayed/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh' : 'firefox &'}"
+              :onrightclick "firefox &"
+              :class "${jq(pinned_apps, '.[] | select(.name == \"firefox\")') == '' ? 'dock_button' : jq(pinned_apps, '.[] | select(.name == \"firefox\" and .focused == true)') != '' ? 'dock_button on' : 'dock_button background'}"
+              :tooltip "firefox"
+        (box :orientation "v"
+        (image :icon "firefox"
+               :icon-size "dialog")))
+      (button :onclick "${jq(pinned_apps, '.[] | select(.name == \"Spotify\")') != '' ? "hyprctl dispatch \"hl.dispatch(hl.dsp.focus({ window = 'class:Spotify' }))\"" : 'spotify-launcher &'}"
+              :class "${jq(pinned_apps, '.[] | select(.name == \"Spotify\")') == '' ? 'dock_button' : jq(pinned_apps, '.[] | select(.name == \"Spotify\" and .focused == true)') != '' ? 'dock_button on' : 'dock_button background'}"
+              :tooltip "Spotify"
+        (image :icon "spotify-launcher"
+               :icon-size "dialog"))
+      (button :onclick "cd /home/zaydaansayed/dotfiles/.config && kitty -e nvim &"
+              :class "dock_button"
+              :tooltip "Rice"
+        (image :icon "kitty"
+               :icon-size "dialog"))
+        (button :onclick "cd /home/zaydaansayed/ && kitty -e yazi &"
+              :class "dock_button"
+              :style {arraylength(active_apps) > 0 ? "margin-right: 7px;" : ""}
+              :tooltip "Yazi"
+        (image :icon "yazi"
+               :icon-size "dialog")))
+      (for app in active_apps
           (box :orientation "h"
                :space-evenly false
             (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "pid:${app.pid}" })'`
@@ -562,6 +593,21 @@
             (image :icon {app.icon}
                    :icon-size "dialog"))))))
 
+(defwindow app_multiple_instances 
+  :monitor 0
+  :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
+  :stacking "fg"
+  (box :class "window"
+    (eventbox :onhoverlost "eww close app_multiple_instances"
+      (box :orientation "h"
+           :space-evenly false
+        (for app in pinned_apps
+          (box :visible {app.name == selected_app}
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })' && eww close app_multiple_instances`
+                    :class {app.focused ? "dock_button on" : "dock_button"}
+                    :tooltip {app.title}
+              (image :icon selected_app   
+                     :icon-size "dialog"))))))))
 (defwindow ai
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "300px" :height "500px" :anchor "top right")
@@ -576,7 +622,7 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick "eww update ai_menu_chats=\"$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"                                                                                                                                                :class "ai_menu_button"
+      (button :onclick {ai_menu_toggle ? "eww update ai_menu_toggle=false && eww close ai_menu" : "eww update ai_menu_toggle=true && eww open ai_menu"}                                                                                                                                                   :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
               :tooltip "Open Menu"
         "")
     (button :onclick "eww close ai && eww update ai_prompt='' && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
@@ -742,7 +788,7 @@ EOF_SAFE
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
-    (button :onclick "eww close ai_menu"
+    (button :onclick "eww update ai_menu_toggle=false && eww close ai_menu"
             :valign "end"
             :tooltip "Close"
       "")))

@@ -1,0 +1,189 @@
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "1273px" :height "25px" :anchor "top center")
+  :stacking "bg"
+  :exclusive true 
+  (centerbox :orientation "h"
+    (box :space-evenly false
+         :spacing 5
+         (player) (workspaces))
+    (box :space-evenly false 
+         :tooltip date 
+      (label :text timenum))
+    (box :space-evenly false 
+         :halign "end"
+         :spacing 3
+         (label  :text {btinfo.icon}  
+                 :class "bticon"
+                 :tooltip {btinfo.devcname})
+         (label  :text {netinfo.icon} 
+                 :class "neticon"
+                 :tooltip {netinfo.netname})
+         (label  :text batinfo)
+         (button :onclick {quick_toggle ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
+                 :class {quick_toggle ? "quick_center on" : "quick_center"}
+                 :tooltip "Open Quick Settings"
+           "")
+         (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_toggle=true && eww open ai && ollama serve &"}
+        :class {ai_toggle ? "ai_center on" : "ai_center"}
+        :tooltip "Open Isaac AI"
+  "󰚩"))))
+
+(defwidget workspaces []
+  (box :orientation "h"
+       :spacing 3
+    (for i in "[1, 2, 3, 4, 5]"
+      (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'"
+              :class {active_workspace == i ? "on" : ""}
+              :tooltip "Switch to workspace ${i}"
+              (label :text i)))))
+
+(defwindow screenprint
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "127px" :height "25px" :anchor "top center")
+  :stacking "fg"
+  (box :orientation "h"
+       :spacing 3
+       :class "window_small"
+       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :tooltip "Fullscreen"
+               :class "quick_button" 
+               "󰍹")
+       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :class "quick_button" 
+               :tooltip "Window"
+               "󰖯")
+       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+               :class "quick_button" 
+               :tooltip "Region"
+               "")
+       (button :onclick "eww close screenprint" 
+               :class "quick_button"                
+               :tooltip "Close"
+               "")))
+
+(defwindow quick_settings
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :class "window"
+      (quickS_topbar)
+      (quick_controls)
+      (tlp_menu)
+      (quick_sliders)
+      (notification_history)))
+
+(defwidget quickS_topbar []
+  (box :orientation "h"
+       :space-evenly false
+    (button :onclick "eww close quick_settings && eww update quick_toggle=false"
+            :class "quick_close"
+            :tooltip "Close"
+      "")
+    (button :onclick "eww open power_menu && eww close quick_settings && eww update quick_toggle=false"
+            :class "quick_power"
+            :tooltip "Open Power Menu"
+      "")))
+
+(defwidget quick_controls []
+  (box :orientation "v"
+       :space-evenly false
+    (box :orientation "h"
+         :space-evenly false
+         :class "quick_controls_top"
+      (button :class {netinfo.icon == "󰤭" ? "quick_button net" : "quick_button net on"}
+              :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
+              :tooltip {netinfo.netname}
+              {netinfo.icon})
+      (button :class {netinfo.icon == "󰤭" ? "quick_extend net" : "quick_extend net on"}
+              :onclick "networkmanager_dmenu | eww close quick_settings | eww update quick_toggle=false"
+              :tooltip {netinfo.netname}
+              ">")
+      (button :class {btinfo.button == "󰂲" ? "quick_button bt" : "quick_button bt on"}
+              :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+              :tooltip {btinfo.devcname}
+              {btinfo.button})
+      (button :class {btinfo.button == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
+              :onclick "bzmenu -l fuzzel | eww close quick_settings | eww update quick_toggle=false"
+              :tooltip {btinfo.devcname}
+             ">")
+      (button :class {tlp_toggle ? "quick_button on" : "quick_button"}
+              :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+              :tooltip "Power Profiles"
+              tlpicon))
+    (box :orientation "h"
+         :space-evenly false
+      (button :class "quick_button localsend_button"
+              :onclick "eww open localsend && eww update localsend_tab=receive && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
+              :tooltip "Share files"
+        ""))))
+
+(defwidget tlp_menu []
+  (box :orientation "h"
+       :space-evenly false
+       :class "tlp_menu"
+       :visible tlp_toggle
+       :spacing 5
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl power-saver &"
+           :tooltip "Low power mode"
+           "")
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl balanced &"
+           :tooltip "Balanced"
+           "")
+   (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl performance &"
+           :tooltip "Performance"
+           "󱐋")))
+
+(defwidget quick_sliders []
+  (box :orientation "h"
+       :space-evenly false
+       :class "quick_sliders"
+       :spacing 4
+    (box :orientation "v"
+         :space-evenly false
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {volinfo.volume}
+           :spacing 15
+           :class "quickV_scale"
+        (scale :value {volinfo.volume}
+                :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")        
+        (label :text {volinfo.icon}))
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {briginfo.brightness}
+           :spacing 15
+        (scale :value {briginfo.brightness}
+               :onchange "brightnessctl set {}%"
+                :min 1)
+        (label :text {briginfo.icon})))
+      (button :onclick "pwmenu --launcher fuzzel | eww close quick_settings | eww update quick_toggle=false"
+                :class "vol_settings"
+                :tooltip "Volume Settings"
+                :halign "end"
+                :hexpand true
+        "")))
+
+(defwidget notification_history []
+  (box :orientation "v"
+       :space-evenly false
+       :visible notif_visibility
+    (scroll :vscroll true
+            :hscroll false
+            :height 180
+            :class "nhtext_box"
+      (box :orientation "v"
+           :space-evenly false
+        (for entry in notif_history
+          (box :orientation "v"
+               :space-evenly false
+               :class "l2 nhis_box"
+            (label :text {entry.app})
+            (label :text {entry.title})))))
+    (button :onclick "killall mako && mako"
+      "Clear All")))

@@ -31,7 +31,7 @@ button:hover {
 }
 
 scale {
-  min-width: 154px;
+  min-width: 130px;
   margin: 0px;
   padding: 0px;
 }
@@ -221,6 +221,7 @@ scale {
 
 .quick_sliders {
   margin-bottom: 5px;
+  margin-left: 10px;
 }
 
 .quickV_scale {
@@ -283,6 +284,11 @@ scale {
 .dock_button {
   margin: 0px 2px;
   padding: 3px;
+  border-bottom: 1px solid #1a1a1a;
+
+  &.background {
+    border-bottom: 1px solid #ffffff;  
+  }
 }
 
 .tray_button {

@@ -1,0 +1,59 @@
+;; =============================================================================
+;; LISTENERS
+;; =============================================================================
+(deflisten batinfo                :initial ""          `~/.config/eww/scripts/batinfo.sh`)
+(deflisten netinfo                :initial ""          `~/.config/eww/scripts/netinfo.sh`)
+(deflisten btinfo                 :initial ""          `~/.config/eww/scripts/btinfo.sh`)
+(deflisten active_workspace       :initial ""          `~/.config/eww/scripts/workspaces.sh`)
+(deflisten player_data            :initial ""          `~/.config/eww/scripts/player_data.sh`)
+(deflisten volinfo                :initial ""          `~/.config/eww/scripts/volinfo.sh`)
+(deflisten briginfo               :initial ""          `~/.config/eww/scripts/briginfo.sh`)
+(deflisten notif_visibility       :initial ""          `~/dotfiles/.config/eww/scripts/notif_visibility.sh`)
+(deflisten notif_history          :initial ""          `~/dotfiles/.config/eww/scripts/notif_history.sh`)
+(deflisten bluetooth_button       :initial ""          `~/.config/eww/scripts/bluetooth_button.sh`)
+(deflisten bticon_button          :initial ""          `~/.config/eww/scripts/bticon_button.sh`)
+(deflisten cava                   :initial ""          `~/dotfiles/.config/eww/scripts/cava.sh`)
+(deflisten active_apps            :initial ""          `~/dotfiles/.config/eww/scripts/active_apps.sh`)
+(deflisten pinned_apps            :initial ""          "~/dotfiles/.config/eww/scripts/pinned_apps.sh")
+
+;; =============================================================================
+;; POLLERS
+;; =============================================================================
+(defpoll timenum           :interval "30s" "date +'%R'")
+(defpoll tlpicon           :interval "1s"  "~/.config/eww/scripts/tlpicon.sh")
+(defpoll date              :interval "30s" "cal")
+(defpoll localsend_devices :interval "4s" "/home/zaydaansayed/dotfiles/.config/eww/scripts/localsend_devices.sh")
+
+;; =============================================================================
+;; VARIABLES
+;; =============================================================================
+(defvar notif_app                "")
+(defvar notif_title              "")
+(defvar notif_body               "")
+(defvar tlp_toggle               "false")
+(defvar quick_toggle             "false")
+(defvar music_toggle             "false")
+(defvar localsend_tab            "receive")
+(defvar localsend_files          "[]")
+(defvar sysnotif_type            "information")
+(defvar sysnotif_text_main       "")
+(defvar sysnotif_text_butr       "")
+(defvar sysnotif_text_butl       "")
+(defvar sysnotif_commandbr       "eww close system_notification")
+(defvar sysnotif_commandbl       "eww close system_notification")
+(defvar sysnotif_commandi-c      "")
+(defvar sysnotif_commandi-a      "eww close system_notification")
+(defvar sysnotif_text_input      "")
+(defvar dock_visibility          "false")
+(defvar selected_app             "")
+(defvar tray_toggle              "false")
+(defvar ai_prompt                "")
+(defvar ai_toggle                "false")
+(defvar ai_loading               "false")
+(defvar ai_dinput                "")
+(defvar ai_file_paths            "[]")
+(defvar ai_image                 "false")
+(defvar ai_chat_id               "")
+(defvar ai_txt                   "[]")
+(defvar ai_menu_chats            "[]")
+(defvar ls_recipient             "")

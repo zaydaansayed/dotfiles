@@ -9,6 +9,10 @@ active_apps() {
     pid=$(echo "$row" | jq -r '.pid')
     title=$(echo "$row" | jq -r '.title')
     lookup=$(echo "$row" | jq -r '.lookup' | tr '[:upper:]' '[:lower:]')
+
+    case "$lookup" in
+      *firefox*|*spotify*) continue ;;
+    esac
     
     desktop_file=$(find /usr/share/applications/ ~/.local/share/applications/ -type f -iname "*${lookup}*.desktop" 2>/dev/null | head -n 1)
 
@@ -18,7 +22,7 @@ active_apps() {
       icon_name="$lookup"
     fi
 
-     is_focused="false"
+    is_focused="false"
     [ "$pid" -eq "$focused_pid" ] && is_focused="true"
 
     jq -nc --argjson pid "$pid" --arg title "$title" --arg icon "$icon_name" --argjson focused "$is_focused" \
@@ -33,4 +37,3 @@ socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.soc
   while read -r event; do
     active_apps
 done
-

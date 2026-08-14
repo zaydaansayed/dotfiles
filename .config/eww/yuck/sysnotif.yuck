@@ -1,0 +1,38 @@
+(defwindow system_notification
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :orientation "v"
+       :space-evenly false
+       :class "window"
+    (label :text sysnotif_text_main
+           :valign "center"
+           :vexpand true)
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 3
+         :visible {sysnotif_type == "input"}
+      (input :value {sysnotif_text_input == "{}" ? "" : sysnotif_text_input}
+             :onchange sysnotif_commandi-c
+             :onaccept sysnotif_commandi-a
+             :class "sysnotif_input")
+      (button :onclick sysnotif_commandi-a
+              :halign "end"
+              :hexpand true
+              :class "sysnotif_iconfirm"
+        ""))
+    (box :orientation "h"
+         :space-evenly false
+         :visible {sysnotif_type == "information"}
+         :valign "end"
+         :vexpand true
+      (button :onclick sysnotif_commandbl
+              :class "sysnotif_but"
+        sysnotif_text_butl)
+      (button :onclick sysnotif_commandbr
+              :class "sysnotif_but"
+              :halign "end"
+              :hexpand true
+        sysnotif_text_butr))))
+

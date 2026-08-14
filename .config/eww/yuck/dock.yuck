@@ -1,0 +1,85 @@
+(defwindow dock
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "0px" :height "3px" :anchor "bottom center")
+  :stacking "fg"
+  (eventbox :onhover "eww update dock_visibility=true"
+            :onhoverlost "eww update dock_visibility=false" 
+    (revealer :transition "slideup"
+              :reveal dock_visibility
+      (box :class "window dock"
+           :orientation "h"
+           :space-evenly false
+           :spacing "10"
+        (button :onclick "fuzzel &"
+                :class "fuzzel_button"
+                :tooltip "fuzzel"
+                    (image :path "/home/zaydaansayed/dotfiles/.config/eww/scripts/hyprland_logo.png"
+                           :image-width 50
+                           :image-height 50))
+        (apps)
+        (button :onclick {tray_toggle ? "eww update tray_toggle=false" : "eww update tray_toggle=true"}
+                :class "tray_button"
+                :tooltip "System tray"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 5
+            (label :text {tray_toggle ? "" : ""})
+            (systray :visible tray_toggle
+                     :spacing 4
+                     :class "systemtray")))))))
+
+(defwidget apps []
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 0
+    (box :orientation "h"
+         :space-evenly false
+         :style {arraylength(active_apps) > 0 ? "border-right: 1px solid #7a7a7a; margin-right: 7px;" : ""}
+      (button :onclick "${jq(pinned_apps, '.[] | select(.name == \"firefox\")') != '' ? 'eww update selected_app=firefox && /home/zaydaansayed/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh' : 'firefox &'}"
+              :onrightclick "firefox &"
+              :class "${jq(pinned_apps, '.[] | select(.name == \"firefox\")') == '' ? 'dock_button' : jq(pinned_apps, '.[] | select(.name == \"firefox\" and .focused == true)') != '' ? 'dock_button on' : 'dock_button background'}"
+              :tooltip "firefox"
+        (box :orientation "v"
+        (image :icon "firefox"
+               :icon-size "dialog")))
+      (button :onclick "${jq(pinned_apps, '.[] | select(.name == \"Spotify\")') != '' ? "hyprctl dispatch \"hl.dispatch(hl.dsp.focus({ window = 'class:Spotify' }))\"" : 'spotify-launcher &'}"
+              :class "${jq(pinned_apps, '.[] | select(.name == \"Spotify\")') == '' ? 'dock_button' : jq(pinned_apps, '.[] | select(.name == \"Spotify\" and .focused == true)') != '' ? 'dock_button on' : 'dock_button background'}"
+              :tooltip "Spotify"
+        (image :icon "spotify-launcher"
+               :icon-size "dialog"))
+      (button :onclick "cd /home/zaydaansayed/dotfiles/.config && kitty -e nvim &"
+              :class "dock_button"
+              :tooltip "Rice"
+        (image :icon "kitty"
+               :icon-size "dialog"))
+        (button :onclick "cd /home/zaydaansayed/ && kitty -e yazi &"
+              :class "dock_button"
+              :style {arraylength(active_apps) > 0 ? "margin-right: 7px;" : ""}
+              :tooltip "Yazi"
+        (image :icon "yazi"
+               :icon-size "dialog")))
+      (for app in active_apps
+          (box :orientation "h"
+               :space-evenly false
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "pid:${app.pid}" })'`
+                    :class {app.focused ? "dock_button on" : "dock_button"}
+                    :tooltip {app.title}
+            (image :icon {app.icon}
+                   :icon-size "dialog"))))))
+
+(defwindow app_multiple_instances 
+  :monitor 0
+  :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
+  :stacking "fg"
+  (box :class "window"
+    (eventbox :onhoverlost "eww close app_multiple_instances"
+      (box :orientation "h"
+           :space-evenly false
+        (for app in pinned_apps
+          (box :visible {app.name == selected_app}
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })' && eww close app_multiple_instances`
+                    :class {app.focused ? "dock_button on" : "dock_button"}
+                    :tooltip {app.title}
+              (image :icon selected_app   
+                     :icon-size "dialog"))))))))
+
