@@ -9,3 +9,4 @@
 (include "./yuck/ai.yuck")
 (include "./yuck/dock.yuck")
 (include "./yuck/sysnotif.yuck")
+(include "./yuck/kdeconnect.yuck")

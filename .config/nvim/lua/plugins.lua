@@ -1,24 +1,29 @@
 return {
   "nvim-tree/nvim-tree.lua",
   "nvim-tree/nvim-web-devicons",
-  "nvim-telescope/telescope.nvim",
-  "nvim-lua/plenary.nvim",
-  "nvim-lualine/lualine.nvim",
   "elkowar/yuck.vim",
-  "numToStr/Comment.nvim",
-  "windwp/nvim-autopairs",
-  "tpope/vim-fugitive",
   "lewis6991/gitsigns.nvim",
-  "tpope/vim-surround",
-
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
   {
-    'akinsho/bufferline.nvim',
-    version = '*',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function()
-      require("bufferline").setup({})
-    end
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    config = true
   },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+  {
+    'nvim-telescope/telescope.nvim', version = '*',
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    }
+  },
+  {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -27,15 +32,12 @@ return {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
+    opts = {
+    },
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
-    },
-    config = function()
-      require("noice").setup({
-        cmdline = { view = "cmdline_popup" },
-      })
-    end
+    }
   },
   {
     "goolord/alpha-nvim",
@@ -49,32 +51,21 @@ return {
     end,
   },
   {
-    "neovim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    dependencies = {"neovim-treesitter/treesitter-parser-registry"},
+    "mason-org/mason.nvim",
+    opts = {}
+  },
+  {
+    "neovim/nvim-lspconfig",
     config = function()
-    end,
+    end
   },
-
   {
-    "williamboman/mason.nvim",
-    cmd = "Mason",
+    "mason-org/mason-lspconfig.nvim",
     opts = {},
-  },
-  {
-    "Saghen/blink.cmp",
-    version = "1.*",
-    opts = {
-      keymap = {
-        preset = 'default',
-        ['<C-space>'] = { 'show', 'show_documentation', 'hide' },
-        ['<CR>'] = { 'accept', 'fallback' },
-        ['<Tab>'] = { 'select_next', 'fallback' },
-        ['<S-Tab>'] = { 'select_prev', 'fallback' },
-      },
-      sources = {
-        default = { 'lsp', 'path', 'buffer' },
-      },
+    dependencies = {
+        { "mason-org/mason.nvim", opts = {} },
+        "neovim/nvim-lspconfig",
     },
-  },
+  }
 }
+
