@@ -186,7 +186,7 @@
     (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu && eww update main_toggle=false"
             :tooltip "r/unixporn"
             :class "main_shortcut rest"
-      "")
+      "")
     (button :onclick "firefox https://www.reddit.com/r/thinkpad/ & eww close main_menu && eww update main_toggle=false"
             :tooltip "r/thinkPad"
             :class "main_shortcut thinkpad"

@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e "System\nUI\nAbout and support" | fuzzel --dmenu --prompt="Settings: ")
+choice=$(echo -e "󰛳 Network\n Audio\n System\n UI\n About and support" | fuzzel --dmenu --prompt="Settings: ")
 
 case "$choice" in
-    "System")
-        firefox &
+    "󰛳 Network")
+	$HOME/dotfiles/.config/fuzzel/settings/secondary_settings/network.sh
+	;;
+    " Audio")
+        pwmenu --launcher fuzzel
+	;;
+    " System")
+        $HOME/dotfiles/.config/fuzzel/settings/secondary_settings/system.sh
         ;;
-    "UI")
-        foot &
+    " UI")
+        $HOME/dotfiles/.config/fuzzel/settings/secondary_settings/ui.sh
         ;;
-    "About and support")
-        pavucontrol &
+    " About and support")
+        $HOME/dotfiles/.config/fuzzel/settings/secondary_settings/about_support.sh
         ;;
     *)
         exit 0

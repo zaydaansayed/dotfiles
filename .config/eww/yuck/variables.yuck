@@ -19,12 +19,12 @@
 ;; =============================================================================
 ;; POLLERS
 ;; =============================================================================
-(defpoll timenum           :interval "30s" "date +'%R'")
+(defpoll timenum           :interval "5s" "date +'%R'")
 (defpoll tlpicon           :interval "1s"  "~/.config/eww/scripts/tlpicon.sh")
 (defpoll date              :interval "30s" "echo \"$(date +'%a') $(date +'%d' | sed 's/^0//')th $(date +'%b')\" | tr 'A-Z' 'a-z'")
 (defpoll username          :interval "24h" "echo $USER")
-(defpoll weather_current   :interval "24h" "weather-Cli get -r")
-(defpoll weather_future    :interval "24h" "~/dotfiles/.config/eww/scripts/weather_future.sh")
+(defpoll weather_current   :interval "1h" "weather-Cli get -r")
+(defpoll weather_future    :interval "1h" "~/dotfiles/.config/eww/scripts/weather_future.sh")
 
 ;; =============================================================================
 ;; VARIABLES
