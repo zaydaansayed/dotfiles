@@ -22,10 +22,10 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
-    position = "auto",
-    scale    = "auto",
+    output   = "eDP-1",
+    mode     = "1920x1080@60",
+    position = "0x0",
+    scale    = "1.33",
 })
 
 
@@ -33,10 +33,8 @@ hl.monitor({
 ---- MY PROGRAMS ----
 ---------------------
 
-local terminal    = "kitty"
-local menu        = "fuzzel"
-local bar         = "eww open bar" 
-local notification_daemon = "mako"
+--local terminal    = "kitty"
+--local menu        = "fuzzel"
 
 -------------------
 ---- AUTOSTART ----
@@ -44,18 +42,22 @@ local notification_daemon = "mako"
 
  hl.on("hyprland.start", function ()
    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
-   hl.exec_cmd("udiskie --tray")
+   hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
+   hl.exec_cmd("exec-once = gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'")
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
-   hl.exec_cmd("kdeconnectd")
-   hl.exec_cmd("rclone mount Icloud_Photos: /home/zaydaansayed/Icloud_Photos")
-   hl.exec_cmd(bar)
-   hl.exec_cmd(notification_daemon)
-   hl.exec_cmd("sleep 0.5 && eww open dock")
+    
+   hl.exec_cmd("mako")
    hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
+   hl.exec_cmd("eww open bar")
+   hl.exec_cmd("sleep 1 && eww open dock")
+   
+   hl.exec_cmd("udiskie --tray")
+   hl.exec_cmd("kdeconnectd") 
+   
+   hl.exec_cmd("rclone mount Icloud_Photos: ~/Icloud_Photos")
+   hl.exec_cmd("sleep 20 && kdeconnect-indicator")
 end)
-
-
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
@@ -67,6 +69,8 @@ hl.env("XCURSOR_SIZE", "24")
 
 hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Classic")
 hl.env("HYPRCURSOR_SIZE", "24")
+
+hl.env("GTK_THEME", "Adwaita-dark")
 
 -----------------------
 ----- PERMISSIONS -----
@@ -243,18 +247,25 @@ hl.gesture({
     action = "workspace"
 })
 
+hl.device({
+    name = "synaptics-tm3471-020",
+    sensitivity = 0,
+    tap_to_click = true,
+})
+
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
 
 local mainMod = "SUPER"
 
-hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("kitty"))
 hl.bind(mainMod .. " + S",      hl.dsp.window.close())
 hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + F",      hl.dsp.window.float({ action = "toggle" }))
-hl.bind("ALT  + SPACE",         hl.dsp.exec_cmd(menu))
+hl.bind("ALT  + SPACE",         hl.dsp.exec_cmd("fuzzel"))
 hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())
+hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("$HOME/dotfiles/.config/eww/scripts/main_toggle.sh"))
 hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("~/dotfiles/.config/fuzzel/clipboard.sh"))
 hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("bemoji"))

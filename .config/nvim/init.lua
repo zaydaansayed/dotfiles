@@ -6,14 +6,22 @@ require("config.lazy")
 require('lualine').setup()
 require("nvim-tree").setup()
 require("ibl").setup()
+
+
+require("mason").setup({
+  firewall = {
+    enabled = true
+  }
+})
 require("mason-lspconfig").setup()
+
 require("bufferline").setup{}
 require("noice").setup({
   lsp = {
     override = {
       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
       ["vim.lsp.util.stylize_markdown"] = true,
-      },
+    },
   },
   presets = {
     bottom_search = true, 
@@ -23,18 +31,14 @@ require("noice").setup({
     lsp_doc_border = false, 
   },
 })
-require("mason").setup {
-  firewall = {
-    enabled = true
-  }
-}
 
 local builtin = require('telescope.builtin')
 local cmp = require('cmp')
+
 cmp.setup({
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- if using LuaSnip
+      require('luasnip').lsp_expand(args.body) 
     end,
   },
   mapping = cmp.mapping.preset.insert({
@@ -42,7 +46,14 @@ cmp.setup({
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
-    { name = 'buffer' },
+    { 
+      name = 'buffer',
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end
+      }
+    },
     { name = 'path' },
   })
 })
@@ -53,3 +64,4 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find f
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+

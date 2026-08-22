@@ -1,3 +1,4 @@
+#!/home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/venv/bin/python
 import sys
 import os
 import json

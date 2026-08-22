@@ -1,0 +1,232 @@
+(defwindow main_menu
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "700px" :height "500px" :anchor "center")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+       :class "window main_menu"
+    (centerbox :orientation "h" 
+      (box :orientation "v"
+           :space-evenly false
+           :class "main_start"
+           :spacing 10
+        (user_info)
+        (main_apps))
+      (box :orientation "v"
+           :space-evenly false
+           :class "main_middle"
+           :spacing 10
+        (weather)
+        (links))
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+           :class "main_end"
+        (main_music_player)
+        (files)
+        (calendar :class "main_cal")))))
+
+(defwidget main_apps []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 5
+       :class "main"
+    (button :onclick "fuzzel & eww close main_menu && eww update main_toggle=false"
+            :tooltip "List all apps"
+            :class "main_app_launcher"
+      "")
+    (button :onclick "firefox & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Firefox"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (image :icon "firefox")
+        (label :text "Firefox")))
+    (button :onclick "kitty & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Kitty"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3           
+        (image :icon "kitty")
+        (label :text "Kitty")))
+    (button :onclick "spotify-launcher & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Spotify"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (image :icon "spotify-launcher")
+        (label :text "Spotify")))
+    (button :onclick "kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Yazi"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (image :icon "yazi")
+        (label :text "Files")))
+    (button :onclick "cd /home/zaydaansayed/ && kitty -e nvim & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Nvim"
+            :class "main_buttons"
+      (label :text "   Nvim"
+             :halign "start"))
+    (button :onclick "kitty -e htop & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Htop"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (image :icon "htop")
+        (label :text "Htop")))
+    (button :onclick "kdeconnect-app & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Kdeconnect"
+            :class "main_buttons"
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (image :icon "kdeconnect")
+        (label :text "Kdeconnect")))))
+
+(defwidget user_info [] 
+  (box :orientation "v"
+       :space-evenly false
+       :class "user_info"
+       :spacing 10
+    (box :class "image profile_picture" 
+         :valign "start"
+         :vexpand true)
+        (label :text username
+           :valign "center"
+           :vexpand true)))
+
+(defwidget weather []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 20
+       :class "main_weather"
+    (box :orientation "v"
+         :space-evenly false
+         :class "current_weather"
+         :tooltip {weather_current.location.name}
+      (label :text "Current Weather"
+             :class "placeholder_txt")
+      (label :text date
+             :class "placeholder_txt")
+      (label :text {weather_current.forecast.current_weather.weathercode == 0 ? "" :
+                weather_current.forecast.current_weather.weathercode == 1 ? "󰖕" :
+                weather_current.forecast.current_weather.weathercode == 2 ? "" :
+                weather_current.forecast.current_weather.weathercode == 3 ? "󰖐" :
+                weather_current.forecast.current_weather.weathercode == 45 || 
+                weather_current.forecast.current_weather.weathercode == 48 ? "" :
+                weather_current.forecast.current_weather.weathercode >= 51 && 
+                weather_current.forecast.current_weather.weathercode <= 57 ? "" :
+                weather_current.forecast.current_weather.weathercode >= 61 && 
+                weather_current.forecast.current_weather.weathercode <= 67 ? "" :
+                weather_current.forecast.current_weather.weathercode >= 71 && 
+                weather_current.forecast.current_weather.weathercode <= 77 ? "" :
+                weather_current.forecast.current_weather.weathercode >= 80 && 
+                weather_current.forecast.current_weather.weathercode <= 86 ? "" :
+                weather_current.forecast.current_weather.weathercode >= 95 && 
+                weather_current.forecast.current_weather.weathercode <= 99 ? "" :
+                                                                             "???"}
+             :class "weather_icon")
+      (label :text "${weather_current.forecast.current_weather.temperature}°C"))
+    (box :orientation "h"
+         :valign "end"
+         :vexpand true
+      (for hour in weather_future
+        (box :orientation "v"
+             :space-evenly false
+          (label :text {hour.time})
+          (label :text {hour.code == 0 ? "" :
+                hour.code == 1 ? "󰖕" :
+                hour.code == 2 ? "" :
+                hour.code == 3 ? "󰖐" :
+                hour.code == 45 || 
+                hour.code == 48 ? "" :
+                hour.code >= 51 && 
+                hour.code <= 57 ? "" :
+                hour.code >= 61 && 
+                hour.code <= 67 ? "" :
+                hour.code >= 71 && 
+                hour.code <= 77 ? "" :
+                hour.code >= 80 && 
+                hour.code <= 86 ? "" :
+                hour.code >= 95 && 
+                hour.code <= 99 ? "" :
+                                               "???"}
+                 :class "weather_future_icon")
+          (label :text "${hour.temp}°C"))))))
+
+(defwidget links []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 5
+       :class "main"
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (button :onclick "firefox https://github.com & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Github"
+            :class "main_shortcut github"
+      "")
+    (button :onclick "firefox https://elkowar.github.io/eww/ & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Eww-documentation"
+            :class "main_shortcut"
+      "󰂺")
+    (button :onclick "firefox https://www.nerdfonts.com/cheat-sheet & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Nerd fonts"
+            :class "main_shortcut rest"
+      ""))
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu && eww update main_toggle=false"
+            :tooltip "r/unixporn"
+            :class "main_shortcut rest"
+      "")
+    (button :onclick "firefox https://www.reddit.com/r/thinkpad/ & eww close main_menu && eww update main_toggle=false"
+            :tooltip "r/thinkPad"
+            :class "main_shortcut thinkpad"
+      "")
+    (button :onclick "firefox https://www.youtube.com & eww close main_menu && eww update main_toggle=false"
+            :tooltip "YouTube"
+            :class "main_shortcut_yt"
+      ""))))
+
+(defwidget files []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 5
+       :class "main"
+    (button :onclick "cd $HOME/Downloads && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :class "main_buttons"
+            :tooltip "Downloads folder"
+      "󰉍  Downloads")
+    (button :onclick "cd $HOME/Documents && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :class "main_buttons"
+            :tooltip "Documents folder"
+      "󰈙 Documents")
+    (button :onclick "cd $HOME/Pictures && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :class "main_buttons"
+            :tooltip "Pictures folder"
+      "   Pictures")
+    (button :onclick "cd $HOME/Desktop && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :class "main_buttons"
+            :tooltip "Desktop folder"
+      "   Desktop")
+    (button :onclick "cd $HOME/Videos && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+            :class "main_buttons"
+            :tooltip "Videos folder"
+      "󰯜  Videos")))
+
+(defwidget main_music_player []
+  (box :orientation "v"
+       :space-evenly false
+       :visible {player_data.visible} 
+       :spacing 4
+       :class "main"
+    (music_info)
+    (music_buttons)))

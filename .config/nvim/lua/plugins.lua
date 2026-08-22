@@ -17,6 +17,11 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   {
+	"L3MON4D3/LuaSnip",
+	version = "v2.*",
+	build = "make install_jsregexp"
+  },
+  {
     'nvim-telescope/telescope.nvim', version = '*',
       dependencies = {
         'nvim-lua/plenary.nvim',

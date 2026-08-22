@@ -14,7 +14,6 @@
          :spacing 3
          :visible {sysnotif_type == "input"}
       (input :value {sysnotif_text_input == "{}" ? "" : sysnotif_text_input}
-             :onchange sysnotif_commandi-c
              :onaccept sysnotif_commandi-a
              :class "sysnotif_input")
       (button :onclick sysnotif_commandi-a

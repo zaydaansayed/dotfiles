@@ -1,42 +1,36 @@
 #!/bin/bash
 
 get_target_apps() {
-  # 1. Grab the unique window address of the focused client
   focused_address=$(hyprctl activewindow -j | jq -r '.address // "none"')
-
-  # 2. Extract client state data (removed pid from initial object projection)
-  hyprctl clients -j | jq -c '.[] | {address: .address, title: .title, lookup: (.initialClass // .class)}' | while read -r row; do
-    [ -z "$row" ] && continue
-
-    address=$(echo "$row" | jq -r '.address')
-    title=$(echo "$row" | jq -r '.title')
-    lookup=$(echo "$row" | jq -r '.lookup' | tr '[:upper:]' '[:lower:]')
-
-    case "$lookup" in
-      *firefox*) app_name="firefox" ;;
-      *spotify*) app_name="Spotify" ;;
-      *) continue ;;
-    esac
-
-    # 3. Use strict address matching to fix the duplicate focus highlighting bug
-    is_focused="false"
-    [ "$address" = "$focused_address" ] && is_focused="true"
-
-    # 4. Construct final output payload (removed all pid arguments)
-    jq -nc \
-      --arg name "$app_name" \
-      --argjson focused "$is_focused" \
-      --arg address "$address" \
-      --arg title "$title" \
-      '{"name": $name, "focused": $focused, "address": $address, "title": $title}'
-  done | jq -c -s .
+  
+  hyprctl clients -j | jq -c --arg focused "$focused_address" '
+    [ .[] | 
+      ((.initialClass // .class) | ascii_downcase) as $lookup |
+      if ($lookup | contains("firefox")) then "firefox"
+      elif ($lookup | contains("spotify")) then "Spotify"
+      else empty
+      end as $app_name |
+      {
+        name: $app_name,
+        focused: (.address == $focused),
+        address: .address,
+        title: .title
+      }
+    ] as $apps |
+    {
+      apps: $apps,
+      firefox_open: ($apps | any(.name == "firefox")),
+      firefox_focused: ($apps | any(.name == "firefox" and .focused)),
+      spotify_open: ($apps | any(.name == "Spotify")),
+      spotify_focused: ($apps | any(.name == "Spotify" and .focused))
+    }
+  '
 }
 
 get_target_apps
 
 socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | \
   grep --line-buffered -E "openwindow|closewindow|activewindow" | \
-  while read -r event; do
+  while read -r _; do
     get_target_apps
-done
-
+  done

@@ -5,6 +5,7 @@
     (box :orientation "v"
          :space-evenly false
          :class "window"
+         :spacing 5
       (quickS_topbar)
       (quick_controls)
       (tlp_menu)
@@ -26,9 +27,9 @@
 (defwidget quick_controls []
   (box :orientation "v"
        :space-evenly false
+       :spacing 5
     (box :orientation "h"
          :space-evenly false
-         :class "quick_controls_top"
       (button :class {netinfo.icon == "󰤭" ? "quick_button net" : "quick_button net on"}
               :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
               :tooltip {netinfo.netname}
@@ -37,24 +38,33 @@
               :onclick "networkmanager_dmenu | eww close quick_settings | eww update quick_toggle=false"
               :tooltip {netinfo.netname}
               ">")
-      (button :class {btinfo.button == "󰂲" ? "quick_button bt" : "quick_button bt on"}
+      (button :class {btinfo.icon == "󰂲" ? "quick_button bt" : "quick_button bt on"}
               :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
               :tooltip {btinfo.devcname}
-              {btinfo.button})
-      (button :class {btinfo.button == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
+              {btinfo.icon})
+      (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
               :onclick "bzmenu -l fuzzel | eww close quick_settings | eww update quick_toggle=false"
               :tooltip {btinfo.devcname}
              ">")
-      (button :class {tlp_toggle ? "quick_button on" : "quick_button"}
-              :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
-              :tooltip "Power Profiles"
-              tlpicon))
+      (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
+              :class {airplane_mode == "󰀝" ? "quick_button on" : "quick_button"} 
+              :tooltip "Airplane Mode"
+              airplane_mode))
     (box :orientation "h"
          :space-evenly false
-      (button :class "quick_button localsend_button"
-              :onclick "eww open localsend && eww update localsend_tab=receive && eww close quick_settings && eww update quick_toggle=false && /home/zaydaansayed/dotfiles/.config/eww/scripts/localsendr.sh &"
-              :tooltip "Share files"
-        ""))))
+         :spacing 5
+      (button :class "quick_button_big"
+              :onclick "hyprpicker -a &"
+              :tooltip "Color-Picker"
+        "") 
+      (button :class "quick_button_big"
+              :onclick "hypruler &"
+              :tooltip "Ruler"
+        "󰑭")
+      (button :class {tlp_toggle ? "quick_button_big on" : "quick_button_big"}
+              :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+              :tooltip "Power Profiles"
+        tlpicon))))
 
 (defwidget tlp_menu []
   (box :orientation "h"

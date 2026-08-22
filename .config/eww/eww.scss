@@ -5,6 +5,11 @@
 window {
   background-color: #000000;
   color: #ffffff;
+
+  &.main_menu {
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    border-radius: 7px;
+  }
 }
 
 button {
@@ -86,12 +91,6 @@ scale {
     padding: 0px 3px;
     margin-bottom: 3px;
   }
-
-  &.localsend_files {
-    min-width: 170px;
-    min-height: 175px;
-    padding: 5px;
-  }
 }
 
 .l2 button {
@@ -130,8 +129,9 @@ scale {
     margin-bottom: 3px;
   }
 
-  &.localsend {
-    margin-bottom: 3px;
+  &.profile_picture {
+    background-image: url('/home/zaydaansayed/dotfiles/.config/eww/images/profile_picture.png');
+    min-height: 150px;
   }
 }
 
@@ -145,6 +145,10 @@ scale {
 
 .neticon {
   padding-right: 7px;
+}
+
+.planeicon {
+  padding-right: 5px;
 }
 
 .quick_center {
@@ -168,10 +172,6 @@ scale {
   padding-right: 4px;
 }
 
-.quick_controls_top {
-  margin: 5px 0px;
-}
-
 .quick_button {
   min-width: 60px;
   min-height: 40px;
@@ -188,10 +188,11 @@ scale {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+}
 
-  &.localsend {
-  padding-right: 1px;
-  }
+.quick_button_big {
+  min-width: 72px;
+  min-height: 40px;
 }
 
 .quick_extend {
@@ -211,7 +212,6 @@ scale {
     border: 1px solid #4d4c4c;
     border-radius: 10px;
     padding: 5px;
-    margin: 5px 0px;
 }
 
 .prfp_button {
@@ -220,7 +220,6 @@ scale {
 }
 
 .quick_sliders {
-  margin-bottom: 5px;
   margin-left: 10px;
 }
 
@@ -252,23 +251,6 @@ scale {
   margin-left: 5px;
 }
 
-.localsend_clear_files {
-  margin-bottom: 5px;
-}
-
-.lstab {
-  min-width: 70px;
-}
-
-.ls_device_button {
-  padding: 3px;
-  margin-bottom: 3px;
-}
-
-.ls_receive_txt {
-  font-size: 35px;
-}
-
 .sysnotif_but {
   padding: 3px;
 }
@@ -279,6 +261,12 @@ scale {
 
 .sysnotif_iconfirm {
   padding-right: 3px;
+}
+
+.main_menu_button {
+  font-size: 40px;
+  min-width: 46px;
+  padding-right: 7px;
 }
 
 .dock_button {
@@ -350,4 +338,93 @@ scale {
 .ai_chat {
   padding: 3px;
   min-width: 149px;
+}
+
+.main_buttons {
+  min-height: 30px;
+  padding: 0px 4px;
+}
+
+.weather_icon {
+  font-size: 100px;
+  margin-right: 37px;
+}
+
+.weather_future_icon {
+  font-size: 40px;
+  margin-right: 18px;
+}
+
+.current_weather {
+  border: #ffffff 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.main_shortcut {
+  min-height: 60px; 
+  min-width: 80px;
+  font-size: 40px;
+
+  &.github {
+    padding-right: 5px;
+  }
+
+  &.thinkpad {
+    padding-right: 15px;
+  }
+
+  &.rest {
+    padding-right: 10px;
+  }
+}
+
+.main_shortcut_yt {
+  min-width: 56px;
+  min-height: 60px;
+  font-size: 40px;
+  padding-right: 14px;
+}
+
+.main_start {
+  margin-right: 10px;
+}
+
+.main_middle {
+  margin-right: 10px;
+}
+
+.main_end {
+  min-width: 205px;
+}
+
+.main_cal {
+  border-radius: 7px;
+}
+
+.main_app_launcher {
+  min-height: 50px;
+  font-size: 30px;
+}
+
+.user_info {
+  background-color: #000000;
+  padding: 10px;
+  min-height: 150px;
+  min-width: 150px;
+  border-radius: 7px;
+}
+
+.main_weather {
+  background-color: #000000;
+  min-height: 200px;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+.main {
+  background-color: #000000;
+  padding: 5px;
+  border-radius: 7px;
 }

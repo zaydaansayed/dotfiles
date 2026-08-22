@@ -12,10 +12,10 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick {ai_menu_toggle ? "eww update ai_menu_toggle=false && eww close ai_menu" : "eww update ai_menu_toggle=true && eww open ai_menu"}                                                                                     :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
+      (button :onclick "eww update ai_menu_chats=\"$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"               :class "ai_menu_button"
               :tooltip "Open Menu"
         "")
-    (button :onclick "eww close ai && eww update ai_prompt='' && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
+    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -46,10 +46,11 @@
           (for att in {ai.attachments ?: []}
             (box :orientation "v"
                  :space-evenly false
-              (box :class "image ai_prompt"
-                   :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
-                   :style "background-image: url('${att}');"
-                   :halign "end")
+              (button :class "image ai_prompt"
+                     :onclick "imv ${att} &"
+                     :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                     :style "background-image: url('${att}');"
+                     :halign "end")
                 (box :orientation "v"
                      :space-evenly false
                      :class "l2 ai_txt attachment"
@@ -87,7 +88,6 @@
                     "󰆏 Copy"))
                 (input :value {block.content}
                        :class "ai_code_input")))))))))
-
 (defwidget ai_bottom []
   (box :orientation "v"
        :space-evenly false
@@ -100,7 +100,6 @@
             :class "l2 ai_iattached"
       (box :orientation "v"
            :space-evenly false
-           :spacing 3
         (box :orientation "v"
              :space-evenly false
              :halign "center"
@@ -115,9 +114,10 @@
                :space-evenly false
                :spacing 5
                :class "ai_ifiles"
-            (box :class "image ai_input"
-                 :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
-                 :style "background-image: url('${path}');")
+            (button :class "image ai_input"
+                    :onclick "imv ${path} &"
+                    :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                    :style "background-image: url('${path}');")
             (label :text path 
                    :show-truncated true
                    :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))
@@ -149,7 +149,7 @@ EOF_SAFE
        :space-evenly false
        :class "window"
        :spacing 3
-    (button :onclick "eww update ai_chat_id='' && eww update ai_menu_toggle='false' && eww update ai_txt='[]' && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww close ai_menu"
             :class "ai_new_chat"
             :tooltip "Create New Chat"
             "+ New Chat")
@@ -169,7 +169,7 @@ EOF_SAFE
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
              :show-truncated true))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
             :tooltip "Rename Chat"
       "󰏫")
    (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
@@ -178,7 +178,7 @@ EOF_SAFE
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
-    (button :onclick "eww update ai_menu_toggle=false && eww close ai_menu"
+    (button :onclick "eww close ai_menu"
             :valign "end"
             :tooltip "Close"
       "")))

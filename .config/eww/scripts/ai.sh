@@ -32,7 +32,8 @@ fi
 
 history_json=$(cat "$CHAT_FILE")
 
-response=$(/home/zaydaansayed/venv/bin/python /home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/ai.py \
+# Updated line below:
+response=$(/home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/venv/bin/python /home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/ai.py \
   "$prompt" "$file_paths" "$history_json")
 
 attachments_json=$(echo "$file_paths" | jq -c . 2>/dev/null || echo '[]')
