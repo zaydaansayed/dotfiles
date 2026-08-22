@@ -1,17 +1,14 @@
 
 #!/usr/bin/env bash
 
-choice=$(echo -e "System-info(fastfetch)\nSupport\n Back" | fuzzel --dmenu --prompt="About and Support: ")
+choice=$(echo -e "󰌢 System-info(fastfetch)\n Support\n Back" | fuzzel --dmenu --prompt="About and Support: ")
 
 case "$choice" in
-    "System-info(fastfetch)")
-        firefox &
+    "󰌢 System-info(fastfetch)")
+        kitty --class fastfetch-term --hold -e fastfetch &
         ;;
-    "Support")
-        foot &
-        ;;
-    "About and support")
-        pavucontrol &
+    " Support")
+        
         ;;
     " Back")
         $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh
