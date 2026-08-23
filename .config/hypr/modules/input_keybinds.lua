@@ -23,12 +23,6 @@ hl.gesture({
     action = "workspace"
 })
 
-hl.device({
-    name = "synaptics-tm3471-020",
-    sensitivity = 0,
-    tap_to_click = true,
-})
-
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------

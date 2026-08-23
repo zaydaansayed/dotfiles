@@ -1,3 +1,8 @@
+;; =============================================================================
+;; popups.yuck
+;; =============================================================================
+
+; Volume popup window
 (defwindow volume
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
@@ -9,6 +14,7 @@
                :class "volbar")
         (label :text {volinfo.icon})))
 
+; Brightness popup window
 (defwindow brightness
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "192px" :height "18px" :anchor "top center")
@@ -20,6 +26,7 @@
                 :class "brigbar")
         (label :text {briginfo.icon})))
 
+; Notification popup window
 (defwindow notification_popup
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "300px" :height "0px" :anchor "top right")
@@ -43,3 +50,10 @@
            :text notif_body
            :xalign 0)))
 
+; Most other files are found in the variables.yuck file, but the processes that calls the windows are in the hyprland.lua file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

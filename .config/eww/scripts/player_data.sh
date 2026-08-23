@@ -19,15 +19,9 @@ print_status() {
     title=$(echo "$title" | sed 's/"/\\"/g')
 
     if [[ -z "$artist" ]]; then
-        local full_text="$title"
+        local text="$title"
     else
-        local full_text="$artist - $title"
-    fi
-
-    if [ ${#full_text} -gt $LIMIT ]; then
-        local text="${full_text:0:$((LIMIT-3))}..."
-    else
-        local text="$full_text"
+        local text="$artist - $title"
     fi
 
     local icon="󰐊"

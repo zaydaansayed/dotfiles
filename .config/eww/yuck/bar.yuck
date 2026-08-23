@@ -1,3 +1,8 @@
+;; =============================================================================
+;; bar.yuck
+;; =============================================================================
+
+; Bar window
 (defwindow bar
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "99.7%" :height "30px" :anchor "top center")
@@ -35,6 +40,7 @@
         :tooltip "Open Isaac AI"
           "󰚩"))))
 
+; Workspaces widget
 (defwidget workspaces []
   (box :orientation "h"
        :spacing 3
@@ -44,6 +50,7 @@
               :tooltip "Switch to workspace ${i}"
               (label :text i)))))
 
+; Player widget
 (defwidget player []
   (box :class "player" 
        :orientation "h" 
@@ -57,6 +64,7 @@
             :class {music_toggle ? "music_player_button on" : "music_player_button"}
       (label :text {player_data.text}))))
 
+; Screenprint window
 (defwindow screenprint
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "127px" :height "25px" :anchor "top center")
@@ -64,15 +72,15 @@
   (box :orientation "h"
        :spacing 3
        :class "window_small"
-       (button :onclick "hyprshot -m output -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+       (button :onclick "hyprshot -m output -o $HOME/Pictures/Screenshots | eww close screenprint" 
                :tooltip "Fullscreen"
                :class "quick_button" 
                "󰍹")
-       (button :onclick "hyprshot -m window -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+       (button :onclick "hyprshot -m window -o $HOME/Pictures/Screenshots | eww close screenprint" 
                :class "quick_button" 
                :tooltip "Window"
                "󰖯")
-       (button :onclick "hyprshot -m region -o /home/zaydaansayed/Pictures/Screenshots | eww close screenprint" 
+       (button :onclick "hyprshot -m region -o $HOME/Pictures/Screenshots | eww close screenprint" 
                :class "quick_button" 
                :tooltip "Region"
                "")
@@ -81,6 +89,7 @@
                :tooltip "Close"
                "")))
 
+; Power menu
 (defwindow power_menu
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "0px" :height "0px" :anchor "center")
@@ -109,3 +118,12 @@
             :class "quick_button"
             :tooltip "Close"
             "")))
+
+; Most other files will be found in the variables.yuck file but all screenshots will be saved to:
+; (user-directory)/Pictures/Screenshots
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

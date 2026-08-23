@@ -1,3 +1,8 @@
+;; =============================================================================
+;; sysnotif.yuck
+;; =============================================================================
+
+; System notification window
 (defwindow system_notification
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
@@ -34,3 +39,11 @@
               :halign "end"
               :hexpand true
         sysnotif_text_butr))))
+
+; All files that interact with this window doesnt directly mention it, you might needa go looking for it, but you could always ask me for help
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

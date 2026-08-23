@@ -1,3 +1,8 @@
+;; =============================================================================
+;; ai.yuck
+;; =============================================================================
+
+; AI window
 (defwindow ai
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "300px" :height "500px" :anchor "top right")
@@ -12,7 +17,7 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick "eww update ai_menu_chats=\"$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"               :class "ai_menu_button"
+      (button :onclick "eww update ai_menu_chats=\"$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"                            :class "ai_menu_button"
               :tooltip "Open Menu"
         "")
     (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
@@ -20,6 +25,7 @@
             :tooltip "Close"
       ""))))
 
+; Text when no chat is selected
 (defwidget ai_placeholder []
   (box :orientation "v"
        :space-evenly false
@@ -34,6 +40,7 @@
       (label :text "Isaac is Ready!"
              :class "placeholder_txt message"))))
 
+; Text when chat is selected
 (defwidget ai_chat []
   (scroll :vscroll true
           :class "ai_main"
@@ -82,12 +89,21 @@
                   (label :text "Code" 
                          :halign "start" 
                          :hexpand true)
-                  (button :onclick "echo '${block.content}' | wl-copy"
+                  (button :onclick "echo \"${block.content}\" | wl-copy && $HOME/dotfiles/.config/eww/scripts/copy-popup.sh"
                           :class "ai_code_copy"
                           :tooltip "Copy Code"
                     "󰆏 Copy"))
                 (input :value {block.content}
                        :class "ai_code_input")))))))))
+
+(defwindow copy-popup
+  :monitor 0
+  :geometry (geometry :x "12px" :y "425px" :width "290px" :height "20px" :anchor "top right")
+  :stacking "overlay"
+  (label :text "󰆏 Text Copied!"
+         :class "l2"))
+
+; Area around the ai prompt
 (defwidget ai_bottom []
   (box :orientation "v"
        :space-evenly false
@@ -128,22 +144,23 @@
 {}
 EOF_SAFE
 )\""
-             :onaccept {strlength(ai_prompt) > 0 ? "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &" : ""}
+             :onaccept {strlength(ai_prompt) > 0 ? "$HOME/dotfiles/.config/eww/scripts/ai.sh &" : ""}
              :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
-      (button :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai.sh &"
+      (button :onclick "$HOME/dotfiles/.config/eww/scripts/ai.sh &"
               :visible {strlength(ai_prompt) > 0}
               :class "ai_ibutton send"
               :tooltip "Send"
         "")
       (button :class "ai_ibutton"
-              :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_file_picker.sh &"
+              :onclick "$HOME/dotfiles/.config/eww/scripts/ai_file_picker.sh &"
               :tooltip "Attach file"
         "󰁦"))))
 
+; Menu for choosing chats and configuring the ai
 (defwindow ai_menu
   :monitor 0
   :geometry (geometry :x "310px" :y "3px" :width "200px" :height "510px" :anchor "top right")
-  :stacking "overlay"
+  :stacking "fg"
   :focusable true
   (box :orientation "v"
        :space-evenly false
@@ -164,21 +181,33 @@ EOF_SAFE
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat /home/zaydaansayed/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat $HOME/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww close ai_menu"
             :tooltip {chat.title}
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
              :show-truncated true))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='/home/zaydaansayed/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
             :tooltip "Rename Chat"
       "󰏫")
    (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
           :tooltip "Delete Chat"
      "󰆴")))))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat /home/zaydaansayed/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > /home/zaydaansayed/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
     (button :onclick "eww close ai_menu"
             :valign "end"
             :tooltip "Close"
       "")))
+
+; Other files:
+; file 1: (user-directory)/dotfiles/.config/eww/scripts/ai.sh
+; file 2: (user-directory)/dotfiles/.config/scripts/Isaac-ai/ai.py
+; Chats: (user-directory)/Documents/ai_chats
+; Dynamic context: (user-directory)/Documents/ai_dynam_context.txt
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

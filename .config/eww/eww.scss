@@ -1,3 +1,7 @@
+/*=============================================================================
+eww.scss
+=============================================================================*/
+
 * {
   -gtk-icon-shadow: none;
 }
@@ -53,6 +57,11 @@ scale {
   }
   &.ai_loading {
     margin-bottom: 3px;
+  }
+
+  &.weather_loading {
+    font-size: 100px;
+    margin-right: 37px;
   }
 }
 
@@ -130,7 +139,7 @@ scale {
   }
 
   &.profile_picture {
-    background-image: url('/home/zaydaansayed/dotfiles/.config/eww/images/profile_picture.png');
+    background-image: url('./images/profile_picture.png');
     min-height: 150px;
   }
 }
@@ -164,11 +173,14 @@ scale {
 }
 
 .quick_close {
-  margin-right: 3px;
   padding: 0px 2px;
 }
 
 .quick_power {
+  padding-right: 4px;
+}
+
+.quick_set_button {
   padding-right: 4px;
 }
 
@@ -316,6 +328,7 @@ scale {
 
 .ai_att_top {
   border-bottom: 1px solid #7a7a7a;
+  margin-bottom: 3px;
 }
 
 .ai_code_copy {
@@ -428,3 +441,11 @@ scale {
   padding: 5px;
   border-radius: 7px;
 }
+
+/* This is ALL the customisation for eww except the gtk theme obviously
+
+For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+=============================================================================
+Made by Zaydaan Sayed 2026
+============================================================================= */

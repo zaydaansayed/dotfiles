@@ -28,7 +28,7 @@ case "$choice" in
 	kitty -e nvim $HOME/dotfiles/.config/hypr/modules/windows.lua &
 	;;
     " Back")
-        /home/zaydaansayed/dotfiles/.config/fuzzel/settings/settings_menu.sh &
+        $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh &
 	;;
     *)
         exit 0

@@ -1,3 +1,8 @@
+;; =============================================================================
+;; player.yuck
+;; =============================================================================
+
+; Music player window 
 (defwindow music_player_window
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "210px" :height "110px" :anchor "top left")
@@ -12,9 +17,11 @@
               :tooltip "Close"
         "")))
 
+; Music info
 (defwidget music_info []
   (box :orientation "h" 
        :space-evenly false
+       :vexpand true
       (progress :orientation "v" :value {cava[0]} :flipped true)
       (progress :orientation "v" :value {cava[1]} :flipped true)
       (progress :orientation "v" :value {cava[2]} :flipped true)
@@ -26,8 +33,11 @@
       (progress :orientation "v" :value {cava[8]} :flipped true)
       (progress :orientation "v" :value {cava[9]} :flipped true)
       (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"
+             :wrap true 
+             :show-truncated false
              :class "music_text")))
 
+; Music buttons
 (defwidget music_buttons []
   (box :orientation "h" 
        :space-evenly false
@@ -51,3 +61,11 @@
             :class "repeat_button"
             :tooltip "Repeat"
       "${player_data.repeat_icon}")))
+
+; Most other files are in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

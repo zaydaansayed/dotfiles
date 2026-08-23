@@ -15,7 +15,8 @@
    -- Visual tasks
    hl.exec_cmd("mako")
    hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh") 
-   hl.exec_cmd("eww open bar") 
+   hl.exec_cmd("eww open bar")
+   hl.exec_cmd("hyprpaper")
    hl.exec_cmd("sleep 1 && eww open dock")
 
    -- Tasks that go to the tray
@@ -23,7 +24,6 @@
    hl.exec_cmd("kdeconnectd")
 
    -- Final tasks
-   hl.exec_cmd("sleep 2 && sudo modprobe -r psmouse && sudo modprobe psmouse") 
    hl.exec_cmd("kdeconnect-indicator")
 end)
 

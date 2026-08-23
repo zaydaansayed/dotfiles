@@ -1,20 +1,19 @@
 ;; =============================================================================
 ;; LISTENERS
 ;; =============================================================================
-(deflisten batinfo                :initial ""          "~/.config/eww/scripts/batinfo.sh")
-(deflisten netinfo                :initial ""          "~/.config/eww/scripts/netinfo.sh")
-(deflisten btinfo                 :initial ""          "~/.config/eww/scripts/btinfo.sh")
-(deflisten active_workspace       :initial ""          "~/.config/eww/scripts/workspaces.sh")
-(deflisten player_data            :initial ""          "~/.config/eww/scripts/player_data.sh")
-(deflisten volinfo                :initial ""          "~/.config/eww/scripts/volinfo.sh")
-(deflisten briginfo               :initial ""          "~/.config/eww/scripts/briginfo.sh")
-(deflisten notif_visibility       :initial ""          "~/.config/eww/scripts/notif_visibility.sh")
-(deflisten notif_history          :initial ""          "~/.config/eww/scripts/notif_history.sh")
-(deflisten airplane_mode          :initial ""          "~/.config/eww/scripts/airplane_mode.sh")
-(deflisten cava                   :initial ""          "~/.config/eww/scripts/cava.sh")
-(deflisten active_apps            :initial ""          "~/.config/eww/scripts/active_apps.sh")
-(deflisten pinned_apps            :initial ""          "~/.config/eww/scripts/pinned_apps.sh")
-(deflisten cpu_usage              :initial ""          "~/.config/eww/scripts/cpu.sh")
+(deflisten batinfo                :initial ""          "~/dotfiles/.config/eww/scripts/batinfo.sh")
+(deflisten netinfo                :initial ""          "~/dotfiles/.config/eww/scripts/netinfo.sh")
+(deflisten btinfo                 :initial ""          "~/dotfiles/.config/eww/scripts/btinfo.sh")
+(deflisten active_workspace       :initial ""          "~/dotfiles/.config/eww/scripts/workspaces.sh")
+(deflisten player_data            :initial ""          "~/dotfiles/.config/eww/scripts/player_data.sh")
+(deflisten volinfo                :initial ""          "~/dotfiles/.config/eww/scripts/volinfo.sh")
+(deflisten briginfo               :initial ""          "~/dotfiles/.config/eww/scripts/briginfo.sh")
+(deflisten notif_visibility       :initial ""          "~/dotfiles/.config/eww/scripts/notif_visibility.sh")
+(deflisten notif_history          :initial ""          "~/dotfiles/.config/eww/scripts/notif_history.sh")
+(deflisten airplane_mode          :initial ""          "~/dotfiles/.config/eww/scripts/airplane_mode.sh")
+(deflisten cava                   :initial ""          "~/dotfiles/.config/eww/scripts/cava.sh")
+(deflisten active_apps            :initial ""          "~/dotfiles/.config/eww/scripts/active_apps.sh")
+(deflisten pinned_apps            :initial ""          "~/dotfiles/.config/eww/scripts/pinned_apps.sh")
 
 ;; =============================================================================
 ;; POLLERS
@@ -57,6 +56,8 @@
 (defvar ai_txt                   "[]")
 (defvar ai_menu_toggle           "false")
 (defvar ai_menu_chats            "[]")
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
 
 ;; =============================================================================
 ;; Made by Zaydaan Sayed 2026

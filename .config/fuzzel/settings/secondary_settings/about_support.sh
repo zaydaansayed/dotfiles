@@ -8,7 +8,7 @@ case "$choice" in
         kitty --class fastfetch-term --hold -e fastfetch &
         ;;
     " Support")
-        
+	firefox https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
         ;;
     " Back")
         $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh

@@ -2,38 +2,32 @@
 show_hidden = true
 
 [opener]
-extract = [
-    { run = 'unzip "%1" -d "${1%.*}"', desc = "Extract here", block = true }
+unzip = [
+    { run = 'unzip %s' }
 ]
 imv = [
-    { run = 'imv "$@" &', desc = "Open with imv" }
+    { run = 'imv %s', orphan = true }
 ]
 imv_animated = [
-    { run = 'imv -u linear "$@" &', desc = "Open WebP without scaling artifacts" }
+    { run = 'imv -u linear %s', orphan = true }
 ]
 play-wine = [
     { run = 'export WINE_JOYSTICK_DISABLE_LO_DI=1 && cd "$(dirname "$1")" && wine "$(basename "$1")"', orphan = true, desc = "Run with Wine" }
 ]
-vlc = [
-	{ run = 'vlc "$@"', orphan = true, desc = "VLC Media Player" }
+play = [
+	{ run = 'vlc %s', orpan = true }
 ]
-pdf_viewer = [
-	{ run = 'zathura "$@"', description = "Open PDF", orphan = true }
+pdf = [
+	{ run = 'zathura %s', orphan = true }
 ]
 edit = [
-    { run = 'nvim "$@"', block = true, desc = "Neovim", for = "unix" }
+	{ run = "nvim %s", block = true },
 ]
 
 [open]
-rules = [
-    { mime = "text/*", use = "edit" },
-    { url = "*.zip", use = "extract" },
-    { mime = "image/*", use = [ "imv", "imv_animated", "reveal" ] },
-    { mime = "audio/*", use = "vlc" },
-    { mime = "video/*", use = "vlc" },
-    { mime = "application/pdf", use = [ "pdf_viewer", "reveal" ] },
-    { url = "*.exe", use = "play-wine" },
-    { url = "*", use = "edit" }
+prepend_rules = [
+	{ url = "*.pdf", use = "pdf" },
+	{ url = "*.zip", use = "unzip" },
 ]
 
 [[plugin.prepend_fetchers]]

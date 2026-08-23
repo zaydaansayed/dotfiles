@@ -1,3 +1,8 @@
+;; =============================================================================
+;; quick_settings.yuck
+;; =============================================================================
+
+; Quick settings window
 (defwindow quick_settings
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
@@ -12,9 +17,11 @@
       (quick_sliders)
       (notification_history)))
 
+; Quick settings top-bar
 (defwidget quickS_topbar []
   (box :orientation "h"
        :space-evenly false
+       :spacing 3
     (button :onclick "eww close quick_settings && eww update quick_toggle=false"
             :class "quick_close"
             :tooltip "Close"
@@ -22,8 +29,13 @@
     (button :onclick "eww open power_menu && eww close quick_settings && eww update quick_toggle=false"
             :class "quick_power"
             :tooltip "Open Power Menu"
-      "")))
+      "")
+    (button :onclick "eww update quick_toggle=false && eww close quick_settings && $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh &"
+            :tootltip "Open Settings"
+            :class "quick_set_button"
+      "")))
 
+; Quick settings main buttons
 (defwidget quick_controls []
   (box :orientation "v"
        :space-evenly false
@@ -66,6 +78,7 @@
               :tooltip "Power Profiles"
         tlpicon))))
 
+; Tlp power-profiles buttons
 (defwidget tlp_menu []
   (box :orientation "h"
        :space-evenly false
@@ -85,6 +98,7 @@
            :tooltip "Performance"
            "󱐋")))
 
+; Volume and brightness sliders
 (defwidget quick_sliders []
   (box :orientation "h"
        :space-evenly false
@@ -115,6 +129,7 @@
                 :hexpand true
         "")))
 
+; Notification history
 (defwidget notification_history []
   (box :orientation "v"
        :space-evenly false
@@ -134,3 +149,10 @@
     (button :onclick "killall mako && mako"
       "Clear All")))
 
+; Most other files are found in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

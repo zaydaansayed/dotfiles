@@ -1,3 +1,8 @@
+;; =============================================================================
+;; main_menu.yuck
+;; =============================================================================
+
+; Main menu window
 (defwindow main_menu
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "700px" :height "500px" :anchor "center")
@@ -26,6 +31,7 @@
         (files)
         (calendar :class "main_cal")))))
 
+; Average apps
 (defwidget main_apps []
   (box :orientation "v"
        :space-evenly false
@@ -67,7 +73,7 @@
            :spacing 3
         (image :icon "yazi")
         (label :text "Files")))
-    (button :onclick "cd /home/zaydaansayed/ && kitty -e nvim & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/ && kitty -e nvim & eww close main_menu && eww update main_toggle=false"
             :tooltip "Nvim"
             :class "main_buttons"
       (label :text "   Nvim"
@@ -80,15 +86,15 @@
            :spacing 3
         (image :icon "htop")
         (label :text "Htop")))
-    (button :onclick "kdeconnect-app & eww close main_menu && eww update main_toggle=false"
-            :tooltip "Kdeconnect"
+    (button :onclick "$HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh & eww close main_menu && eww update main_toggle=false"
+            :tooltip "Settings Menu"
             :class "main_buttons"
       (box :orientation "h"
            :space-evenly false
            :spacing 3
-        (image :icon "kdeconnect")
-        (label :text "Kdeconnect")))))
+        (label :text "  Settings")))))
 
+; User information
 (defwidget user_info [] 
   (box :orientation "v"
        :space-evenly false
@@ -101,65 +107,79 @@
            :valign "center"
            :vexpand true)))
 
+; Current weather
 (defwidget weather []
-  (box :orientation "v"
-       :space-evenly false
-       :spacing 20
-       :class "main_weather"
+  (box
     (box :orientation "v"
          :space-evenly false
-         :class "current_weather"
-         :tooltip {weather_current.location.name}
-      (label :text "Current Weather"
-             :class "placeholder_txt")
-      (label :text date
-             :class "placeholder_txt")
-      (label :text {weather_current.forecast.current_weather.weathercode == 0 ? "" :
-                weather_current.forecast.current_weather.weathercode == 1 ? "󰖕" :
-                weather_current.forecast.current_weather.weathercode == 2 ? "" :
-                weather_current.forecast.current_weather.weathercode == 3 ? "󰖐" :
-                weather_current.forecast.current_weather.weathercode == 45 || 
-                weather_current.forecast.current_weather.weathercode == 48 ? "" :
-                weather_current.forecast.current_weather.weathercode >= 51 && 
-                weather_current.forecast.current_weather.weathercode <= 57 ? "" :
-                weather_current.forecast.current_weather.weathercode >= 61 && 
-                weather_current.forecast.current_weather.weathercode <= 67 ? "" :
-                weather_current.forecast.current_weather.weathercode >= 71 && 
-                weather_current.forecast.current_weather.weathercode <= 77 ? "" :
-                weather_current.forecast.current_weather.weathercode >= 80 && 
-                weather_current.forecast.current_weather.weathercode <= 86 ? "" :
-                weather_current.forecast.current_weather.weathercode >= 95 && 
-                weather_current.forecast.current_weather.weathercode <= 99 ? "" :
-                                                                             "???"}
-             :class "weather_icon")
-      (label :text "${weather_current.forecast.current_weather.temperature}°C"))
-    (box :orientation "h"
-         :valign "end"
-         :vexpand true
-      (for hour in weather_future
-        (box :orientation "v"
-             :space-evenly false
-          (label :text {hour.time})
-          (label :text {hour.code == 0 ? "" :
-                hour.code == 1 ? "󰖕" :
-                hour.code == 2 ? "" :
-                hour.code == 3 ? "󰖐" :
-                hour.code == 45 || 
-                hour.code == 48 ? "" :
-                hour.code >= 51 && 
-                hour.code <= 57 ? "" :
-                hour.code >= 61 && 
-                hour.code <= 67 ? "" :
-                hour.code >= 71 && 
-                hour.code <= 77 ? "" :
-                hour.code >= 80 && 
-                hour.code <= 86 ? "" :
-                hour.code >= 95 && 
-                hour.code <= 99 ? "" :
-                                               "???"}
-                 :class "weather_future_icon")
-          (label :text "${hour.temp}°C"))))))
+         :visible {strlength(weather_current) < 1}
+         :class "main_weather"
+      (label :text ""
+             :valign "center"
+             :vexpand true
+             :class "placeholder_txt weather_loading")
+      (label :text "Loading..."
+             :class "placeholder_txt"))
+    (box :orientation "v"
+         :space-evenly false
+         :visible {strlength(weather_current) > 0}
+         :spacing 20
+         :class "main_weather" 
+      (box :orientation "v"
+           :space-evenly false
+           :class "current_weather"
+           :tooltip {weather_current.location.name}
+        (label :text "Current Weather"
+               :class "placeholder_txt")
+        (label :text date
+               :class "placeholder_txt")
+        (label :text {weather_current.forecast.current_weather.weathercode == 0 ? "" :
+                  weather_current.forecast.current_weather.weathercode == 1 ? "󰖕" :
+                  weather_current.forecast.current_weather.weathercode == 2 ? "" :
+                  weather_current.forecast.current_weather.weathercode == 3 ? "󰖐" :
+                  weather_current.forecast.current_weather.weathercode == 45 || 
+                  weather_current.forecast.current_weather.weathercode == 48 ? "" :
+                  weather_current.forecast.current_weather.weathercode >= 51 && 
+                  weather_current.forecast.current_weather.weathercode <= 57 ? "" :
+                  weather_current.forecast.current_weather.weathercode >= 61 && 
+                  weather_current.forecast.current_weather.weathercode <= 67 ? "" :
+                  weather_current.forecast.current_weather.weathercode >= 71 && 
+                  weather_current.forecast.current_weather.weathercode <= 77 ? "" :
+                  weather_current.forecast.current_weather.weathercode >= 80 && 
+                  weather_current.forecast.current_weather.weathercode <= 86 ? "" :
+                  weather_current.forecast.current_weather.weathercode >= 95 && 
+                  weather_current.forecast.current_weather.weathercode <= 99 ? "" :
+                                                                               "???"}
+               :class "weather_icon")
+        (label :text "${weather_current.forecast.current_weather.temperature}°C"))
+      (box :orientation "h"
+           :valign "end"
+           :vexpand true
+        (for hour in weather_future
+          (box :orientation "v"
+               :space-evenly false
+            (label :text {hour.time})
+            (label :text {hour.code == 0 ? "" :
+                  hour.code == 1 ? "󰖕" :
+                  hour.code == 2 ? "" :
+                  hour.code == 3 ? "󰖐" :
+                  hour.code == 45 || 
+                  hour.code == 48 ? "" :
+                  hour.code >= 51 && 
+                  hour.code <= 57 ? "" :
+                  hour.code >= 61 && 
+                  hour.code <= 67 ? "" :
+                  hour.code >= 71 && 
+                  hour.code <= 77 ? "" :
+                  hour.code >= 80 && 
+                  hour.code <= 86 ? "" :
+                  hour.code >= 95 && 
+                  hour.code <= 99 ? "" :
+                                    "???"}
+                   :class "weather_future_icon")
+            (label :text "${hour.temp}°C")))))))
 
+; Web links
 (defwidget links []
   (box :orientation "v"
        :space-evenly false
@@ -196,6 +216,7 @@
             :class "main_shortcut_yt"
       ""))))
 
+; Average file directories
 (defwidget files []
   (box :orientation "v"
        :space-evenly false
@@ -222,6 +243,7 @@
             :tooltip "Videos folder"
       "󰯜  Videos")))
 
+; Currently playing
 (defwidget main_music_player []
   (box :orientation "v"
        :space-evenly false
@@ -230,3 +252,11 @@
        :class "main"
     (music_info)
     (music_buttons)))
+
+; Most other files are inside variables.yuck
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================
