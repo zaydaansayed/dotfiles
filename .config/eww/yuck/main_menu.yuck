@@ -7,29 +7,27 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "700px" :height "500px" :anchor "center")
   :stacking "fg"
-  (box :orientation "h"
-       :space-evenly false
-       :class "window main_menu"
-    (centerbox :orientation "h" 
-      (box :orientation "v"
-           :space-evenly false
-           :class "main_start"
-           :spacing 10
-        (user_info)
-        (main_apps))
-      (box :orientation "v"
-           :space-evenly false
-           :class "main_middle"
-           :spacing 10
-        (weather)
-        (links))
-      (box :orientation "v"
-           :space-evenly false
-           :spacing 10
-           :class "main_end"
-        (main_music_player)
-        (files)
-        (calendar :class "main_cal")))))
+  (centerbox :orientation "h" 
+             :class "window main_menu"
+    (box :orientation "v"
+         :space-evenly false
+         :class "main_start"
+         :spacing 10
+      (user_info)
+      (main_apps))
+    (box :orientation "v"
+        :space-evenly false
+        :class "main_middle"
+        :spacing 10
+      (weather)
+      (links))
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 10
+        :class "main_end"
+      (main_music_player)
+      (files)
+      (calendar :class "main_cal"))))
 
 ; Average apps
 (defwidget main_apps []

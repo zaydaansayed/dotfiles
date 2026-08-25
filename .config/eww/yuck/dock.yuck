@@ -11,7 +11,7 @@
             :onhoverlost "eww update dock_visibility=false" 
     (revealer :transition "slideup"
               :reveal {dock_visibility || active_apps.workspace_windows == 0}
-      (box :class "window dock"
+      (box :class "dock"
            :orientation "h"
            :space-evenly false
            :spacing "10"

@@ -1,0 +1,31 @@
+.main_menu_button {
+  background-image: url('/home/.config/eww/themes/night_sky/images/workspace4.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: rgba($color: #000000, $alpha: 0);
+  min-width: 46px;
+  padding-right: 7px;
+}
+
+.dock_pinned_apps {
+    
+}
+
+.dock_button {
+  margin: 0px 2px;
+  padding: 3px;
+  border-bottom: 1px solid #1a1a1a;
+
+  &.background {
+    border-bottom: 1px solid $on;  
+  }
+}
+
+.tray_button {
+  padding-left: 6px;
+}
+
+.systemtray {
+  padding-right: 4px;
+}
+

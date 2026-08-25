@@ -1,0 +1,89 @@
+.main_buttons {
+  min-height: 30px;
+  padding: 0px 4px;
+}
+
+.weather_icon {
+  font-size: 100px;
+  margin-right: 37px;
+}
+
+.weather_future_icon {
+  font-size: 40px;
+  margin-right: 18px;
+}
+
+.current_weather {
+  border: $text 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.main_shortcut {
+  min-height: 60px; 
+  min-width: 80px;
+  font-size: 40px;
+
+  &.github {
+    padding-right: 5px;
+  }
+
+  &.thinkpad {
+    padding-right: 15px;
+  }
+
+  &.rest {
+    padding-right: 10px;
+  }
+}
+
+.main_shortcut_yt {
+  min-width: 56px;
+  min-height: 60px;
+  font-size: 40px;
+  padding-right: 14px;
+}
+
+.main_start {
+  margin-right: 10px;
+}
+
+.main_middle {
+  margin-right: 10px;
+}
+
+.main_end {
+  min-width: 205px;
+}
+
+.main_cal {
+  border-radius: 7px;
+}
+
+.main_app_launcher {
+  min-height: 50px;
+  font-size: 30px;
+}
+
+.user_info {
+  background-color: $bg;
+  padding: 10px;
+  min-height: 150px;
+  min-width: 150px;
+  border-radius: 7px;
+}
+
+.main_weather {
+  background-color: $bg;
+  min-height: 200px;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 7px;
+}
+
+.main {
+  background-color: $bg;
+  padding: 5px;
+  border-radius: 7px;
+}
+

@@ -54,10 +54,10 @@
             (box :orientation "v"
                  :space-evenly false
               (button :class "image ai_prompt"
-                     :onclick "imv ${att} &"
-                     :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
-                     :style "background-image: url('${att}');"
-                     :halign "end")
+                      :onclick "imv ${att} &"
+                      :visible {att != "" && matches(att ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
+                      :style "background-image: url('${att}');"
+                      :halign "end")
                 (box :orientation "v"
                      :space-evenly false
                      :class "l2 ai_txt attachment"
@@ -98,7 +98,7 @@
 
 (defwindow copy-popup
   :monitor 0
-  :geometry (geometry :x "12px" :y "425px" :width "290px" :height "20px" :anchor "top right")
+  :geometry (geometry :x "12px" :y "415px" :width "290px" :height "30px" :anchor "top right")
   :stacking "overlay"
   (label :text "󰆏 Text Copied!"
          :class "l2"))

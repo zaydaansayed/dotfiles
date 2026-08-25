@@ -3,12 +3,13 @@
 ;; =============================================================================
 
 ; Bar window
-(defwindow bar
+(defwindow nar
   :monitor 0
   :geometry (geometry :x "0px" :y "3px" :width "99.7%" :height "30px" :anchor "top center")
   :stacking "fg"
   :exclusive true 
   (centerbox :orientation "h"
+             :class "window bar"
     (box :space-evenly false
          :spacing 5
          (player) (workspaces))

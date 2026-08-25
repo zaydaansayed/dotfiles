@@ -1,0 +1,90 @@
+* {
+  -gtk-icon-shadow: none;
+  all: unset;
+  font-family: "Monocraft";
+}
+
+window { 
+    border-radius: 7px;
+    border: $bg 1.5px solid;
+    background-color: rgba($color: $bg, $alpha: 0.7);
+}
+
+button {
+  padding: 0px;
+  background: #1a1a1a;
+  border: none;
+  min-height: 26px;
+  border-radius: 5px;
+  min-width: 15px;
+  color: $text;
+  box-shadow: none;
+  text-shadow: none;
+
+  &.on {
+    background-color: $on;
+    color: $bg;
+  }
+
+  &.on:hover {
+    background-color: #d6d4d4;
+  }
+}
+
+button:hover {
+  background-color: #292929; 
+}
+
+scale { 
+  trough {
+    background-color: #1a1a1a;
+    min-height: 7px;
+    min-width: 130px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 100px;
+  }
+
+  highlight {
+    background-color: $text;
+    border-radius: 100px;
+  }
+
+  slider {
+    min-height: 18px;
+    min-width: 18px;
+    margin: -8px 0px;
+    border-radius: 100px;
+    border: #0051ff 1px solid;
+    background-color: $text;
+  }
+}
+
+progressbar {
+  progress {
+    border-radius: 100px;
+    background-color: $text;
+}
+
+  trough {
+    background-color: #1a1a1a;
+    border-radius: 100px;
+  }
+}
+
+entry {
+  background-color: #1a1a1a;
+  min-height: 25px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+entry:focus {
+  border: $text 1px solid;
+}
+
+tooltip {
+  background-color: rgba($color: $bg, $alpha: 0.7);
+  border: #000000 solid 1px;
+  border-radius: 5px;
+}

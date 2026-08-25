@@ -1,0 +1,33 @@
+.dock {
+  padding: 5px;
+  min-height: 50px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  }
+
+.main_menu_button {
+  font-size: 40px;
+  min-width: 46px;
+  padding-right: 7px;
+}
+
+.dock_button {
+  margin: 0px 2px;
+  padding: 3px;
+  border-bottom: 1px solid #1a1a1a;
+
+  &.background {
+    border-bottom: 1px solid #ffffff;  
+  }
+}
+
+.tray_button {
+  padding-left: 6px;
+}
+
+.systemtray {
+  padding-right: 4px;
+}
+
