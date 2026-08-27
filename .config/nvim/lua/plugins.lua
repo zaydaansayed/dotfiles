@@ -71,6 +71,54 @@ return {
         { "mason-org/mason.nvim", opts = {} },
         "neovim/nvim-lspconfig",
     },
-  }
-}
+  },
+    {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+  },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    opts = {
+      heading = {
+        sign = false, 
+	icons = { "   ", "   ", "   ", "   ", "   ", "   " }, 
+      },
+      checkbox = {
+        enabled = true,
+        unchecked = { icon = "   " },
+        checked = { icon = " " },
+      },
+    },
+  },
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*",
+    lazy = true,
+    ft = "markdown",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      workspaces = {
+        {
+          name = "personal",
+          path = "~/vaults/personal", 
+        },
+      },
+      
+      link_style = "wiki", 
+      
+      daily_notes = {
+        folder = "dailies",
+        date_format = "%Y-%m-%d",
+      },
 
+      note_id_func = function(title)
+        if title ~= nil then
+          return title
+        else
+          return tostring(os.time())
+        end
+      end,
+    },
+  },
+}

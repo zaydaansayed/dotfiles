@@ -1,1 +1,11 @@
+(defwindow test
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
+  :stacking "fg"
+  (loading_spinner))
 
+(defwidget loading_spinner []
+  (box :class "spinner-container"
+       :halign "center"
+       :valign "center"
+    (label :class "safe-loader" :text spinner)))

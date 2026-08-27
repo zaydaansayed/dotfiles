@@ -1,6 +1,6 @@
 #!/bin/bash
 
-eww update ai_loading=true
+eww open loading-popup
 
 CHAT_DIR="/home/zaydaansayed/Documents/ai_chats"
 INDEX_FILE="$CHAT_DIR/index.json"
@@ -41,7 +41,7 @@ attachments_json=$(echo "$file_paths" | jq -c . 2>/dev/null || echo '[]')
 jq --arg prompt "$prompt" --argjson response "$response" --argjson attachments "$attachments_json" \
    '. + [{"prompt": $prompt, "response": $response, "attachments": $attachments}]' "$CHAT_FILE" > "${CHAT_FILE}.tmp" && mv "${CHAT_FILE}.tmp" "$CHAT_FILE"
 
-eww update ai_loading=false
+eww close loading-popup
 eww update ai_dinput=""
 eww update ai_file_paths="[]"
 eww update ai_txt="$(cat /home/zaydaansayed/Documents/ai_chats/${chat_id}.json 2>/dev/null || echo '[]')"

@@ -7,8 +7,8 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "700px" :height "500px" :anchor "center")
   :stacking "fg"
-  (centerbox :orientation "h" 
-             :class "window main_menu"
+  (centerbox :orientation "h"
+             :class "main_menu"
     (box :orientation "v"
          :space-evenly false
          :class "main_start"
@@ -111,8 +111,8 @@
     (box :orientation "v"
          :space-evenly false
          :visible {strlength(weather_current) < 1}
-         :class "main_weather"
-      (label :text ""
+         :class "main_weather "
+      (label :text spinner
              :valign "center"
              :vexpand true
              :class "placeholder_txt weather_loading")
@@ -175,7 +175,9 @@
                   hour.code <= 99 ? "" :
                                     "???"}
                    :class "weather_future_icon")
-            (label :text "${hour.temp}°C")))))))
+            (label :text "${hour.temp}°C"))))
+      (button :onclick "kitty -e --hold curl wttr.in & eww close main_menu && eww update main_toggle=false"
+        "More Weather"))))
 
 ; Web links
 (defwidget links []

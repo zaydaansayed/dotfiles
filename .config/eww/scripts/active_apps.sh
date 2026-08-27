@@ -1,34 +1,97 @@
 #!/bin/bash
 
+declare -A ICON_MAP
 declare -A ICON_CACHE
+
+# 1. Build an index mapping StartupWMClass, app IDs, and binary names to GTK icon names
+build_icon_index() {
+  eval "$(python3 - << 'EOF'
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gio
+import shlex
+
+apps = Gio.AppInfo.get_all()
+for app in apps:
+    icon = app.get_icon()
+    if not icon:
+        continue
+
+    icon_name = None
+    if isinstance(icon, Gio.ThemedIcon):
+        names = icon.get_names()
+        if names:
+            icon_name = names[0]
+    elif isinstance(icon, Gio.FileIcon):
+        icon_name = icon.get_file().get_basename()
+
+    if not icon_name:
+        continue
+
+    keys = set()
+    app_id = app.get_id()
+    if app_id:
+        clean_id = app_id.replace('.desktop', '').lower()
+        keys.add(clean_id)
+        if '.' in clean_id:
+            keys.add(clean_id.split('.')[-1])
+
+    wmclass = app.get_startup_wm_class()
+    if wmclass:
+        keys.add(wmclass.lower())
+
+    exec_name = app.get_executable()
+    if exec_name:
+        keys.add(exec_name.lower())
+
+    for key in keys:
+        print(f'ICON_MAP[{shlex.quote(key)}]={shlex.quote(icon_name)}')
+EOF
+)"
+}
+
+build_icon_index
 
 get_icon() {
   local lookup="$1"
-  if [[ -n "${ICON_CACHE[$lookup]}" ]]; then
-    echo "${ICON_CACHE[$lookup]}"
+  local clean_lookup
+  clean_lookup=$(echo "$lookup" | tr '[:upper:]' '[:lower:]')
+
+  if [[ -n "${ICON_CACHE[$clean_lookup]}" ]]; then
+    echo "${ICON_CACHE[$clean_lookup]}"
     return
   fi
 
-  local desktop_file
-  desktop_file=$(find /usr/share/applications/ ~/.local/share/applications/ -type f -iname "*${lookup}*.desktop" 2>/dev/null | head -n 1)
+  local icon_name=""
 
-  local icon_name="$lookup"
-  if [[ -n "$desktop_file" ]]; then
-    icon_name=$(awk -F= '/^Icon=/ {print $2; exit}' "$desktop_file")
+  # 1. Match indexed desktop mappings
+  if [[ -n "${ICON_MAP[$clean_lookup]}" ]]; then
+    icon_name="${ICON_MAP[$clean_lookup]}"
   fi
 
-  ICON_CACHE["$lookup"]="${icon_name:-$lookup}"
-  echo "${ICON_CACHE[$lookup]}"
+  # 2. Try tail of reverse domain (e.g., com.obsproject.studio -> studio)
+  if [[ -z "$icon_name" && "$clean_lookup" == *.* ]]; then
+    local tail_name="${clean_lookup##*.}"
+    [[ -n "${ICON_MAP[$tail_name]}" ]] && icon_name="${ICON_MAP[$tail_name]}"
+  fi
+
+  # 3. Explicit edge-case overrides
+  if [[ -z "$icon_name" ]]; then
+    case "$clean_lookup" in
+      *obs*|*obsproject*) icon_name="com.obsproject.Studio" ;;
+      *)                  icon_name="${clean_lookup##*.}" ;;
+    esac
+  fi
+
+  ICON_CACHE["$clean_lookup"]="$icon_name"
+  echo "$icon_name"
 }
 
 active_apps() {
-  local active_info
+  local active_info active_win focused_pid workspace_windows
   active_info=$(hyprctl -j clients)
-  local active_win
   active_win=$(hyprctl -j activewindow)
-  local focused_pid
   focused_pid=$(echo "$active_win" | jq -r '.pid // -1')
-  local workspace_windows
   workspace_windows=$(hyprctl -j activeworkspace | jq -r '.windows')
 
   local raw_apps
@@ -37,7 +100,7 @@ active_apps() {
   local app_list="[]"
   while read -r row; do
     [[ -z "$row" ]] && continue
-    local pid lookup title
+    local pid lookup title icon is_focused=false
     pid=$(jq -r '.pid' <<< "$row")
     title=$(jq -r '.title' <<< "$row")
     lookup=$(jq -r '.lookup' <<< "$row")
@@ -46,9 +109,7 @@ active_apps() {
       *firefox*|*spotify*) continue ;;
     esac
 
-    local icon
     icon=$(get_icon "$lookup")
-    local is_focused=false
     [[ "$pid" -eq "$focused_pid" ]] && is_focused=true
 
     app_list=$(jq -c --argjson list "$app_list" \

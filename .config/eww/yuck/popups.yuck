@@ -9,10 +9,13 @@
   :stacking "fg" 
     (box :orientation "h"
          :space-evenly false
+         :class "popup"
       (progress :orientation "h" 
                 :value {volinfo.volume}
                :class "volbar")
-        (label :text {volinfo.icon})))
+        (label :text {volinfo.icon}
+               :halign "center"
+               :hexpand true)))
 
 ; Brightness popup window
 (defwindow brightness
@@ -21,34 +24,40 @@
   :stacking "fg"
     (box :orientation "h"
          :space-evenly false
+         :class "popup"
       (progress :orientation "h" 
                 :value {briginfo.brightness}
                 :class "brigbar")
-        (label :text {briginfo.icon})))
+        (label :text {briginfo.icon}
+               :halign "center"
+               :hexpand true)))
 
 ; Notification popup window
 (defwindow notification_popup
   :monitor 0
-  :geometry (geometry :x "6px" :y "3px" :width "300px" :height "0px" :anchor "top right")
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :anchor "top right")
   :stacking "fg"
   (box :orientation "v"
        :space-evenly false
-       :class "window"
-    (box :orientation "h"
-         :space-evenly false
-      (label :text notif_app)
-      (button :onclick "eww close notification_popup && makoctl dismiss"
-               :halign "end"
-               :hexpand true
-         (label :text "")))
-    (label :show-truncated false
-           :wrap true
-           :text notif_title
-           :halign "start")
-    (label :show-truncated false
-           :wrap true
-           :text notif_body
-           :xalign 0)))
+       :spacing 10
+       :class "notification-container"
+    (for notif in notifications_json
+      (button :onclick "~/.config/eww/scripts/dismiss_notif.sh ${notif.id} && makoctl dismiss"
+              :class "window"
+        (box :orientation "v"
+             :space-evenly false 
+          (label :text "${notif.app}"
+                 :halign "start"
+                 :class "notif-app")
+          (label :show-truncated false
+                 :wrap true
+                 :text "${notif.title}"
+                 :halign "start"
+                 :class "notif-title")
+          (label :show-truncated false
+                 :wrap true
+                 :text "${notif.body}"
+                 :xalign 0))))))
 
 ; Most other files are found in the variables.yuck file, but the processes that calls the windows are in the hyprland.lua file
 

@@ -17,10 +17,11 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick "eww update ai_menu_chats=\"$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu"                            :class "ai_menu_button"
+      (button :onclick { ai_menu_toggle ? "eww close ai_menu && eww update ai_menu_toggle=false" : "eww update ai_menu_chats=\"$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu && eww update ai_menu_toggle=true" }                       
+              :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
               :tooltip "Open Menu"
         "")
-    (button :onclick "eww close ai && eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama"
+    (button :onclick "eww update ai_menu_toggle=false && eww close loading-popup ; eww close copy-popup ; eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama && eww close ai"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -103,13 +104,17 @@
   (label :text "󰆏 Text Copied!"
          :class "l2"))
 
+(defwindow loading-popup
+  :monitor 0
+  :geometry (geometry :x "12px" :y "415px" :width "290px" :height "30px" :anchor "top right")
+  :stacking "overlay"
+  (label :text "Loading  ${spinner}"
+         :class "l2"))
+
 ; Area around the ai prompt
 (defwidget ai_bottom []
   (box :orientation "v"
        :space-evenly false
-    (label :text "Loading..."
-           :class "placeholder_txt ai_loading"
-           :visible ai_loading)
     (scroll :hscroll false
             :vscroll true
             :visible {arraylength(ai_file_paths) > 0}
@@ -181,7 +186,7 @@ EOF_SAFE
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat $HOME/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat $HOME/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww update ai_menu_toggle=false && eww close ai_menu"
             :tooltip {chat.title}
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
@@ -195,7 +200,7 @@ EOF_SAFE
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
-    (button :onclick "eww close ai_menu"
+    (button :onclick "eww update ai_menu_toggle=false && eww close ai_menu"
             :valign "end"
             :tooltip "Close"
       "")))

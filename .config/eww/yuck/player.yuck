@@ -22,16 +22,16 @@
   (box :orientation "h" 
        :space-evenly false
        :vexpand true
-      (progress :orientation "v" :value {cava[0]} :flipped true)
-      (progress :orientation "v" :value {cava[1]} :flipped true)
-      (progress :orientation "v" :value {cava[2]} :flipped true)
-      (progress :orientation "v" :value {cava[3]} :flipped true)
-      (progress :orientation "v" :value {cava[4]} :flipped true)
-      (progress :orientation "v" :value {cava[5]} :flipped true)
-      (progress :orientation "v" :value {cava[6]} :flipped true)
-      (progress :orientation "v" :value {cava[7]} :flipped true)
-      (progress :orientation "v" :value {cava[8]} :flipped true)
-      (progress :orientation "v" :value {cava[9]} :flipped true)
+      (progress :orientation "v" :value {cava[0]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[1]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[2]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[3]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[4]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[5]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[6]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[7]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[8]} :class "cava_bar" :flipped true)
+      (progress :orientation "v" :value {cava[9]} :class "cava_bar" :flipped true)
       (label :text "${player_data.text != '' && player_data.text != 'null' ? player_data.text : 'nothing playing'}"
              :wrap true 
              :show-truncated false
