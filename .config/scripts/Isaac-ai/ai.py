@@ -1,4 +1,4 @@
-#!/home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/venv/bin/python
+#!/usr/bin/env python3
 import sys
 import os
 import json
@@ -6,13 +6,14 @@ import re
 import traceback
 import ollama
 from pypdf import PdfReader
+from pathlib import Path
 
 FIXED_SYSTEM_CONTEXT = """You are a direct, concise local desktop assistant and your name is Isaac.
 - System environment: Linux, Hyprland (Wayland).
 - Response style: Direct, accurate, technical when needed, no unnecessary fluff.
 - Formatting: Always enclose code blocks in standard markdown triple backticks (```)."""
 
-DYNAMIC_CONTEXT_FILE = "/home/zaydaansayed/Documents/ai_dynam_context.txt"
+DYNAMIC_CONTEXT_FILE = os.path.join(Path.home(), "Documents", "ai_dynam_context.txt")
 
 def search_internet(query):
     """Basic web search capability without needing API keys."""
@@ -43,7 +44,6 @@ def get_auto_search_query(user_prompt):
         query = res.get('message', {}).get('content', '').strip()
         if query.upper() == "NONE" or not query:
             return None
-        # Clean up in case the model adds quotes around the query
         return query.strip('"\'')
     except Exception:
         return None
@@ -149,7 +149,6 @@ def read_dynamic_context():
 
 def process_ai_request(user_prompt, file_paths_arg, history_json_str):
     try:
-        # Check for explicit internet search trigger, or auto-detect
         search_context = ""
         search_query = None
         
@@ -161,7 +160,6 @@ def process_ai_request(user_prompt, file_paths_arg, history_json_str):
         if search_query:
             search_context = f"INTERNET SEARCH RESULTS FOR '{search_query}':\n{search_internet(search_query)}\n\n"
 
-        # Reconstruct chat history from passed JSON string
         history_messages = []
         try:
             raw_history = json.loads(history_json_str) if history_json_str else []
@@ -178,16 +176,14 @@ def process_ai_request(user_prompt, file_paths_arg, history_json_str):
                 if p: history_messages.append({"role": "user", "content": p})
                 if res_text: history_messages.append({"role": "assistant", "content": res_text})
         except Exception:
-            pass # Failsafe if history is empty or malformed
+            pass
 
-        # Setup System Instructions
         system_parts = [FIXED_SYSTEM_CONTEXT]
         dynamic_context = read_dynamic_context()
         if dynamic_context:
             system_parts.append(f"SYSTEM DYNAMIC CONTEXT:\n{dynamic_context}")
         system_instruction = "\n\n".join(system_parts)
 
-        # Process attached contexts (Files, Images, Search)
         images, file_context = parse_attachments(file_paths_arg)
         context_blocks = []
         
@@ -202,7 +198,6 @@ def process_ai_request(user_prompt, file_paths_arg, history_json_str):
 
         combined_prompt = f"ATTACHED CONTEXT:\n{chr(10).join(context_blocks)}\n\nUSER PROMPT: {user_prompt}" if context_blocks else user_prompt
 
-        # Compile Payload & Request Model
         messages = [{"role": "system", "content": system_instruction}]
         messages.extend(history_messages)
         messages.append({"role": "user", "content": combined_prompt})
@@ -232,3 +227,4 @@ if __name__ == "__main__":
         print(output)
     else:
         print("Usage: python ai.py <prompt> [json_file_paths] [history_json]")
+
