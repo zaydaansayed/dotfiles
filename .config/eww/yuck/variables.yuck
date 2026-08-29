@@ -1,31 +1,31 @@
 ;; =============================================================================
 ;; LISTENERS
 ;; =============================================================================
-(deflisten batinfo                :initial ""          "~/dotfiles/.config/eww/scripts/batinfo.sh")
-(deflisten netinfo                :initial ""          "~/dotfiles/.config/eww/scripts/netinfo.sh")
-(deflisten btinfo                 :initial ""          "~/dotfiles/.config/eww/scripts/btinfo.sh")
-(deflisten active_workspace       :initial ""          "~/dotfiles/.config/eww/scripts/workspaces.sh")
-(deflisten player_data            :initial ""          "~/dotfiles/.config/eww/scripts/player_data.sh")
-(deflisten volinfo                :initial ""          "~/dotfiles/.config/eww/scripts/volinfo.sh")
-(deflisten briginfo               :initial ""          "~/dotfiles/.config/eww/scripts/briginfo.sh")
-(deflisten notif_visibility       :initial ""          "~/dotfiles/.config/eww/scripts/notif_visibility.sh")
-(deflisten notif_history          :initial ""          "~/dotfiles/.config/eww/scripts/notif_history.sh")
-(deflisten airplane_mode          :initial ""          "~/dotfiles/.config/eww/scripts/airplane_mode.sh")
-(deflisten cava                   :initial ""          "~/dotfiles/.config/eww/scripts/cava.sh")
-(deflisten active_apps            :initial ""          "~/dotfiles/.config/eww/scripts/active_apps.sh")
-(deflisten pinned_apps            :initial ""          "~/dotfiles/.config/eww/scripts/pinned_apps.sh")
+(deflisten batinfo                :initial ""          "~/.config/eww/scripts/batinfo.sh")
+(deflisten netinfo                :initial ""          "~/.config/eww/scripts/netinfo.sh")
+(deflisten btinfo                 :initial ""          "~/.config/eww/scripts/btinfo.sh")
+(deflisten active_workspace       :initial ""          "~/.config/eww/scripts/workspaces.sh")
+(deflisten player_data            :initial ""          "~/.config/eww/scripts/player_data.sh")
+(deflisten volinfo                :initial ""          "~/.config/eww/scripts/volinfo.sh")
+(deflisten briginfo               :initial ""          "~/.config/eww/scripts/briginfo.sh")
+(deflisten notif_visibility       :initial ""          "~/.config/eww/scripts/notif_visibility.sh")
+(deflisten notif_history          :initial ""          "~/.config/eww/scripts/notif_history.sh")
+(deflisten airplane_mode          :initial ""          "~/.config/eww/scripts/airplane_mode.sh")
+(deflisten cava                   :initial ""          "~/.config/eww/scripts/cava.sh")
+(deflisten active_apps            :initial ""          "~/.config/eww/scripts/active_apps.sh")
+(deflisten pinned_apps            :initial ""          "~/.config/eww/scripts/pinned_apps.sh")
 
 ;; =============================================================================
 ;; POLLERS
 ;; =============================================================================
-(defpoll spinner           :interval "100ms" "/home/.config/eww/scripts/spinner.sh")
+(defpoll spinner           :interval "100ms" "~/.config/eww/scripts/spinner.sh")
 (defpoll timenum           :interval "5s"  "date +'%R'")
 (defpoll tlpicon           :interval "1s"  "~/.config/eww/scripts/tlpicon.sh")
 (defpoll date              :interval "30s" "echo \"$(date +'%a') $(date +'%d' | sed 's/^0//')th $(date +'%b')\" | tr 'A-Z' 'a-z'")
 (defpoll username          :interval "24h" "echo $USER")
-(defpoll current_theme     :interval "24h" "cat /home/.config/eww/themes/current_theme.txt")
+(defpoll current_theme     :interval "24h" "cat ~/.config/eww/themes/current_theme.txt")
 (defpoll weather_current   :interval "1h"  "weather-Cli get -r")
-(defpoll weather_future    :interval "1h"  "~/dotfiles/.config/eww/scripts/weather_future.sh")
+(defpoll weather_future    :interval "1h"  "~/.config/eww/scripts/weather_future.sh")
 
 ;; =============================================================================
 ;; VARIABLES

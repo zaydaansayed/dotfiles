@@ -1,4 +1,4 @@
-@use "/home/.config/eww/themes/default_dark/eww/scss/colors.scss" as c;
+@use "../colors.scss" as c;
 
 .cava_bar {
   border-bottom: c.$on 1px solid; 

@@ -2,7 +2,7 @@
 
 eww open loading-popup
 
-CHAT_DIR="/home/zaydaansayed/Documents/ai_chats"
+CHAT_DIR="$HOME/Documents/ai_chats"
 INDEX_FILE="$CHAT_DIR/index.json"
 mkdir -p "$CHAT_DIR"
 
@@ -32,8 +32,7 @@ fi
 
 history_json=$(cat "$CHAT_FILE")
 
-# Updated line below:
-response=$(/home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/venv/bin/python /home/zaydaansayed/dotfiles/.config/scripts/Isaac-ai/ai.py \
+response=$($HOME/dotfiles/.config/scripts/Isaac-ai/venv/bin/python $HOME/dotfiles/.config/scripts/Isaac-ai/ai.py \
   "$prompt" "$file_paths" "$history_json")
 
 attachments_json=$(echo "$file_paths" | jq -c . 2>/dev/null || echo '[]')
@@ -44,5 +43,5 @@ jq --arg prompt "$prompt" --argjson response "$response" --argjson attachments "
 eww close loading-popup
 eww update ai_dinput=""
 eww update ai_file_paths="[]"
-eww update ai_txt="$(cat /home/zaydaansayed/Documents/ai_chats/${chat_id}.json 2>/dev/null || echo '[]')"
-eww update ai_menu_chats="$(cat /home/zaydaansayed/Documents/ai_chats/index.json 2>/dev/null || echo '[]')"
+eww update ai_txt="$(cat $HOME/Documents/ai_chats/${chat_id}.json 2>/dev/null || echo '[]')"
+eww update ai_menu_chats="$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')"

@@ -9,7 +9,7 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 20
-      (button :onclick "/home/.config/eww/themes/default_dark/application.sh"
+      (button :onclick "$HOME/.config/eww/themes/default_dark/application.sh"
               :class {current_theme == "default_dark" ? "default_dark_btn on" : "default_dark_btn"}
         (box :orientation "v"
              :space-evenly false 

@@ -35,7 +35,7 @@
 ; Apps widget
 
 ; To pin an app that can be opened with multiple instances and isnt a terminal app use this as an example (You might needa configure different files also):
-;button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && /home/zaydaansayed/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
+;button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
 ;             :onrightclick "firefox &"
 ;            :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button on" : "dock_button background"}
 ;              :tooltip "Firefox"
@@ -51,7 +51,7 @@
 ;               :icon-size "dialog"))
 
 ; To pin a terminal app use this format (you do not needa configure any different files):
-;(button :onclick "cd /home/zaydaansayed/dotfiles/.config && kitty -e nvim &"
+;(button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
 ;              :class "dock_button"
 ;              :tooltip "Rice"
 ;        (image :icon "kitty"
