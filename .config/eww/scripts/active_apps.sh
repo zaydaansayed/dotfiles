@@ -3,7 +3,6 @@
 declare -A ICON_MAP
 declare -A ICON_CACHE
 
-# 1. Build an index mapping StartupWMClass, app IDs, and binary names to GTK icon names
 build_icon_index() {
   eval "$(python3 - << 'EOF'
 import gi
@@ -54,8 +53,24 @@ build_icon_index
 
 get_icon() {
   local lookup="$1"
-  local clean_lookup
+  local title="$2"
+  local clean_lookup clean_title
   clean_lookup=$(echo "$lookup" | tr '[:upper:]' '[:lower:]')
+  clean_title=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+
+  case "$clean_lookup" in
+    *kitty*|*alacritty*|*foot*|*wezterm*|*st*|*xterm*)
+      echo "kitty"
+      return
+      ;;
+  esac
+
+  case "$clean_title" in
+    *nvim*|*neovim*|*yazi*|*btop*|*htop*|*ranger*|*tmux*)
+      echo "kitty"
+      return
+      ;;
+  esac
 
   if [[ -n "${ICON_CACHE[$clean_lookup]}" ]]; then
     echo "${ICON_CACHE[$clean_lookup]}"
@@ -64,18 +79,15 @@ get_icon() {
 
   local icon_name=""
 
-  # 1. Match indexed desktop mappings
   if [[ -n "${ICON_MAP[$clean_lookup]}" ]]; then
     icon_name="${ICON_MAP[$clean_lookup]}"
   fi
 
-  # 2. Try tail of reverse domain (e.g., com.obsproject.studio -> studio)
   if [[ -z "$icon_name" && "$clean_lookup" == *.* ]]; then
     local tail_name="${clean_lookup##*.}"
     [[ -n "${ICON_MAP[$tail_name]}" ]] && icon_name="${ICON_MAP[$tail_name]}"
   fi
 
-  # 3. Explicit edge-case overrides
   if [[ -z "$icon_name" ]]; then
     case "$clean_lookup" in
       *obs*|*obsproject*) icon_name="com.obsproject.Studio" ;;
@@ -109,7 +121,7 @@ active_apps() {
       *firefox*|*spotify*) continue ;;
     esac
 
-    icon=$(get_icon "$lookup")
+    icon=$(get_icon "$lookup" "$title")
     [[ "$pid" -eq "$focused_pid" ]] && is_focused=true
 
     app_list=$(jq -c --argjson list "$app_list" \

@@ -1,4 +1,4 @@
-@use "/home/.config/eww/scss/colors.scss" as c;
+@use "/home/.config/eww/themes/default_dark/eww/scss/colors.scss" as c;
 
 .dock {
   color: c.$on;
@@ -23,7 +23,6 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  min-width: 53px;
   border-bottom: 1px solid c.$bg;
 
   &.background {

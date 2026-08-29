@@ -1,12 +1,11 @@
-@use "scss/colors";
-@use "scss/mixins";
-@use "scss/base";
-
-@use "scss/widgets/bar";
-@use "scss/widgets/ai";
-@use "scss/widgets/dock";
-@use "scss/widgets/main_menu";
-@use "scss/widgets/player";
-@use "scss/widgets/popups";
-@use "scss/widgets/quick_settings";
-@use "scss/widgets/sysnotif";
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/ai.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/bar.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/dock.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/main_menu.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/player.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/popups.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/quick_settings.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/sysnotif.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/widgets/theme_picker.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/base.scss';
+@use '/home/.config/eww/themes/default_dark/eww/scss/mixins.scss'

@@ -1,4 +1,4 @@
-@use "/home/.config/eww/scss/colors.scss" as c;
+@use "/home/.config/eww/themes/default_dark/eww/scss/colors.scss" as c;
 
 .placeholder_txt {
   color: #515152;
@@ -102,5 +102,11 @@
   &.profile_picture {
     background-image: url('./images/profile_picture.png');
     min-height: 150px;
+  }
+
+  &.default_dark {
+    background-image: url('./themes/default_dark/images/wallpaper.png');
+    min-width: 256px;
+    min-height: 144px;
   }
 }

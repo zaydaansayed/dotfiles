@@ -1,4 +1,4 @@
-@use "/home/.config/eww/scss/colors.scss" as c;
+@use "/home/.config/eww/themes/default_dark/eww/scss/colors.scss" as c;
 
 * {
   -gtk-icon-shadow: none;
@@ -85,4 +85,28 @@ entry:focus {
 tooltip {
   background-color: rgba($color: c.$bg, $alpha: 0.7);
   border-radius: 7px;
+}
+
+scrollbar trough {
+    background-color: c.$l3;
+    border: none;
+    border-radius: 7px;
+}
+
+scrollbar slider {
+    background-color: c.$l3_hover;
+    padding: 2px;
+    border-radius: 6px;
+    min-width: 3px;
+    min-height: 3px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+scrollbar slider:hover {
+    background-color: c.$l4;
+    transition: background-color 0.3s ease-in-out;
+}
+
+scrollbar slider:active {
+    background-color: c.$on;
 }

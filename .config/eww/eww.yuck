@@ -9,4 +9,5 @@
 (include "./yuck/dock.yuck")
 (include "./yuck/sysnotif.yuck")
 (include "./yuck/main_menu.yuck")
+(include "./yuck/theme_picker.yuck")
 (include "./yuck/test.yuck")

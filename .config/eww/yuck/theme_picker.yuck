@@ -1,0 +1,20 @@
+(defwindow theme_picker
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top center")
+  :stacking "fg"
+  (box :orientation "v"
+       :space-evenly false
+       :class "window"
+       :spacing 10
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 20
+      (button :onclick "/home/.config/eww/themes/default_dark/application.sh"
+              :class {current_theme == "default_dark" ? "default_dark_btn on" : "default_dark_btn"}
+        (box :orientation "v"
+             :space-evenly false 
+          (box :class "image default_dark")
+          (label :text "Default Dark"
+                    :halign "center"))))
+    (button :onclick "eww close theme_picker"
+      "")))
