@@ -18,6 +18,9 @@ include=$HOME/.config/eww/themes/default_dark/fuzzel.ini
 
 echo "default_dark" > $HOME/.config/eww/themes/current_theme.txt
 
+echo "(include './themes/default_dark/eww/yuck/bar.yuck')" > $HOME/.config/eww/yuck/bar.yuck
+echo "(include './themes/default_dark/eww/yuck/player.yuck')" > $HOME/.config/eww/yuck/player.yuck
+
 sed -i '3c\    path = $HOME/.config/eww/themes/default_dark/images/wallpaper.png' $HOME/.config/hypr/hyprpaper.conf
 
 killall hyprpaper

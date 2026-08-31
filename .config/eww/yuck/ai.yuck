@@ -34,6 +34,7 @@
        :visible {arraylength(ai_txt) < 1}
     (box :orientation "v"
          :space-evenly false
+         :spacing 20
          :valign "center"
          :vexpand true
       (label :text "󰚩"
@@ -102,18 +103,19 @@
   :geometry (geometry :x "12px" :y "415px" :width "290px" :height "30px" :anchor "top right")
   :stacking "overlay"
   (label :text "󰆏 Text Copied!"
-         :class "l2"))
+         :class "l3"))
 
 (defwindow loading-popup
   :monitor 0
   :geometry (geometry :x "12px" :y "415px" :width "290px" :height "30px" :anchor "top right")
   :stacking "overlay"
   (label :text "Loading  ${spinner}"
-         :class "l2"))
+         :class "l3"))
 
 ; Area around the ai prompt
 (defwidget ai_bottom []
   (box :orientation "v"
+       :class "ai_bottom"
        :space-evenly false
     (scroll :hscroll false
             :vscroll true

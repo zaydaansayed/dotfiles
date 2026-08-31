@@ -1,51 +1,26 @@
-/*=============================================================================
-bar.scss
-=============================================================================*/
-
-.bar {
-    padding-top: 5px;
-    border: none;
-    background-color: rgba($color: $bg, $alpha: 0.0);
-  }
-
-.bar button {
-  min-height: 0px;
-}
+@use "../colors.scss" as c;
 
 .bar_module {
-  background-color: rgba($color: $bg, $alpha: 0.5);
+  background-color: c.$bg;
+  padding: 5px;
   border-radius: 7px;
-  border: $bg 1.5px solid;
-  padding: 4;
+  border: c.$border 1px solid;
 
-  &.workspaces { 
-    margin-right: 10px;
+  &.start {
+    margin-right: 40px;
   }
 
   &.time {
-    color: $dark_text;
-    padding: 0px 30px;
+    color: c.$accent_2;
   }
 
-  &.end {
-    color: $text;
+  &.bar_end {
+    color: c.$accent_1;
+
+    button {
+      color: c.$accent_1;
+    }
   }
-}
-
-.player_text {
-  color: #e2dff4;
-  background-color: rgba($color: #000000, $alpha: 0.0);
-  padding-left: 4px;
-}
-
-.player_text:hover {
-  background-color: rgba($color: #ffffff, $alpha: 0.1);
-}
-
-.play_pause {
-  color: #e2dff4;
-  background-color: rgba($color: #000000, $alpha: 0.0);
-  padding-left: 2px;
 }
 
 .workspace {
@@ -54,38 +29,22 @@ bar.scss
   background-color: rgba($color: #000000, $alpha: 0);
   padding: 3px 3px 3px 5px;
 
-  &.one {
-    background-image: url('/home/.config/eww/themes/night_sky/images/workspace1.png');
+  &.a {
     color: #ffffff;
   }
 
-  &.two {
-    background-image: url('/home/.config/eww/themes/night_sky/images/workspace2.png');
-    color: #ffffff;
-  }
-
-  &.three {
-    background-image: url('/home/.config/eww/themes/night_sky/images/workspace3.png');
+  &.b {
     color: #000000;
   }
+}
 
-  &.four {
-    background-image: url('/home/.config/eww/themes/night_sky/images/workspace4.png');
-    color: #000000;
-  }
+.workspace:hover {
+  opacity: 0.75;
+  background-color: unset;
+}
 
-  &.five {
-    background-image: url('/home/.config/eww/themes/night_sky/images/workspace5.png');
-    color: #ffffff;
-  }
-
-  &.won {
-    opacity: 1;
-  }
-
-  &.woff {
-    opacity: 0.35;
-  }
+.play-pause {
+  color: c.$accent_3;
 }
 
 .bticon {
@@ -101,5 +60,30 @@ bar.scss
 }
 
 .quick_center {
-  padding-right: 3px;
+  padding: 0px 5px 0px 3px;
+
+  &.on {
+    background-color: c.$accent_1;
+
+    label {
+      color: #000000;
+    }
+  }
+
+  &.on:hover {
+    background-color: #c26b59;
+  }
+}
+
+.ai_center {
+  padding: 0px 8px 0px 3px;
+
+  &.on {
+    background-color: c.$accent_1;
+    color: #000000;
+
+    label {
+      color: #000000;
+    }
+  }
 }

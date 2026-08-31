@@ -1,3 +1,10 @@
+@use "../colors.scss" as c;
+
+.music_player_window {
+  padding: 10px;
+  border-radius: 7px;
+}
+
 .repeat_button {
   padding-right: 3px;
 }
@@ -6,6 +13,31 @@
   padding-right: 1px;
 }
 
-.music_text {
-  margin-left: 5px;
+.music_btn {
+  color: #ffffff;
+}
+
+.album_art {
+  background-size: contain;
+  border-radius: 7px;
+  min-width: 100px;
+  min-height: 100px;
+  background-repeat: no-repeat;
+}
+
+.lyrics {
+  min-width: 200px;
+  margin-left: 20px;
+}
+
+.lyrics_unfocused {
+  color: c.$l3_hover;
+}
+
+.lyrics_focused {
+  margin: 10px 0px;
+}
+
+.no_album_art {
+  font-size: 100px;
 }

@@ -2,16 +2,13 @@
   min-height: 442px;
 }
 
-.ai_center {
-  padding-right: 5px;
-}
-
 .ai_input {
   margin-bottom: 3px;
-  min-width: 218px;
+  min-width: 217px;
   margin-right: 3px;
+
   &.empty {
-    min-width: 248px;
+    min-width: 247px;
   }
 }
 
@@ -35,10 +32,6 @@
   margin-bottom: 3px;
 }
 
-.ai_code_input {
-  background-color: #2b2b2b;
-} 
-
 .ai_menu_button {
   padding-right: 2px;
 }
@@ -54,4 +47,8 @@
 .ai_chat {
   padding: 3px;
   min-width: 149px;
+}
+
+.ai_bottom {
+  margin-top: 3px;
 }

@@ -8,7 +8,7 @@
    -- Unseen background tasks
    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'") 
-   hl.exec_cmd("exec-once = gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'")
+   hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'")
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
 

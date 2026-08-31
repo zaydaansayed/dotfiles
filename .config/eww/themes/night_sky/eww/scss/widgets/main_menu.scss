@@ -1,3 +1,10 @@
+@use "../colors.scss" as c;
+.main_menu {
+  padding: 5px;
+  border-radius: 7px;
+  background-color: rgba($color: c.$bg, $alpha: 0.4);
+}
+
 .main_buttons {
   min-height: 30px;
   padding: 0px 4px;
@@ -14,7 +21,7 @@
 }
 
 .current_weather {
-  border: $text 1px solid;
+  border: c.$on 1px solid;
   border-radius: 10px;
   padding: 10px;
 }
@@ -57,7 +64,13 @@
 }
 
 .main_cal {
+  background-color: c.$bg;
   border-radius: 7px;
+}
+
+.main_cal:selected {
+  background-color: c.$on;
+  color: #000000;
 }
 
 .main_app_launcher {
@@ -66,7 +79,7 @@
 }
 
 .user_info {
-  background-color: $bg;
+  background-color: c.$bg;
   padding: 10px;
   min-height: 150px;
   min-width: 150px;
@@ -74,7 +87,7 @@
 }
 
 .main_weather {
-  background-color: $bg;
+  background-color: c.$bg;
   min-height: 200px;
   min-width: 200px;
   padding: 10px;
@@ -82,8 +95,7 @@
 }
 
 .main {
-  background-color: $bg;
+  background-color: c.$bg;
   padding: 5px;
   border-radius: 7px;
 }
-

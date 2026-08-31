@@ -250,7 +250,7 @@
        :visible {player_data.visible} 
        :spacing 4
        :class "main"
-    (music_info)
+    (music_bars)
     (music_buttons)))
 
 ; Most other files are inside variables.yuck

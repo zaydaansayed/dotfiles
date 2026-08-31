@@ -1,26 +1,13 @@
-$bg: #090409;
-$on: #B96DE7;
-$l2: #1a1a1a;
-$text: #E99AFF;
-$light_text: #EBC4F7;
-$dark_text: #E07D68;
-$blueish: #549D9D;
-$blueish_hover: #6dcfcf;
-
-/*
-#090409
-#426068
-#88594B
-#754888
-#549D9D
-#E07D68
-#B96DE7
-#E99AFF
-#A358D1
-#426068
-#88594B
-#754888
-#549D9D
-#E07D68
-#B96DE7
-#EBC4F7*/
+$bg: rgba($color: #090409, $alpha: 0.6);
+$border: #090409;
+$on: #E99AFF;
+$on_hover: #b272c4;
+$l2: rgba($color: #ffffff, $alpha: 0.1);
+$l2_hover: rgba($color: #ffffff, $alpha: 0.15);
+$l3: #383838;
+$l3_hover: #555555;
+$l4: #777777;
+$accent_1: #E07D68;
+$accent_2: #549D9D;
+$accent_3: #E99AFF;
+$accent_4: #88594b;

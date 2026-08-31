@@ -1,0 +1,92 @@
+;; =============================================================================
+;; player.yuck
+;; =============================================================================
+
+; Music player window 
+(defwindow music_player_window
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "400px" :height "200px" :anchor "top left")
+  :stacking "fg" 
+  (box :class "music_player_window"
+       :orientation "h"
+       :space-evenly false
+       :style "background-color: ${player_bg}; color: ${player_text};"
+    (box :orientation "v"
+         :space-evenly false
+         :hexpand false
+         :spacing 10
+      (album_art)
+      (music_buttons)
+      (label :text {player_data.artist}
+             :visible {strlength(player_data.artist) > 0}
+             :class "music_text")
+      (label :text {player_data.title}))
+      (lyrics)))
+
+  (defwidget lyrics []
+    (box :orientation "v"
+         :space-evenly false
+         :valign "center"
+         :visible {arraylength(player_data.current) > 0 || arraylength(player_data.future) > 0 || arraylength(player_data.past) > 0}
+          :class "lyrics"
+      (label :text {lyrics.past}
+             :show-truncated false
+             :class "lyrics_unfocused"
+             :wrap true)
+      (label :text {lyrics.current}
+             :show-truncated false
+             :class "lyrics_focused"
+             :wrap true)
+      (label :text {lyrics.future}
+             :show-truncated false
+             :class "lyrics_unfocused"
+             :wrap true)))
+
+; Album art
+(defwidget album_art []
+  (box
+  (box :style "background-image: url('${player_data.image}')"
+       :visible {player_data.image != "none"}
+       :halign "center"
+       :class "album_art")
+  (label :text ""
+         :visible {player_data.image == "none"}
+         :halign "start"
+         :hexpand true
+         :class "no_album_art")))
+
+; Music buttons
+(defwidget music_buttons []
+  (box :orientation "h" 
+       :space-evenly false
+       :halign "center"
+       :class "music_buttons"
+       :spacing 3
+    (button :onclick "playerctl shuffle toggle"
+            :class "music_btn shuffle_button"
+            :tooltip "Shuffle"
+      {player_data.shuffle_icon})
+    (button :onclick "playerctl previous"
+            :tooltip "Previous"
+            :class "music_btn"
+      "󰒮")
+    (button :onclick "playerctl play-pause"
+            :tooltip "Play/Pause"
+            :class "music_btn"
+      "${player_data.icon}")
+    (button :onclick "playerctl next"
+            :tooltip "Next"
+            :class "music_btn"
+      "󰒭")
+    (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" = \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
+            :class "music_btn repeat_button"
+            :tooltip "Repeat"
+      "${player_data.repeat_icon}")))
+
+; Most other files are in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

@@ -1,8 +1,8 @@
 [general]
-bars = 10                  ; Match this to the number of bars you want in Eww
+bars = 6
 
 [output]
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
-ascii_max_range = 100     ; Bar height values will range from 0 to 100
+ascii_max_range = 100

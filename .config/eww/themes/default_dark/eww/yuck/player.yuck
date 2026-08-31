@@ -1,0 +1,71 @@
+;; =============================================================================
+;; player.yuck
+;; =============================================================================
+
+; Music player window 
+(defwindow music_player_window
+  :monitor 0
+  :geometry (geometry :x "3px" :y "3px" :width "400px" :height "100px" :anchor "top left")
+  :stacking "fg" 
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 5
+         :class "window"
+      (music_info)
+      (music_buttons)))
+
+; Music info
+(defwidget music_info []
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 15
+    (box :style "background-image: url('${player_data.image}')"
+         :class "music_art")
+    (box :orientation "v"
+         :space-evenly false
+         :valign "center"
+      (label :text {player_data.artist}
+             :class "music_artist"
+             :halign "start"
+             :wrap true
+             :show-truncated false)
+      (label :text {player_data.title}
+             :class "music_title"
+             :halign "start"
+             :wrap true
+             :show-truncated false))))
+
+; Music buttons
+(defwidget music_buttons []
+  (box :orientation "h" 
+       :space-evenly false
+       :valign "center"
+       :spacing 3
+    (button :onclick "playerctl shuffle toggle"
+            :class "music_btn shuffle_button"
+            :tooltip "Shuffle"
+      {player_data.shuffle_icon})
+    (button :onclick "playerctl previous"
+            :tooltip "Previous"
+            :class "music_btn"
+      "󰒮")
+    (button :onclick "playerctl play-pause"
+            :tooltip "Play/Pause"
+            :class "music_btn"
+      "${player_data.icon}")
+    (button :onclick "playerctl next"
+            :tooltip "Next"
+            :class "music_btn"
+      "󰒭")
+    (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" = \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
+            :class "music_btn repeat_button"
+            :tooltip "Repeat"
+      "${player_data.repeat_icon}")))
+
+; Most other files are in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

@@ -1,43 +1,48 @@
+@use "./colors.scss" as c;
+
 * {
   -gtk-icon-shadow: none;
   all: unset;
   font-family: "Monocraft";
 }
 
-window { 
-    border-radius: 7px;
-    border: $bg 1.5px solid;
-    background-color: rgba($color: $bg, $alpha: 0.7);
-}
-
 button {
-  padding: 0px;
-  background: #1a1a1a;
+  padding: 0;
+  background: c.$l2;
   border: none;
-  min-height: 26px;
-  border-radius: 5px;
+  border-radius: 7px;
   min-width: 15px;
-  color: $text;
+  color: c.$on;
   box-shadow: none;
   text-shadow: none;
+  transition: background-color 0.3s ease-in-out;
 
   &.on {
-    background-color: $on;
-    color: $bg;
+    background-color: c.$on;
+    color: #000000;
   }
 
   &.on:hover {
-    background-color: #d6d4d4;
+    background-color: c.$on_hover;
+  }
+
+  &.ws_on {
+    opacity: 1.0;
+  }
+
+  &.off {
+    opacity: 0.5;
   }
 }
 
 button:hover {
-  background-color: #292929; 
+  background-color: c.$l2_hover;
+  transition: background-color 0.3s ease-in-out;
 }
 
 scale { 
   trough {
-    background-color: #1a1a1a;
+    background-color: c.$l2;
     min-height: 7px;
     min-width: 130px;
     margin: 0px;
@@ -46,7 +51,7 @@ scale {
   }
 
   highlight {
-    background-color: $text;
+    background-color: c.$on;
     border-radius: 100px;
   }
 
@@ -56,35 +61,60 @@ scale {
     margin: -8px 0px;
     border-radius: 100px;
     border: #0051ff 1px solid;
-    background-color: $text;
+    background-color: c.$on;
   }
 }
+
 
 progressbar {
   progress {
     border-radius: 100px;
-    background-color: $text;
+    background-color: c.$on;
 }
 
   trough {
-    background-color: #1a1a1a;
+    background-color: c.$l2;
     border-radius: 100px;
   }
 }
 
 entry {
-  background-color: #1a1a1a;
+  background-color: c.$l2;
   min-height: 25px;
   padding: 5px;
   border-radius: 5px;
+  border: c.$bg 1px solid;
 }
 
 entry:focus {
-  border: $text 1px solid;
+  border: c.$on 1px solid;
 }
 
 tooltip {
-  background-color: rgba($color: $bg, $alpha: 0.7);
-  border: #000000 solid 1px;
-  border-radius: 5px;
+  background-color: rgba($color: c.$bg, $alpha: 0.7);
+  border-radius: 7px;
+}
+
+scrollbar trough {
+    background-color: c.$l3;
+    border: none;
+    border-radius: 7px;
+}
+
+scrollbar slider {
+    background-color: c.$l3_hover;
+    padding: 2px;
+    border-radius: 6px;
+    min-width: 3px;
+    min-height: 3px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+scrollbar slider:hover {
+    background-color: c.$l4;
+    transition: background-color 0.3s ease-in-out;
+}
+
+scrollbar slider:active {
+    background-color: c.$on;
 }

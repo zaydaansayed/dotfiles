@@ -1,11 +1,15 @@
 (defwindow test
   :monitor 0
-  :geometry (geometry :x "0px" :y "0px" :width "250px" :height "100px" :anchor "center")
+  :geometry (geometry :x "0px" :y "0px" :width "250px" :height "0px" :anchor "center")
   :stacking "fg"
-  (loading_spinner))
+  (bars))
 
-(defwidget loading_spinner []
-  (box :class "spinner-container"
-       :halign "center"
-       :valign "center"
-    (label :class "safe-loader" :text spinner)))
+(defwidget bars []
+  (box :orientation "h"
+       :space-evenly false
+    (progress :orientation "v" :value {cava[0]} :class "cava_bar start" :flipped true)
+      (progress :orientation "v" :value {cava[1]} :class "cava_bar start" :flipped true)
+      (progress :orientation "v" :value {cava[2]} :class "cava_bar mid" :flipped true)
+      (progress :orientation "v" :value {cava[3]} :class "cava_bar mid" :flipped true)
+      (progress :orientation "v" :value {cava[4]} :class "cava_bar end" :flipped true)
+      (progress :orientation "v" :value {cava[5]} :class "cava_bar end" :flipped true)))

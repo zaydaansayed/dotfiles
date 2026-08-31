@@ -6,6 +6,7 @@
   margin-bottom: 3px;
   min-width: 217px;
   margin-right: 3px;
+
   &.empty {
     min-width: 247px;
   }
@@ -46,4 +47,8 @@
 .ai_chat {
   padding: 3px;
   min-width: 149px;
+}
+
+.ai_bottom {
+  margin-top: 3px;
 }

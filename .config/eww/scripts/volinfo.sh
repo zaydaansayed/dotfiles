@@ -5,7 +5,7 @@ print_volume() {
   status=$([ "$(pactl get-sink-mute @DEFAULT_SINK@)" = "Mute: yes" ] && echo "muted" || echo "unmuted")
 
   if [[ $volume -eq 0 ]]; then
-      icon=""
+      icon=" "
   elif [[ $volume -le 25 ]]; then
       icon=" "
   else

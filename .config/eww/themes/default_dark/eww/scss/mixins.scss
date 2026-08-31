@@ -69,6 +69,11 @@
   border: c.$l3 1px solid;
 }
 
+.l3 {
+  background-color: c.$l3;
+  border-radius: 7px;
+}
+
 .window {
   color: c.$on;
   background-color: c.$bg; 
@@ -108,5 +113,12 @@
     background-image: url('./themes/default_dark/images/wallpaper.png');
     min-width: 256px;
     min-height: 144px;
+  }
+
+  &.night_sky {
+    background-image: url('./themes/night_sky/images/wallpaper.png');
+    min-width: 256px;
+    min-height: 144px;
+
   }
 }

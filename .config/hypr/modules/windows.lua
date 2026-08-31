@@ -39,6 +39,14 @@ hl.window_rule({
 -- })
 -- overlayLayerRule:set_enabled(false)
 
+-- Add this to your layer rules section
+hl.layer_rule({
+    name = "eww-blur",
+    match = { namespace = "^gtk-layer-shell$" },
+    blur = true,
+    ignore_alpha = 0.1
+})
+
 -- Hyprland-run windowrule
 hl.window_rule({
     name  = "move-hyprland-run",

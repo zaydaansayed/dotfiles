@@ -6,15 +6,22 @@
        :space-evenly false
        :class "window"
        :spacing 10
-    (box :orientation "h"
-         :space-evenly false
-         :spacing 20
-      (button :onclick "$HOME/.config/eww/themes/default_dark/application.sh"
-              :class {current_theme == "default_dark" ? "default_dark_btn on" : "default_dark_btn"}
-        (box :orientation "v"
-             :space-evenly false 
-          (box :class "image default_dark")
-          (label :text "Default Dark"
-                    :halign "center"))))
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (button :onclick "$HOME/.config/eww/themes/default_dark/application.sh"
+            :class {current_theme == "default_dark" ? "theme_btn on" : "theme_btn"}
+      (box :orientation "v"
+           :space-evenly false 
+        (box :class "image default_dark")
+        (label :text "Default Dark"
+               :halign "center")))
+    (button :onclick "$HOME/.config/eww/themes/night_sky/application.sh"
+            :class {current_theme == "night_sky" ? "theme_btn on" : "theme_btn"}
+      (box :orientation "v"
+           :space-evenly false 
+        (box :class "image night_sky")
+        (label :text "Night Sky"
+               :halign "center"))))
     (button :onclick "eww close theme_picker"
       "")))

@@ -24,7 +24,7 @@ CHAT_FILE="$CHAT_DIR/${chat_id}.json"
 if [ ! -f "$CHAT_FILE" ]; then
     echo "[]" > "$CHAT_FILE"
     
-    title=$(ollama run qwen2.5:1.5b "Summarize this prompt in 3 to 5 words as a short title. Return ONLY the title with no quotes, formatting, or period: $prompt" 2>/dev/null)
+    title=$(ollama run qwen2.5:0.5b "Summarize this prompt in 3 to 5 words as a short title. Return ONLY the title with no quotes, formatting, or period: $prompt" 2>/dev/null)
     if [ -z "$title" ]; then title="New Chat"; fi
     
     jq --arg id "$chat_id" --arg title "$title" '. + [{"id": $id, "title": $title}]' "$INDEX_FILE" > "${INDEX_FILE}.tmp" && mv "${INDEX_FILE}.tmp" "$INDEX_FILE"

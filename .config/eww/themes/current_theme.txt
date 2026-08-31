@@ -1,1 +1,1 @@
-default_dark
+night_sky

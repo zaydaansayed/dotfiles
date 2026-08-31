@@ -1,3 +1,11 @@
+@use "../colors.scss" as c;
+
+.popup {
+  color: c.$on;
+  background-color: c.$bg;
+  border-radius: 7px;
+}
+
 .volbar {
   padding: 8px;
 }

@@ -14,6 +14,7 @@
 (deflisten cava                   :initial ""          "~/.config/eww/scripts/cava.sh")
 (deflisten active_apps            :initial ""          "~/.config/eww/scripts/active_apps.sh")
 (deflisten pinned_apps            :initial ""          "~/.config/eww/scripts/pinned_apps.sh")
+(deflisten lyrics                 :initial ""          "~/.config/eww/scripts/lyrics.py")
 
 ;; =============================================================================
 ;; POLLERS
@@ -55,6 +56,8 @@
 (defvar ai_txt                   "[]")
 (defvar ai_menu_toggle           "false")
 (defvar ai_menu_chats            "[]")
+(defvar player_bg "rgba(9, 4, 9, 0.5)")
+(defvar player_text "#ffffff")
 
 ; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
 
