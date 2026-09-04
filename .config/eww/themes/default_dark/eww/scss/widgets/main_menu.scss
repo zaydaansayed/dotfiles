@@ -1,9 +1,4 @@
 @use "../colors.scss" as c;
-.main_menu {
-  padding: 5px;
-  border-radius: 7px;
-  background-color: rgba($color: c.$bg, $alpha: 0.4);
-}
 
 .main_buttons {
   min-height: 30px;
@@ -59,10 +54,6 @@
   margin-right: 10px;
 }
 
-.main_end {
-  min-width: 205px;
-}
-
 .main_cal {
   background-color: c.$bg;
   border-radius: 7px;
@@ -74,8 +65,8 @@
 }
 
 .main_app_launcher {
-  min-height: 50px;
-  font-size: 30px;
+  min-height: 70px;
+  font-size: 40px;
 }
 
 .user_info {
@@ -98,4 +89,16 @@
   background-color: c.$bg;
   padding: 5px;
   border-radius: 7px;
+}
+
+.main_music_player {
+  background-color: c.$bg;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.no_main_music {
+  background-color: c.$bg;
+  border-radius: 7px;
+  min-height: 150px;
 }

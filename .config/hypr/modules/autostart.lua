@@ -7,8 +7,6 @@
  hl.on("hyprland.start", function ()
    -- Unseen background tasks
    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
-   hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'") 
-   hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'")
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
 
@@ -22,9 +20,6 @@
    -- Tasks that go to the tray
    hl.exec_cmd("udiskie --tray") 
    hl.exec_cmd("kdeconnectd")
-
-   -- Final tasks
-   hl.exec_cmd("kdeconnect-indicator")
 end)
 
 -- You may add programs to start-up as you use your PC

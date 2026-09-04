@@ -245,13 +245,22 @@
 
 ; Currently playing
 (defwidget main_music_player []
-  (box :orientation "v"
+  (box :class "music_player_window"
+       :orientation "h"
        :space-evenly false
-       :visible {player_data.visible} 
-       :spacing 4
-       :class "main"
-    (music_bars)
-    (music_buttons)))
+       :style "background-color: ${player_bg}; color: ${player_text};"
+    (box :orientation "v"
+         :space-evenly false
+         :hexpand false
+         :spacing 10
+      (album_art)
+      (music_buttons)
+      (box :orientation "v"
+        (label :text {player_data.artist}
+               :visible {strlength(player_data.artist) > 0}
+               :class "music_text")
+      (label :text {player_data.title})))
+    (lyrics)))
 
 ; Most other files are inside variables.yuck
 

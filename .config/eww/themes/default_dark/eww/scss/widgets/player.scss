@@ -1,15 +1,9 @@
 @use "../colors.scss" as c;
 
-.cava_bar {
-  border-bottom: c.$on 1px solid; 
-
-  progress {
-    border-radius: 0px;
-  }
-
-  trough {
-    background-color: rgba($color: #000000, $alpha: 0);
-  }
+.music_player_window {
+  background-color: c.$bg;
+  padding: 10px;
+  border-radius: 7px;
 }
 
 .repeat_button {
@@ -20,7 +14,32 @@
   padding-right: 1px;
 }
 
-.music_text {
-  margin-left: 5px;
+.music_btn {
+  color: #ffffff;
 }
 
+.album_art {
+  background-size: contain;
+  border-radius: 7px;
+  min-width: 100px;
+  min-height: 100px;
+  background-repeat: no-repeat;
+}
+
+.lyrics {
+  min-width: 200px;
+  margin-left: 20px;
+}
+
+.lyrics_unfocused {
+  color: c.$l3_hover;
+}
+
+.lyrics_focused {
+  margin: 10px 0px;
+}
+
+.no_album_art {
+  font-size: 100px;
+  padding-right: 15px;
+}

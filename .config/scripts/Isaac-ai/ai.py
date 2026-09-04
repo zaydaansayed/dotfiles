@@ -4,6 +4,8 @@ import os
 import json
 import re
 import traceback
+import subprocess
+import time
 import ollama
 from pypdf import PdfReader
 from pathlib import Path
@@ -28,30 +30,21 @@ def search_internet(query):
     except Exception as e:
         return f"[Search execution failed: {e}]"
 
-def get_auto_search_query(user_prompt):
-    """Asks the local model to determine if a web search is needed."""
-    try:
-        res = ollama.chat(
-            model="qwen2.5:1.5b",
-            messages=[{
-                "role": "system",
-                "content": "You are a search query generator. Analyze the user's prompt. If they are asking for current events, real-time data, weather, or specific facts you don't confidently know, output ONLY the optimal search query string. If no search is needed, output EXACTLY the word: NONE. Do not include any other text."
-            }, {
-                "role": "user",
-                "content": user_prompt
-            }]
-        )
-        query = res.get('message', {}).get('content', '').strip()
-        if query.upper() == "NONE" or not query:
-            return None
-        return query.strip('"\'')
-    except Exception:
-        return None
+def check_search_intent_fast(user_prompt):
+    clean_prompt = user_prompt.strip().lower()
+    if clean_prompt.startswith("/search"):
+        return user_prompt.replace("/search", "", 1).strip()
+    
+    search_keywords = r"\b(weather|news|stock|price of|score|latest|current event|who is the current|today)\b"
+    if re.search(search_keywords, clean_prompt):
+        return user_prompt.strip()
+        
+    return None
 
 def is_binary(file_path):
     try:
         with open(file_path, 'rb') as f:
-            return b'\x00' in f.read(1024)
+            return b'\x00' in f.read(256)
     except Exception:
         return True
 
@@ -83,7 +76,7 @@ def parse_attachments(file_paths_arg, max_chars=2000):
         if ext == '.pdf':
             try:
                 reader = PdfReader(path)
-                text = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+                text = "\n".join([page.extract_text() for page in reader.pages[:5] if page.extract_text()])
                 text_contexts.append(f"FILE ({os.path.basename(path)}):\n{text[:max_chars]}")
             except Exception as e:
                 text_contexts.append(f"Error reading PDF {os.path.basename(path)}: {e}")
@@ -129,7 +122,7 @@ def describe_image_with_moondream(image_path):
             model="moondream",
             messages=[{
                 "role": "user",
-                "content": "Describe this image in clear, concise detail, noting key visual elements, text, and objects.",
+                "content": "Describe this image briefly.",
                 "images": [image_path]
             }]
         )
@@ -138,7 +131,6 @@ def describe_image_with_moondream(image_path):
         return f"[Image description failed: {e}]"
 
 def read_dynamic_context():
-    """Reads system context dynamically from local text file."""
     if os.path.exists(DYNAMIC_CONTEXT_FILE):
         try:
             with open(DYNAMIC_CONTEXT_FILE, 'r', encoding='utf-8') as f:
@@ -147,20 +139,30 @@ def read_dynamic_context():
             return ""
     return ""
 
+def update_eww_live(raw_history_list, current_prompt, streaming_text, parsed_attachments):
+    """Pushes in-flight tokens directly into eww state for real-time UI streaming."""
+    try:
+        active_blocks = parse_response_blocks(streaming_text)
+        current_turn = {
+            "prompt": current_prompt,
+            "response": active_blocks,
+            "attachments": parsed_attachments
+        }
+        updated_history = raw_history_list + [current_turn]
+        subprocess.run(["eww", "update", f"ai_txt={json.dumps(updated_history)}"], check=False)
+    except Exception:
+        pass
+
 def process_ai_request(user_prompt, file_paths_arg, history_json_str):
     try:
         search_context = ""
-        search_query = None
-        
-        if user_prompt.strip().lower().startswith("/search"):
-            search_query = user_prompt.replace("/search", "", 1).strip()
-        else:
-            search_query = get_auto_search_query(user_prompt)
+        search_query = check_search_intent_fast(user_prompt)
 
         if search_query:
             search_context = f"INTERNET SEARCH RESULTS FOR '{search_query}':\n{search_internet(search_query)}\n\n"
 
         history_messages = []
+        raw_history = []
         try:
             raw_history = json.loads(history_json_str) if history_json_str else []
             for item in raw_history:
@@ -202,15 +204,41 @@ def process_ai_request(user_prompt, file_paths_arg, history_json_str):
         messages.extend(history_messages)
         messages.append({"role": "user", "content": combined_prompt})
 
-        res = ollama.chat(
-            model="qwen2.5:1.5b",
+        # Parse raw attachments array for the live UI update
+        try:
+            parsed_attachments = json.loads(file_paths_arg) if file_paths_arg else []
+        except Exception:
+            parsed_attachments = []
+
+        # STREAMING API CALL
+        stream = ollama.chat(
+            model="qwen2.5:3b",
             messages=messages,
-            options={"num_ctx": 4096}
+            options={
+                "num_ctx": 1024,
+                "num_thread": 4
+            },
+            stream=True
         )
 
-        content = res.get('message', {}).get('content', '').strip()
+        full_content = ""
+        last_update_time = time.time()
+
+        for chunk in stream:
+            token = chunk.get('message', {}).get('content', '')
+            full_content += token
+
+            # Throttle UI updates slightly (every 50ms) to reduce widget render lag
+            if time.time() - last_update_time > 0.05:
+                update_eww_live(raw_history, user_prompt, full_content, parsed_attachments)
+                last_update_time = time.time()
+
+        # Push final update to capture completed response
+        update_eww_live(raw_history, user_prompt, full_content, parsed_attachments)
+
+        content = full_content.strip()
         if not content:
-            return json.dumps([{"type": "text", "content": "[Error: qwen2.5:1.5b returned an empty response.]"}])
+            return json.dumps([{"type": "text", "content": "[Error: Model returned an empty response.]"}])
             
         return json.dumps(parse_response_blocks(content))
 
@@ -227,4 +255,3 @@ if __name__ == "__main__":
         print(output)
     else:
         print("Usage: python ai.py <prompt> [json_file_paths] [history_json]")
-

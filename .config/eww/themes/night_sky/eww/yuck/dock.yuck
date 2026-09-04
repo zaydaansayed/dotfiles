@@ -1,0 +1,134 @@
+;; =============================================================================
+;; dock.yuck
+;; =============================================================================
+
+; Dock window 
+(defwindow dock
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "0px" :height "3px" :anchor "bottom center")
+  :stacking "fg"
+  (eventbox :onhover "eww update dock_visibility=true" 
+            :onhoverlost "eww update dock_visibility=false"
+    (revealer :transition "slideup"
+              :class "dock_revealed"
+              :reveal {dock_visibility || active_apps.workspace_windows == 0}
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 5
+        (button :onclick {main_toggle ? "eww close main_menu && eww update main_toggle=false" : "eww update main_toggle=true && eww open main_menu"}
+                :class {main_toggle ? "main_menu_button on" : "main_menu_button"}
+                :tooltip "Main Menu"
+          " /\\\
+|==|
+/||\\\\")
+        (label :text "|
+|
+|"
+               :class "main_btn_separator")
+        (apps)
+        (button :onclick {tray_toggle ? "eww close systemtray && eww update tray_toggle=false" : "eww open systemtray && eww update tray_toggle=true"}
+                :class "tray_button"
+                :valign "center"
+                :tooltip "System tray"
+            (label :text {tray_toggle ? "" : ""}))))))
+
+; Apps widget
+
+; To pin an app that can be opened with multiple instances and isnt a terminal app use this as an example (You might needa configure different files also):
+;button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
+;             :onrightclick "firefox &"
+;            :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button on" : "dock_button background"}
+;              :tooltip "Firefox"
+;        (box :orientation "v"
+;          (image :icon "firefox"
+;                 :icon-size "dialog")))
+
+; To pin a non-terminal app that cant be open multiple times use this format (You might needa configure different files also):
+;(button :onclick {pinned_apps.spotify_open ? "hyprctl dispatch 'hl.dsp.focus({ window: \"class:Spotify\" })'" : "spotify-launcher &"}
+;              :class {!pinned_apps.spotify_open ? "dock_button" : pinned_apps.spotify_focused ? "dock_button on" : "dock_button background"}
+;              :tooltip "Spotify"
+;        (image :icon "spotify-launcher"
+;               :icon-size "dialog"))
+
+; To pin a terminal app use this format (you do not needa configure any different files):
+;(button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
+;              :class "dock_button"
+;              :tooltip "Rice"
+;        (image :icon "kitty"
+;               :icon-size "dialog"))
+
+(defwidget apps []
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 0
+    (box :orientation "h"
+         :space-evenly false
+      (button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
+              :onrightclick "firefox &"
+              :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button Fon" : "dock_button Fbackground"}
+              :tooltip "Firefox"
+        (box :orientation "v"
+          (image :icon "firefox"
+                 :icon-size "dialog")))
+      (button :onclick {pinned_apps.spotify_open ? "hyprctl dispatch 'hl.dsp.focus({ window: \"class:Spotify\" })'" : "spotify-launcher &"}
+              :class {!pinned_apps.spotify_open ? "dock_button" : pinned_apps.spotify_focused ? "dock_button Son" : "dock_button Sbackground"}
+              :tooltip "Spotify"
+        (image :icon "spotify-launcher"
+               :icon-size "dialog"))
+
+      (button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
+              :class "dock_button"
+              :tooltip "Rice"
+        (image :icon "kitty"
+               :icon-size "dialog"))
+      (button :onclick "cd $HOME/ && kitty -e yazi &"
+              :class "dock_button"
+              :tooltip "Yazi"
+        (image :icon "yazi"
+               :icon-size "dialog")))
+    (label :text "|
+|
+|"
+           :visible {arraylength(active_apps.apps) > 0})
+    (for app in {active_apps.apps}
+      (box :orientation "h"
+           :space-evenly false
+        (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "pid:${app.pid}" })'`
+                :class {app.focused ? "dock_button on" : "dock_button"}
+                :tooltip {app.title}
+          (image :icon {app.icon}
+                 :icon-size "dialog"))))))
+
+; Window that opens when you have multiple apps open
+(defwindow app_multiple_instances 
+  :monitor 0
+  :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
+  :stacking "fg"
+  (box :class "window"
+    (eventbox :onhoverlost "eww close app_multiple_instances"
+      (box :orientation "h"
+           :space-evenly false
+        (for app in {pinned_apps.apps}
+          (box :visible {app.name == selected_app}
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })' && eww close app_multiple_instances`
+                    :class {app.focused ? "dock_button on" : "dock_button"}
+                    :tooltip {app.title}
+              (image :icon selected_app   
+                     :icon-size "dialog"))))))))
+
+(defwindow systemtray []
+  :monitor 0
+  :geometry (geometry :x "515px" :y "70px" :width "0px" :height "0px" :anchor "bottom right")
+  :stacking "fg"
+  (eventbox :onhoverlost "eww close systemtray && eww update tray_toggle=false"
+    (systray :spacing 4
+             :prepend-new true
+             :class "window")))
+
+; Most other files will be in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

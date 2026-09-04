@@ -30,35 +30,35 @@ get_status_string() {
 }
 
 last_state=""
+triggered_20=false
 triggered_10=false
-triggered_5=false
 
 check_battery_thresholds() {
     local capacity=$1
     local charging=$2
 
     if [[ "$charging" == "1" ]]; then
+        triggered_20=false
         triggered_10=false
-        triggered_5=false
         return
     fi
 
-    if [[ $capacity -le 5 ]]; then
-        if [[ "$triggered_5" == false ]]; then
-            ~/dotfiles/.config/eww/scripts/5%bat.sh > /dev/null 2>&1 & 
-            
-            triggered_5=true
-            triggered_10=true 
-        fi
-    elif [[ $capacity -le 10 ]]; then
+    if [[ $capacity -le 10 ]]; then
         if [[ "$triggered_10" == false ]]; then
-            ~/dotfiles/.config/eww/scripts/10%bat.sh > /dev/null 2>&1 &
-
+            ~/dotfiles/.config/eww/scripts/10%bat.sh > /dev/null 2>&1 & 
+            
             triggered_10=true
+            triggered_20=true 
+        fi
+    elif [[ $capacity -le 20 ]]; then
+        if [[ "$triggered_20" == false ]]; then
+            ~/dotfiles/.config/eww/scripts/20%bat.sh > /dev/null 2>&1 &
+
+            triggered_20=true
         fi
     else
+        triggered_20=false
         triggered_10=false
-        triggered_5=false
     fi
 }
 

@@ -1,7 +1,7 @@
 
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰌢 System-info(fastfetch)\n Support\n Back" | fuzzel --dmenu --prompt="About and Support: ")
+choice=$(echo -e "󰌢 System-info(fastfetch)\n Support\n Back" | fuzzel --lines 3 --dmenu --prompt="About and Support: ")
 
 case "$choice" in
     "󰌢 System-info(fastfetch)")

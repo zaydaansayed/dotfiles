@@ -1,40 +1,53 @@
 @use "../colors.scss" as c;
 
 .dock {
-  color: c.$on;
+  color: #ffffff;
   background-color: c.$bg; 
-  padding: 5px;
-  min-height: 50px;
+  border: c.$border 1px solid;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   }
 
+.dock_revealed {
+  padding: 5px;
+}
+
 .main_menu_button {
-  font-size: 40px;
-  min-width: 46px;
-  padding-right: 7px;
+  min-width: 51px;
+  color: c.$accent_3;
+  padding-left: 3px;
 }
 
 .dock_button {
   margin: 0px 2px;
   padding: 3px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-bottom: 1px solid c.$bg;
+  border-bottom: 2px solid c.$bg;
 
-  &.background {
-    border-bottom: 1px solid c.$on;  
+  &.Fon {
+    background-color: c.$accent_2;
+  }
+
+  &.Fbackground {
+    border-bottom: 2px solid c.$accent_2;
+  }
+
+  &.Son {
+    background-color: c.$accent_1;
+  }
+
+  &.Sbackground {
+    border-bottom: 1px solid c.$accent_1;  
   }
 }
 
 .tray_button {
-  padding-left: 6px;
+  padding-left: 2px;
+  min-height: 30px;
+  min-width: 30px;
 }
 
-.systemtray {
-  padding-right: 4px;
+.main_btn_separator {
+  margin-left: 4px;
 }
-

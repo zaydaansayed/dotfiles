@@ -21,10 +21,11 @@ fi
 
 CHAT_FILE="$CHAT_DIR/${chat_id}.json"
 
+# Fast Title Generation (Instant fallback string truncation instead of LLM delay)
 if [ ! -f "$CHAT_FILE" ]; then
     echo "[]" > "$CHAT_FILE"
     
-    title=$(ollama run qwen2.5:0.5b "Summarize this prompt in 3 to 5 words as a short title. Return ONLY the title with no quotes, formatting, or period: $prompt" 2>/dev/null)
+    title=$(echo "$prompt" | cut -c1-30)
     if [ -z "$title" ]; then title="New Chat"; fi
     
     jq --arg id "$chat_id" --arg title "$title" '. + [{"id": $id, "title": $title}]' "$INDEX_FILE" > "${INDEX_FILE}.tmp" && mv "${INDEX_FILE}.tmp" "$INDEX_FILE"
@@ -32,11 +33,13 @@ fi
 
 history_json=$(cat "$CHAT_FILE")
 
+# Run python script (ai.py handles live streaming updates directly to eww)
 response=$($HOME/dotfiles/.config/scripts/Isaac-ai/venv/bin/python $HOME/dotfiles/.config/scripts/Isaac-ai/ai.py \
   "$prompt" "$file_paths" "$history_json")
 
 attachments_json=$(echo "$file_paths" | jq -c . 2>/dev/null || echo '[]')
 
+# Save finalized chat message to persistent disk history
 jq --arg prompt "$prompt" --argjson response "$response" --argjson attachments "$attachments_json" \
    '. + [{"prompt": $prompt, "response": $response, "attachments": $attachments}]' "$CHAT_FILE" > "${CHAT_FILE}.tmp" && mv "${CHAT_FILE}.tmp" "$CHAT_FILE"
 

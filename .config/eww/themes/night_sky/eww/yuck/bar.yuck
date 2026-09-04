@@ -39,7 +39,7 @@
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "") 
-         (button :onclick {ai_toggle ? "" : "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_toggle=true && eww open ai && ollama serve &"}
+         (button :onclick {ai_toggle ? "${EWW_CONFIG_DIR}/scripts/aipopup_close.sh && eww update ai_toggle=false && killall ollama && eww close ai" : "eww update ai_toggle=true && eww open ai && ollama serve &"}
                  :class {ai_toggle ? "ai_center on" : "ai_center"}
                  :tooltip "Open Isaac AI"
            "󰚩"))))
@@ -88,6 +88,7 @@
     (button :onclick {music_toggle ? "eww update music_toggle=false && eww close music_player_window" : "eww update music_toggle=true && eww open music_player_window"}
             :class {music_toggle ? "transparent_btn music on" : "transparent_btn music"}
       (label :text {player_data.text}
+             :limit-width 100
              :tooltip {player_data.text}))))
 
 ; Screenprint window

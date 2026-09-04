@@ -190,3 +190,5 @@ local function show_ascii_graph()
 end
 
 vim.keymap.set("n", "<leader>og", show_ascii_graph, { desc = "Show ASCII Link Graph" })
+
+vim.cmd("cnoreabbrev W w")

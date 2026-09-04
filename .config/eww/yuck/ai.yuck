@@ -7,7 +7,7 @@
   :monitor 0
   :geometry (geometry :x "6px" :y "3px" :width "300px" :height "500px" :anchor "top right")
   :stacking "fg"
-  :focusable true
+  :focusable "ondemand"
   (box :orientation "v"
        :space-evenly false
        :class "window"
@@ -21,7 +21,7 @@
               :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
               :tooltip "Open Menu"
         "")
-    (button :onclick "eww update ai_menu_toggle=false && eww close loading-popup ; eww close copy-popup ; eww update ai_toggle=false && eww update ai_file_paths='[]' && killall ollama && eww close ai"
+    (button :onclick "${EWW_CONFIG_DIR}/scripts/ai_menu_close.sh && ${EWW_CONFIG_DIR}/scripts/aipopup_close.sh && eww update ai_toggle=false && killall ollama && eww close ai"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -65,7 +65,8 @@
                      :class "l2 ai_txt attachment"
                      :visible {att != "" && !matches(att, "(?i)\\.(png|jpg|jpeg|webp)$")}
                   (label :text "󰈙" :class "ai_txt document")
-                  (label :text att))))
+                  (label :text att
+                         :limit-width 30))))
           (label :show-truncated false
                  :wrap true
                  :text {ai.prompt}
@@ -142,17 +143,17 @@
                     :visible {path != "" && matches(path ?: "", "(?i)\\.(png|jpg|jpeg|webp)$")}
                     :style "background-image: url('${path}');")
             (label :text path 
-                   :show-truncated true
+                   :limit-width 10
                    :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))
     (box :orientation "h"
          :space-evenly false
 (input :value ai_dinput
-             :onchange "eww update ai_prompt=\"$(cat << 'EOF_SAFE'
+       :onchange "eww update ai_prompt=\"$(cat << 'EOF_SAFE'
 {}
 EOF_SAFE
 )\""
-             :onaccept {strlength(ai_prompt) > 0 ? "$HOME/dotfiles/.config/eww/scripts/ai.sh &" : ""}
-             :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
+       :onaccept {strlength(ai_prompt) > 0 ? "$HOME/dotfiles/.config/eww/scripts/ai.sh &" : ""}
+       :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
       (button :onclick "$HOME/dotfiles/.config/eww/scripts/ai.sh &"
               :visible {strlength(ai_prompt) > 0}
               :class "ai_ibutton send"
@@ -168,12 +169,11 @@ EOF_SAFE
   :monitor 0
   :geometry (geometry :x "310px" :y "3px" :width "200px" :height "510px" :anchor "top right")
   :stacking "fg"
-  :focusable true
   (box :orientation "v"
        :space-evenly false
        :class "window"
        :spacing 3
-    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_menu_toggle=false && eww close ai_menu"
             :class "ai_new_chat"
             :tooltip "Create New Chat"
             "+ New Chat")
@@ -192,7 +192,7 @@ EOF_SAFE
             :tooltip {chat.title}
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
-             :show-truncated true))
+             :limit-width 20))
     (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
             :tooltip "Rename Chat"
       "󰏫")

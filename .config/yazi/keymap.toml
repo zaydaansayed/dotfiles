@@ -1,25 +1,20 @@
-[[mgr.prepend_keymap]]
-on   = "M" 
-run  = "plugin mount"
-desc = "Open mount manager"
-
 # sudo cp/mv
 [[mgr.prepend_keymap]]
-on = ["R", "p", "p"]
-run = "plugin sudo -- paste"
-desc = "sudo paste"
+on = ["R", "X"]
+run = "shell --block 'sudo cp -r -t %s %y && sudo rm -rf %y'"
+desc = "sudo cut"
 
 # sudo cp/mv --force
 [[mgr.prepend_keymap]]
 on = ["R", "P"]
-run = "plugin sudo -- paste --force"
+run = "shell --block 'sudo cp -r -t %s %y'"
 desc = "sudo paste"
 
 # sudo mv
 [[mgr.prepend_keymap]]
 on = ["R", "r"]
 run = "plugin sudo -- rename"
-desc = "sudo rename"
+desc = "sudo rename/bulk-rename"
 
 # sudo ln -s (absolute-path)
 [[mgr.prepend_keymap]]
@@ -69,61 +64,6 @@ run  = "plugin fg"
 desc = "find file by content (fuzzy match)"
 
 [[mgr.prepend_keymap]]
-on   = [ "f","G" ]
-run  = "plugin fg -- rg"
-desc = "find file by content (ripgrep match)"
-
-[[mgr.prepend_keymap]]
 on   = [ "f","f" ]
 run  = "plugin fg -- fzf"
 desc = "find file by filename"
-
-[[mgr.prepend_keymap]]
-on   = [ "m", "g" ]
-run  = "linemode git"
-desc = "Set linemode to git"
-
-[[mgr.prepend_keymap]]
-on   = [ "g", "i" ]
-run  = "plugin lazygit"
-desc = "run lazygit"
-
-[[mgr.prepend_keymap]]
-on   = [ "R", "b" ]
-run  = "plugin recycle-bin"
-desc = "Open Recycle Bin menu"
-
-[[mgr.prepend_keymap]]
-on   = [ "<C-s>" ]
-run  = "plugin kdeconnect-send"
-desc = "Send selected files via KDE Connect"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "x" ]
-run  = "shell 'chmod +x \"$@\"'"
-desc = "Make selected file(s) executable"
-
-[[mgr.prepend_keymap]]
-on   = [ "z", "a", "a" ]
-run  = "plugin compress"
-desc = "Archive selected files"
-
-[[mgr.prepend_keymap]]
-on   = [ "z", "a", "p" ]
-run  = "plugin compress -p"
-desc = "Archive selected files (password)"
-
-[[mgr.prepend_keymap]]
-on   = [ "z", "a", "h" ]
-run  = "plugin compress -ph"
-desc = "Archive selected files (password+header)"
-
-[[mgr.prepend_keymap]]
-on   = [ "z", "a", "l" ]
-run  = "plugin compress -l"
-desc = "Archive selected files (compression level)"
-
-[[mgr.prepend_keymap]]
-on   = [ "z", "a", "u" ]
-run  = "plugin compress -phl"
-desc = "Archive selected files (password+header+level)"

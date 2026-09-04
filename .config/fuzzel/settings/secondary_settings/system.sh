@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰍹 Monitors\n󰈆 Auto-Start\n󰫧 Enviroment Variables\n Input and Keybinds\n󰖚 Look and feel\n Miscellaneous\n My Programs\n Windows\n Back" | fuzzel --dmenu --prompt="System Settings: ")
+choice=$(echo -e "󰍹 Monitors\n󰈆 Auto-Start\n󰫧 Enviroment Variables\n Input and Keybinds\n󰖚 Look and feel\n Miscellaneous\n My Programs\n Windows\n Back" | fuzzel --lines 9 --dmenu --prompt="System Settings: ")
 
 case "$choice" in
     "󰍹 Monitors")

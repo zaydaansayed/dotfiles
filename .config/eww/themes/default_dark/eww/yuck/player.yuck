@@ -5,41 +5,62 @@
 ; Music player window 
 (defwindow music_player_window
   :monitor 0
-  :geometry (geometry :x "3px" :y "3px" :width "400px" :height "100px" :anchor "top left")
+  :geometry (geometry :x "6px" :y "3px" :width "400px" :height "200px" :anchor "top left")
   :stacking "fg" 
+  (box :class "music_player_window"
+       :orientation "h"
+       :space-evenly false
     (box :orientation "v"
          :space-evenly false
-         :spacing 5
-         :class "window"
-      (music_info)
-      (music_buttons)))
+         :hexpand false
+         :spacing 10
+      (album_art)
+      (music_buttons)
+      (box :orientation "v"
+        (label :text {player_data.artist}
+               :visible {strlength(player_data.artist) > 0}
+               :class "music_text")
+      (label :text {player_data.title})))
+    (lyrics)))
 
-; Music info
-(defwidget music_info []
-  (box :orientation "h"
-       :space-evenly false
-       :spacing 15
-    (box :style "background-image: url('${player_data.image}')"
-         :class "music_art")
+  (defwidget lyrics []
     (box :orientation "v"
          :space-evenly false
          :valign "center"
-      (label :text {player_data.artist}
-             :class "music_artist"
-             :halign "start"
-             :wrap true
-             :show-truncated false)
-      (label :text {player_data.title}
-             :class "music_title"
-             :halign "start"
-             :wrap true
-             :show-truncated false))))
+         :visible {arraylength(player_data.current) > 0 || arraylength(player_data.future) > 0 || arraylength(player_data.past) > 0}
+          :class "lyrics"
+      (label :text {lyrics.past}
+             :show-truncated false
+             :class "lyrics_unfocused"
+             :wrap true)
+      (label :text {lyrics.current}
+             :show-truncated false
+             :class "lyrics_focused"
+             :wrap true)
+      (label :text {lyrics.future}
+             :show-truncated false
+             :class "lyrics_unfocused"
+             :wrap true)))
+
+; Album art
+(defwidget album_art []
+  (box
+  (box :style "background-image: url('${player_data.image}')"
+       :visible {player_data.image != "none"}
+       :halign "center"
+       :class "album_art")
+  (label :text ""
+         :visible {player_data.image == "none"}
+         :halign "start"
+         :hexpand true
+         :class "no_album_art")))
 
 ; Music buttons
 (defwidget music_buttons []
   (box :orientation "h" 
        :space-evenly false
-       :valign "center"
+       :halign "center"
+       :class "music_buttons"
        :spacing 3
     (button :onclick "playerctl shuffle toggle"
             :class "music_btn shuffle_button"

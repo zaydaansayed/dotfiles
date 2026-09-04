@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰛳 Network\n Audio\n System\n UI\n About and support" | fuzzel --dmenu --prompt="Settings: ")
+choice=$(echo -e "󰛳 Network\n Audio\n System\n UI\n About and support" | fuzzel --lines 5 --dmenu --prompt="Settings: ")
 
 case "$choice" in
     "󰛳 Network")

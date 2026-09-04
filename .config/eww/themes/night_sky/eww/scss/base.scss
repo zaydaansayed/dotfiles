@@ -12,7 +12,7 @@ button {
   border: none;
   border-radius: 7px;
   min-width: 15px;
-  color: c.$on;
+  color: #ffffff;
   box-shadow: none;
   text-shadow: none;
   transition: background-color 0.3s ease-in-out;
@@ -51,7 +51,7 @@ scale {
   }
 
   highlight {
-    background-color: c.$on;
+    background-color: #ffffff;
     border-radius: 100px;
   }
 
@@ -61,7 +61,7 @@ scale {
     margin: -8px 0px;
     border-radius: 100px;
     border: #0051ff 1px solid;
-    background-color: c.$on;
+    background-color: #ffffff;
   }
 }
 
@@ -69,7 +69,7 @@ scale {
 progressbar {
   progress {
     border-radius: 100px;
-    background-color: c.$on;
+    background-color: #ffffff;
 }
 
   trough {
@@ -87,7 +87,7 @@ entry {
 }
 
 entry:focus {
-  border: c.$on 1px solid;
+  border: #ffffff 1px solid;
 }
 
 tooltip {
@@ -117,4 +117,22 @@ scrollbar slider:hover {
 
 scrollbar slider:active {
     background-color: c.$on;
+}
+
+menu {
+  background-color: c.$bg;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 7px;
+  border: 1px solid c.$border;
+
+  menuitem {
+    padding: 6px 10px;
+    border-radius: 7px;
+    background-color: transparent;
+
+    &:hover {
+      background-color: c.$l2;
+    }
+  }
 }

@@ -1,12 +1,13 @@
 #!/bin/bash
 
 LIMIT=20
+LAST_ART_URL=""
 
 hex_to_rgb() {
     local hex="${1#\#}"
-    local r=$(printf "%d" "0x${hex:0:2}")
-    local g=$(printf "%d" "0x${hex:2:2}")
-    local b=$(printf "%d" "0x${hex:4:2}")
+    local r=$((16#${hex:0:2}))
+    local g=$((16#${hex:2:2}))
+    local b=$((16#${hex:4:2}))
     echo "$r, $g, $b"
 }
 
@@ -16,7 +17,8 @@ update_colors() {
         
         if [[ ${#colors[@]} -ge 16 ]]; then
             local raw_bg="${colors[0]}"
-            local rgb_bg=$(hex_to_rgb "$raw_bg")
+            local rgb_bg
+            rgb_bg=$(hex_to_rgb "$raw_bg")
             local bg_color="rgba(${rgb_bg}, 0.5)"
             local text_color="${colors[7]}"
 
@@ -34,44 +36,48 @@ print_status() {
 
     if [[ -z "$status" || -z "$title" ]]; then
         echo '{"text": "", "artist": "", "title": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
-	eww close music_player_window
+	eww update music_toggle=false 2>/dev/null
+        eww close music_player_window 2>/dev/null
         return
     fi
 
-    artist=$(echo "$artist" | sed 's/"/\\"/g')
-    title=$(echo "$title" | sed 's/"/\\"/g')
-    art_url=$(playerctl -p spotify metadata mpris:artUrl 2>/dev/null)
+    artist="${artist//\"/\\\"}"
+    title="${title//\"/\\\"}"
     
-    if [[ -z "$art_url" ]]; then
-       image=none
-    else
-      if [[ "$art_url" =~ ^https?:// ]]; then
-        curl -s "$art_url" -o /tmp/cover.png
-	image=/tmp/cover.png
-      elif [[ "$art_url" =~ ^file:// ]]; then
-        cp "${art_url#file://}" /tmp/cover.png
-	image=/tmp/cover.png
-      fi
+    local art_url
+    art_url=$(playerctl -p spotify metadata mpris:artUrl 2>/dev/null)
+    local image="none"
+
+    if [[ -n "$art_url" ]]; then
+        image=/tmp/cover.png
+        if [[ "$art_url" != "$LAST_ART_URL" ]]; then
+            LAST_ART_URL="$art_url"
+            if [[ "$art_url" =~ ^https?:// ]]; then
+                curl -s "$art_url" -o /tmp/cover.png
+            elif [[ "$art_url" =~ ^file:// ]]; then
+                cp "${art_url#file://}" /tmp/cover.png
+            fi
+            update_colors
+        fi
     fi
 
-    update_colors
-
+    local text
     if [[ -z "$artist" ]]; then
-        local text="$title"
+        text="$title"
     else
-        local text="$artist - $title"
+        text="$artist - $title"
     fi
 
     local icon="󰐊"
     [[ "$status" == "Playing" ]] && icon="󰏤"
 
     local shuffle_icon="󰒞"
-    if [[ "$shuffle_status" == "On" ]] || [[ "$shuffle_status" == "true" ]] || [[ "$shuffle_status" == "1" ]]; then
+    if [[ "$shuffle_status" == "On" || "$shuffle_status" == "true" || "$shuffle_status" == "1" ]]; then
         shuffle_icon="󰒝"
     fi
 
     local repeat_icon="󰑗"
-    if [[ "$loop_status" == "Track" ]] || [[ "$loop_status" == "Single" ]]; then
+    if [[ "$loop_status" == "Track" || "$loop_status" == "Single" ]]; then
         repeat_icon="󰑘"
     elif [[ "$loop_status" == "Playlist" ]]; then
         repeat_icon="󰑖"

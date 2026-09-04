@@ -15,7 +15,7 @@
            :orientation "h"
            :space-evenly false
            :spacing "10"
-        (button :onclick "$HOME/dotfiles/.config/eww/scripts/main_toggle.sh"
+        (button :onclick {main_toggle ? "eww close main_menu && eww update main_toggle=false" : "eww update main_toggle=true && eww open main_menu"}
                 :class {main_toggle ? "main_menu_button on" : "main_menu_button"}
                 :tooltip "Main Menu"
           "")

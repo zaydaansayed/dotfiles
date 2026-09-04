@@ -12,16 +12,27 @@ echo "@use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/ai.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
 
+echo "(include './yuck/variables.yuck')
+(include './themes/night_sky/eww/yuck/bar.yuck')
+(include './yuck/popups.yuck')
+(include './yuck/quick_settings.yuck')
+(include './themes/night_sky/eww/yuck/player.yuck')
+(include './yuck/ai.yuck')
+(include './themes/night_sky/eww/yuck/dock.yuck')
+(include './yuck/sysnotif.yuck')
+(include './themes/night_sky/eww/yuck/main_menu.yuck')
+(include './yuck/theme_picker.yuck')
+(include './yuck/test.yuck')" > $HOME/.config/eww/eww.yuck
+
 echo "[main]
 include=$HOME/.config/eww/themes/night_sky/fuzzel.ini
 " > $HOME/.config/fuzzel/fuzzel.ini
 
 echo "night_sky" > $HOME/.config/eww/themes/current_theme.txt
 
-echo "(include './themes/night_sky/eww/yuck/bar.yuck')" > $HOME/.config/eww/yuck/bar.yuck
-echo "(include './themes/night_sky/eww/yuck/player.yuck')" > $HOME/.config/eww/yuck/player.yuck
-
 sed -i '3c\    path = $HOME/.config/eww/themes/night_sky/images/wallpaper.png' $HOME/.config/hypr/hyprpaper.conf
 
 killall hyprpaper
 hyprpaper &
+
+gsettings set org.gnome.desktop.interface icon-theme "pixora"

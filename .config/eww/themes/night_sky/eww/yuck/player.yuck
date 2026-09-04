@@ -17,11 +17,13 @@
          :spacing 10
       (album_art)
       (music_buttons)
-      (label :text {player_data.artist}
-             :visible {strlength(player_data.artist) > 0}
-             :class "music_text")
-      (label :text {player_data.title}))
-      (lyrics)))
+      (box :orientation "v"
+        (label :text {player_data.artist}
+               :limit-width 20
+               :visible {strlength(player_data.artist) > 0})
+      (label :text {player_data.title}
+             :limit-width 20)))
+    (lyrics)))
 
   (defwidget lyrics []
     (box :orientation "v"
@@ -51,7 +53,7 @@
        :class "album_art")
   (label :text ""
          :visible {player_data.image == "none"}
-         :halign "start"
+         :halign "center"
          :hexpand true
          :class "no_album_art")))
 

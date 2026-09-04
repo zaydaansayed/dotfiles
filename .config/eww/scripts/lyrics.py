@@ -4,26 +4,44 @@ import time
 import urllib.request
 import urllib.parse
 import subprocess
+import bisect
+
+LRC_CACHE = {}
 
 def get_mpris_info():
     try:
-        artist = subprocess.check_output(["playerctl", "metadata", "artist"], text=True).strip()
-        title = subprocess.check_output(["playerctl", "metadata", "title"], text=True).strip()
-        pos = float(subprocess.check_output(["playerctl", "position"], text=True).strip())
-        return artist, title, pos
+        output = subprocess.check_output(
+            ["playerctl", "metadata", "--format", "{{artist}}\t{{title}}\t{{position}}"],
+            text=True
+        ).strip()
+        parts = output.split('\t')
+        if len(parts) >= 3:
+            artist = parts[0].strip()
+            title = parts[1].strip()
+            pos = float(parts[2].strip()) / 1000000.0 if parts[2].strip().isdigit() else 0.0
+            return artist, title, pos
     except Exception:
-        return None, None, 0
+        pass
+    return None, None, 0.0
 
 def fetch_lrc(artist, title):
+    track_key = f"{artist} - {title}"
+    if track_key in LRC_CACHE:
+        return LRC_CACHE[track_key]
+
     try:
         url = f"https://lrclib.net/api/get?artist_name={urllib.parse.quote(artist)}&track_name={urllib.parse.quote(title)}"
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req) as response:
+        with urllib.request.urlopen(req, timeout=3) as response:
             data = json.loads(response.read().decode())
             if "syncedLyrics" in data and data["syncedLyrics"]:
-                return parse_lrc(data["syncedLyrics"])
+                parsed = parse_lrc(data["syncedLyrics"])
+                LRC_CACHE[track_key] = parsed
+                return parsed
     except Exception:
         pass
+
+    LRC_CACHE[track_key] = []
     return []
 
 def parse_lrc(lrc_text):
@@ -44,6 +62,7 @@ def parse_lrc(lrc_text):
 def main():
     current_track = ""
     lyrics = []
+    timestamps = []
     last_output = ""
 
     while True:
@@ -53,6 +72,7 @@ def main():
         if track_id != current_track:
             current_track = track_id
             lyrics = fetch_lrc(artist, title) if artist and title else []
+            timestamps = [t[0] for t in lyrics]
             last_output = ""
 
         if not lyrics:
@@ -63,15 +83,11 @@ def main():
             time.sleep(1)
             continue
 
-        past, current, future = "", "", ""
-        for i, (t, text) in enumerate(lyrics):
-            if pos >= t:
-                past = lyrics[i-1][1] if i > 0 else ""
-                current = text
-                future = lyrics[i+1][1] if i + 1 < len(lyrics) else ""
+        idx = bisect.bisect_right(timestamps, pos) - 1
 
-        if not past and not current and not future and current_track:
-            current = "♪♪♪"
+        past = lyrics[idx - 1][1] if idx > 0 else ""
+        current = lyrics[idx][1] if idx >= 0 else "♪♪♪"
+        future = lyrics[idx + 1][1] if (0 <= idx < len(lyrics) - 1) else ""
 
         out = json.dumps({"past": past, "current": current, "future": future})
 
