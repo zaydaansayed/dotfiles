@@ -3,7 +3,7 @@
 get_bt() {
     local bt_show
     bt_show=$(bluetoothctl show 2>/dev/null)
-    devcname=$(bluetoothctl devices Connected | cut -d ' ' -f 3-)
+    devcname=$(bluetoothctl devices Connected 2>/dev/null | cut -d ' ' -f 3- | paste -sd ", " -)
 
     if [[ "$bt_show" == *"Powered: yes"* ]]; then
         if [[ -n "$(bluetoothctl devices Connected 2>/dev/null)" ]]; then
@@ -14,7 +14,7 @@ get_bt() {
     else
         icon="󰂲"
     fi
-    echo "{\"icon\": \"$icon\", \"devcname\": \"$devcname\"}"
+    jq -nc --arg icon "$icon" --arg devcname "$devcname" '{"icon": $icon, "devcname": $devcname}'
 }
 
 get_bt

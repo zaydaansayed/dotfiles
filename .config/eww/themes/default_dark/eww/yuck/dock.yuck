@@ -20,17 +20,11 @@
                 :tooltip "Main Menu"
           "")
         (apps)
-        (button :onclick {tray_toggle ? "eww update tray_toggle=false" : "eww update tray_toggle=true"}
+        (button :onclick {tray_toggle ? "eww close systemtray && eww update tray_toggle=false" : "eww open systemtray && eww update tray_toggle=true"}
                 :class "tray_button"
+                :valign "center"
                 :tooltip "System tray"
-          (box :orientation "h"
-               :space-evenly false
-               :spacing 5
-            (label :text {tray_toggle ? "" : ""})
-            (systray :visible tray_toggle 
-                     :spacing 4
-                     :prepend-new true
-                     :class "systemtray")))))))
+            (label :text {tray_toggle ? "" : ""}))))))
 
 ; Apps widget
 
@@ -115,6 +109,15 @@
                     :tooltip {app.title}
               (image :icon selected_app   
                      :icon-size "dialog"))))))))
+
+(defwindow systemtray
+  :monitor 0
+  :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
+  :stacking "fg"
+  (eventbox :onhoverlost "eww close systemtray && eww update tray_toggle=false"
+    (systray :spacing 4
+             :prepend-new true
+             :class "window")))
 
 ; Most other files will be in the variables.yuck file
 

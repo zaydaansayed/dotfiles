@@ -48,27 +48,27 @@
 (defwidget workspaces []
   (box :orientation "h"
        :spacing 3
-    (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'"
+    (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'`
             :class {active_workspace == "1" ? "workspace a ws_on" : "workspace a off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace1.png');"
             :tooltip "Switch to workspace 1"
       "1")
-    (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'"
+    (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'`
             :class {active_workspace == "2" ? "workspace a ws_on" : "workspace a off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace2.png');"
             :tooltip "Switch to workspace 2"
       "2")
-    (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'"
+    (button :onclick "hyprctl dispatch workspace 3"
             :class {active_workspace == "3" ? "workspace b ws_on" : "workspace b off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace3.png');"
             :tooltip "Switch to workspace 3"
       "3")
-    (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'"
+    (button :onclick "hyprctl dispatch workspace 4"
             :class {active_workspace == "4" ? "workspace b ws_on" : "workspace b off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace4.png');"
             :tooltip "Switch to workspace 4"
       "4")
-    (button :onclick "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'"
+    (button :onclick "hyprctl dispatch workspace 5"
             :class {active_workspace == "5" ? "workspace a ws_on" : "workspace a off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace5.png');"
             :tooltip "Switch to workspace 5"

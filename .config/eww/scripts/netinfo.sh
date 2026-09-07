@@ -25,7 +25,7 @@ get_internet() {
         fi
     fi
 
-    new_output="{\"icon\": \"$icon\", \"netname\": \"$netname\"}"
+    new_output=$(jq -nc --arg icon "$icon" --arg netname "$netname" '{"icon": $icon, "netname": $netname}')
 
     if [[ "$new_output" != "$LAST_OUTPUT" ]]; then
         echo "$new_output"

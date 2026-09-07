@@ -1,0 +1,82 @@
+;; =============================================================================
+;; popups.yuck
+;; =============================================================================
+
+; Variables for this file
+(deflisten volinfo :initial '{"volume": 50, "vol_status": "UNMUTED", "bar": "░░░░░░░░░░"}' "~/.config/eww/themes/night_sky/eww/scripts/volinfo.sh")
+(deflisten briginfo :initial '{"icon":"󰃠 ","brightness":50}' "~/.config/eww/themes/night_sky/eww/scripts/briginfo.sh")
+(deflisten mic_mute :initial '' "~/.config/eww/themes/night_sky/eww/scripts/mic_mute.sh")
+
+; Volume popup window
+(defwindow volume
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "150px" :height "60px" :anchor "top center")
+  :stacking "fg" 
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 10
+         :class "popup volume"
+      (label :text "VOLUME"
+             :class "popup-text")
+      (label :text {volinfo.vol_status}
+             :class "popup-text"
+             :visible {volinfo.vol_status == "MUTED"})
+      (label :text {volinfo.bar}
+                :class "ascii-bar")))
+
+; Brightness popup window
+(defwindow brightness
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "150px" :height "60px" :anchor "top center")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 10
+         :class "popup brightness"
+      (label :text "BRIGHTNESS"
+               :class "popup-text")
+      (label :text {briginfo.bar}
+                :class "ascii-bar")))
+
+; Mic status popup
+(defwindow mic_status
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "150px" :height "0px" :anchor "top center")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :class "popup mic_status"
+      (label :text "MICROPHONE")
+      (label :text mic_mute)))
+
+; Notification popup window
+(defwindow notification_popup
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "300px" :anchor "top right")
+  :stacking "fg"
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+    (for notif in notifications_json
+      (button :onclick "~/.config/eww/scripts/dismiss_notif.sh ${notif.id} && makoctl dismiss"
+              :class "window notification_popup"
+        (box :orientation "v"
+             :space-evenly false 
+          (label :text "${notif.app}"
+                 :halign "start")
+          (label :show-truncated false
+                 :wrap true
+                 :text "${notif.title}"
+                 :halign "start")
+          (label :show-truncated false
+                 :wrap true
+                 :text "${notif.body}"
+                 :xalign 0))))))
+
+; Most other files are found in the variables.yuck file, but the processes that calls the windows are in the hyprland.lua file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

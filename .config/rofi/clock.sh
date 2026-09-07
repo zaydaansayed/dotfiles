@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰥔 Clock\n󱎫 Timer\n Stopwatch\n󰆙 Countdown" | fuzzel --lines 4 --dmenu --prompt="Clock: ")
+choice=$(echo -e "󰥔 Clock\n󱎫 Timer\n Stopwatch\n󰆙 Countdown" | rofi -dmenu -p "Clock" -l 4 )
 
 case "$choice" in
     "󰥔 Clock")
         kitty -e tclock clock	
 	;;
     "󱎫 Timer")
-        duration=$(fuzzel --dmenu --lines 0 -w 40 --prompt="Timer duration (e.g. 10m, 30s): ")
+        duration=$(rofi -dmenu -p "Timer duration (e.g. 10m, 30s)" -l 0)
         [ -n "$duration" ] && kitty -e tclock timer -d "$duration" -e "ffplay -loop 0 -nodisp /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
 	;;
     " Stopwatch")
         kitty -e tclock stopwatch
         ;;
     "󰆙 Countdown")        
-        target_time=$(fuzzel --lines 0 -w 40 --dmenu --prompt="Target time (e.g. 17:00): ")
+        target_time=$(rofi -dmenu -p "Target time (e.g. 17:00)" -l 0)
         if [ -n "$target_time" ]; then
           target_sec=$(date -d "today $target_time" +%s 2>/dev/null)
           now_sec=$(date +%s)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e " Themes\n󰚩 AI menu\n  Bar\n󱂩 Dock\n󰍜 Main menu\n Player\n󱁖 Popups\n Quick settings\n󰎟 System notification\n󰫧 Variables\n Customisation\n Back" | fuzzel --lines 12 --dmenu --prompt="UI Settings: ")
+choice=$(echo -e " Themes\n󰚩 AI menu\n  Bar\n󱂩 Dock\n󰍜 Main menu\n Player\n󱁖 Popups\n Quick settings\n󰎟 System notification\n󰫧 Variables\n Customisation\n Back" | rofi -l 12 -dmenu -p "UI Settings")
 
 case "$choice" in
     " Themes")
@@ -37,7 +37,7 @@ case "$choice" in
 	kitty -e nvim $HOME/dotfiles/.config/eww/eww.scss &
 	;;
     " Back")
-        $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh &
+        $HOME/dotfiles/.config/rofi/settings/settings_menu.sh &
 	;;
     *)
         exit 0

@@ -2,6 +2,11 @@
 ;; popups.yuck
 ;; =============================================================================
 
+; Variables for this file
+(deflisten volinfo :initial '{"icon":" ","volume":50}' "~/.config/eww/themes/default_dark/eww/scripts/volinfo.sh")
+(deflisten briginfo :initial '{"icon":"󰃠 ","brightness":50}' "~/.config/eww/themes/default_dark/eww/scripts/briginfo.sh")
+(deflisten mic_mute :initial '' "~/.config/eww/themes/default_dark/eww/scripts/mic_mute.sh")
+
 ; Volume popup window
 (defwindow volume
   :monitor 0
@@ -32,6 +37,14 @@
                :halign "center"
                :hexpand true)))
 
+; Mic status popup
+(defwindow mic_status
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "30px" :height "30px" :anchor "top center")
+  :stacking "fg"
+  (label :text mic_mute
+         :class "popup"))
+
 ; Notification popup window
 (defwindow notification_popup
   :monitor 0
@@ -40,20 +53,17 @@
   (box :orientation "v"
        :space-evenly false
        :spacing 10
-       :class "notification-container"
     (for notif in notifications_json
       (button :onclick "~/.config/eww/scripts/dismiss_notif.sh ${notif.id} && makoctl dismiss"
               :class "window"
         (box :orientation "v"
              :space-evenly false 
           (label :text "${notif.app}"
-                 :halign "start"
-                 :class "notif-app")
+                 :halign "start")
           (label :show-truncated false
                  :wrap true
                  :text "${notif.title}"
-                 :halign "start"
-                 :class "notif-title")
+                 :halign "start")
           (label :show-truncated false
                  :wrap true
                  :text "${notif.body}"

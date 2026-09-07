@@ -27,6 +27,8 @@
     (box :orientation "v"
          :space-evenly false
          :valign "center"
+         :halign "center"
+         :hexpand true
          :visible {arraylength(player_data.current) > 0 || arraylength(player_data.future) > 0 || arraylength(player_data.past) > 0}
           :class "lyrics"
       (label :text {lyrics.past}

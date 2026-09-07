@@ -17,9 +17,9 @@
    hl.exec_cmd("hyprpaper")
    hl.exec_cmd("sleep 1 && eww open dock")
 
-   -- Tasks that go to the tray
-   hl.exec_cmd("udiskie --tray") 
-   hl.exec_cmd("kdeconnectd")
+    -- Tasks that go to the tray
+    hl.exec_cmd("udiskie --tray") 
+    hl.exec_cmd("kdeconnectd")
 end)
 
 -- You may add programs to start-up as you use your PC

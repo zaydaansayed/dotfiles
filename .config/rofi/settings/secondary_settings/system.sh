@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰍹 Monitors\n󰈆 Auto-Start\n󰫧 Enviroment Variables\n Input and Keybinds\n󰖚 Look and feel\n Miscellaneous\n My Programs\n Windows\n Back" | fuzzel --lines 9 --dmenu --prompt="System Settings: ")
+choice=$(echo -e "󰍹 Monitors\n󰈆 Auto-Start\n󰫧 Enviroment Variables\n Input and Keybinds\n󰖚 Look and feel\n Miscellaneous\n My Programs\n Windows\n Back" | rofi -l 9 -dmenu -p "System Settings")
 
 case "$choice" in
     "󰍹 Monitors")
@@ -28,7 +28,7 @@ case "$choice" in
 	kitty -e nvim $HOME/dotfiles/.config/hypr/modules/windows.lua &
 	;;
     " Back")
-        $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh &
+        $HOME/dotfiles/.config/rofi/settings/settings_menu.sh &
 	;;
     *)
         exit 0

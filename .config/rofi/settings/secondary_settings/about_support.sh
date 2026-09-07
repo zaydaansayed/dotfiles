@@ -1,7 +1,6 @@
-
 #!/usr/bin/env bash
 
-choice=$(echo -e "󰌢 System-info(fastfetch)\n Support\n Back" | fuzzel --lines 3 --dmenu --prompt="About and Support: ")
+choice=$(echo -e "󰌢 System-info(fastfetch)\n Support\n Back" | rofi -l 3 -dmenu -p "About and Support")
 
 case "$choice" in
     "󰌢 System-info(fastfetch)")
@@ -11,7 +10,7 @@ case "$choice" in
 	firefox https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
         ;;
     " Back")
-        $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh
+        $HOME/dotfiles/.config/rofi/settings/settings_menu.sh
 	;;
     *)
         exit 0

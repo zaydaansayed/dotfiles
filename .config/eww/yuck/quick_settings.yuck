@@ -30,8 +30,8 @@
             :class "quick_power"
             :tooltip "Open Power Menu"
       "")
-    (button :onclick "eww update quick_toggle=false && eww close quick_settings && $HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh &"
-            :tootltip "Open Settings"
+    (button :onclick "eww update quick_toggle=false && eww close quick_settings && $HOME/.config/rofi/settings/settings_menu.sh &"
+            :tooltip "Open Settings"
             :class "quick_set_button"
       "")))
 
@@ -55,13 +55,13 @@
               :tooltip {btinfo.devcname}
               {btinfo.icon})
       (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
-              :onclick "bzmenu -l fuzzel | eww close quick_settings | eww update quick_toggle=false"
+              :onclick "bzmenu -l rofi | eww close quick_settings | eww update quick_toggle=false"
               :tooltip {btinfo.devcname}
              ">")
       (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
               :class {airplane_mode == "󰀝" ? "quick_button on" : "quick_button"} 
               :tooltip "Airplane Mode"
-              airplane_mode))
+              {airplane_mode}))
     (box :orientation "h"
          :space-evenly false
          :spacing 5
@@ -76,7 +76,7 @@
       (button :class {tlp_toggle ? "quick_button_big on" : "quick_button_big"}
               :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
               :tooltip "Power Profiles"
-        tlpicon))))
+        {tlpicon}))))
 
 ; Tlp power-profiles buttons
 (defwidget tlp_menu []
@@ -122,7 +122,7 @@
                :onchange "brightnessctl set {}%"
                 :min 1)
         (label :text {briginfo.icon})))
-      (button :onclick "pwmenu --launcher fuzzel | eww close quick_settings | eww update quick_toggle=false"
+      (button :onclick "pwmenu --launcher rofi | eww close quick_settings | eww update quick_toggle=false"
                 :class "vol_settings"
                 :tooltip "Volume Settings"
                 :halign "end"

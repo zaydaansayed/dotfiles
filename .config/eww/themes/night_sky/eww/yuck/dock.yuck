@@ -70,7 +70,7 @@
         (box :orientation "v"
           (image :icon "firefox"
                  :icon-size "dialog")))
-      (button :onclick {pinned_apps.spotify_open ? "hyprctl dispatch 'hl.dsp.focus({ window: \"class:Spotify\" })'" : "spotify-launcher &"}
+      (button :onclick {pinned_apps.spotify_open ? `hyprctl dispatch 'hl.dsp.focus({ window = "class:Spotify" })'` : "spotify-launcher &"}
               :class {!pinned_apps.spotify_open ? "dock_button" : pinned_apps.spotify_focused ? "dock_button Son" : "dock_button Sbackground"}
               :tooltip "Spotify"
         (image :icon "spotify-launcher"
@@ -116,9 +116,9 @@
               (image :icon selected_app   
                      :icon-size "dialog"))))))))
 
-(defwindow systemtray []
+(defwindow systemtray
   :monitor 0
-  :geometry (geometry :x "515px" :y "70px" :width "0px" :height "0px" :anchor "bottom right")
+  :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
   (eventbox :onhoverlost "eww close systemtray && eww update tray_toggle=false"
     (systray :spacing 4

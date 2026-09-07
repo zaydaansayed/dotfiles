@@ -35,15 +35,12 @@ print_status() {
     local title="$5"
 
     if [[ -z "$status" || -z "$title" ]]; then
-        echo '{"text": "", "artist": "", "title": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "visible": false}'
+        echo '{"text": "", "artist": "", "title": "", "icon": "", "shuffle_icon": "", "repeat_icon": "", "image": "none", "visible": false}'
 	eww update music_toggle=false 2>/dev/null
         eww close music_player_window 2>/dev/null
         return
     fi
 
-    artist="${artist//\"/\\\"}"
-    title="${title//\"/\\\"}"
-    
     local art_url
     art_url=$(playerctl -p spotify metadata mpris:artUrl 2>/dev/null)
     local image="none"
@@ -83,7 +80,7 @@ print_status() {
         repeat_icon="󰑖"
     fi
 
-    echo "{\"text\": \"$text\", \"artist\": \"$artist\", \"title\": \"$title\", \"icon\": \"$icon\", \"shuffle_icon\": \"$shuffle_icon\", \"repeat_icon\": \"$repeat_icon\", \"image\": \"$image\", \"visible\": true}"
+    jq -nc --arg text "$text" --arg artist "$artist" --arg title "$title" --arg icon "$icon" --arg shuffle_icon "$shuffle_icon" --arg repeat_icon "$repeat_icon" --arg image "$image" '{"text": $text, "artist": $artist, "title": $title, "icon": $icon, "shuffle_icon": $shuffle_icon, "repeat_icon": $repeat_icon, "image": $image, "visible": true}'
 }
 
 if playerctl -p spotify status 2>/dev/null >/dev/null; then

@@ -32,6 +32,15 @@ button:hover {
   transition: background-color 0.3s ease-in-out;
 }
 
+button:focus {
+  background-color: c.$on;
+  color: #000000;
+}
+
+button:focus:hover {
+  background-color: c.$on_hover;
+} 
+
 scale { 
   trough {
     background-color: c.$l2;
@@ -83,7 +92,7 @@ entry:focus {
 }
 
 tooltip {
-  background-color: rgba($color: c.$bg, $alpha: 0.7);
+  background-color: rgba(26, 26, 26, 0.7);
   border-radius: 7px;
 }
 
@@ -109,4 +118,21 @@ scrollbar slider:hover {
 
 scrollbar slider:active {
     background-color: c.$on;
+}
+
+menu {
+  background-color: c.$bg;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 7px;
+
+  menuitem {
+    padding: 6px 10px;
+    border-radius: 7px;
+    background-color: transparent;
+
+    &:hover {
+      background-color: c.$l2;
+    }
+  }
 }

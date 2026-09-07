@@ -1,15 +1,33 @@
 @use "../colors.scss" as c;
 
 .popup {
-  color: c.$on;
   background-color: c.$bg;
+  border: c.$border 1px solid;
   border-radius: 7px;
-}
 
-.volbar {
-  padding: 8px;
-}
+  &.mic_status {
+    padding: 10px 0px;
+    color: c.$accent_2;
+  }
 
-.brigbar {
-  padding: 8px;
+  &.brightness {
+    color: c.$accent_3;
+    min-height: 20px;
+    padding: 10px 0px;
+  }
+
+  &.volume {
+    color: #FFB07C;
+    min-height: 20px;
+    padding: 10px 0px;
+  }
+
+  .popup-text {
+    font-size: 17px;
+  }
+
+  .ascii-bar {
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
 }

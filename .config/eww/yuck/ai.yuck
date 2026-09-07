@@ -92,7 +92,7 @@
                   (label :text "Code" 
                          :halign "start" 
                          :hexpand true)
-                  (button :onclick "echo \"${block.content}\" | wl-copy && $HOME/dotfiles/.config/eww/scripts/copy-popup.sh"
+                  (button :onclick "$HOME/dotfiles/.config/eww/scripts/copy-text.sh '${replace(block.content, "'", "'\\''")}'"
                           :class "ai_code_copy"
                           :tooltip "Copy Code"
                     "󰆏 Copy"))
@@ -147,13 +147,10 @@
                    :visible {path != "" && !matches(path, "(?i)\\.(png|jpg|jpeg|webp)$")})))))
     (box :orientation "h"
          :space-evenly false
-(input :value ai_dinput
-       :onchange "eww update ai_prompt=\"$(cat << 'EOF_SAFE'
-{}
-EOF_SAFE
-)\""
-       :onaccept {strlength(ai_prompt) > 0 ? "$HOME/dotfiles/.config/eww/scripts/ai.sh &" : ""}
-       :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
+      (input :value ai_dinput
+             :onchange "eww update ai_prompt='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'"
+             :onaccept {strlength(ai_prompt) > 0 ? "$HOME/dotfiles/.config/eww/scripts/ai.sh &" : ""}
+             :class {strlength(ai_prompt) > 0 ? "ai_input" : "ai_input empty"})
       (button :onclick "$HOME/dotfiles/.config/eww/scripts/ai.sh &"
               :visible {strlength(ai_prompt) > 0}
               :class "ai_ibutton send"
@@ -193,13 +190,13 @@ EOF_SAFE
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
              :limit-width 20))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandi-a='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandia='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
             :tooltip "Rename Chat"
       "󰏫")
    (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
           :tooltip "Delete Chat"
      "󰆴")))))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandi-a='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandia='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
             :tooltip "Change AI Personality"
       "")
     (button :onclick "eww update ai_menu_toggle=false && eww close ai_menu"
