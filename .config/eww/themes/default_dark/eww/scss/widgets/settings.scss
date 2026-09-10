@@ -1,0 +1,58 @@
+@use "../colors.scss" as c;
+
+.settings_sidebar {
+  min-width: 190px;
+  padding: 5px;
+}
+
+.settings_title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px 5px 10px 5px;
+}
+
+.settings_nav {
+  padding: 8px 10px;
+  margin-bottom: 4px;
+}
+
+.settings_close {
+  padding: 6px 10px;
+}
+
+.settings_page {
+  min-width: 650px;
+}
+
+.settings_heading {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.settings_card {
+  padding: 10px;
+}
+
+.settings_big_icon {
+  font-size: 28px;
+  padding: 5px 8px;
+}
+
+.settings_dim {
+  opacity: 0.65;
+}
+
+.swatch {
+  min-width: 38px;
+  min-height: 26px;
+  padding: 0;
+}
+
+.swatch.on {
+  border: 2px solid #ffffff;
+}
+
+.window.settings_root {
+  background-color: rgba(26, 26, 26, 0.96);
+}

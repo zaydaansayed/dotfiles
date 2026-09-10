@@ -26,10 +26,10 @@
                  :visible {btinfo.icon == "󰂱"}
                  :class "bticon"
                  :tooltip {btinfo.devcname})
-         (label  :text {netinfo.icon} 
+          (label  :text {netinfo.icon} 
                  :class "neticon"
                  :visible {airplane_mode == "󰀞"}
-                 :tooltip {netinfo.netname})
+                 :tooltip {netinfo.active})
          (label  :text {airplane_mode}
                  :visible {airplane_mode == "󰀝"}
                  :class "planeicon"

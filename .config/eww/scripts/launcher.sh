@@ -1,14 +1,4 @@
 #!/bin/bash
-# eww launcher backend.
-#
-#   launcher.sh                  # JSON array of apps, most-used first
-#                                # [{id, name, exec, terminal, icon}]
-#   launcher.sh launch <id>      # record usage, launch app, close launcher
-#
-# Icon names stay names (no file paths in the JSON). Raster icons bigger
-# than 48x48 are shrunk with ImageMagick into a user-level hicolor overlay
-# (~/.local/share/icons/hicolor/48x48/apps). SVGs are skipped: vectors
-# render at exactly the requested size already.
 
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/eww-launcher"
 HISTORY_FILE="$CACHE_DIR/history.json"
@@ -23,13 +13,14 @@ export OVERLAY_DIR ICON_THEME HISTORY_FILE
 
 APP_DIRS=(
   "$HOME/.local/share/applications"
+  "$HOME/.local/share/flatpak/exports/share"
+  "/var/lib/flatpak/exports/share/applications"
   "/usr/local/share/applications"
   "/usr/share/applications"
 )
 export APP_DIRS_STR
 APP_DIRS_STR=$(printf '%s\n' "${APP_DIRS[@]}")
 
-# ------------------------------------------------------------------ list apps
 do_list() {
   APP_DIRS_STR="$APP_DIRS_STR" HISTORY_FILE="$HISTORY_FILE" \
   OVERLAY_DIR="$OVERLAY_DIR" ICON_THEME="$ICON_THEME" python3 - << 'EOF'
@@ -157,7 +148,6 @@ print(json.dumps(apps))
 EOF
 }
 
-# --------------------------------------------------------------- launch app
 do_launch() {
   local id="${1:-}"
   [[ -z "$id" ]] && { echo '{"error":"no app id"}' >&2; return 1; }
@@ -174,7 +164,6 @@ do_launch() {
   [[ -z "$exec_line" ]] && { echo '{"error":"empty Exec"}' >&2; return 1; }
   grep -qim1 '^Terminal\s*=\s*true' "$file" && is_terminal=1 || is_terminal=0
 
-  # record usage (most-used suggestions)
   HISTORY_FILE="$HISTORY_FILE" APP_ID="$id" python3 -c '
 import json, os, time
 p = os.environ["HISTORY_FILE"]; i = os.environ["APP_ID"]

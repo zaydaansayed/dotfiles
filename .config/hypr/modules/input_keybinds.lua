@@ -8,7 +8,8 @@ hl.config({
     input = {
         kb_layout = "us",
         follow_mouse = 1,
-        sensitivity = 0,
+        sensitivity = -0.08,
+	numlock_by_default = true,
 
         touchpad = {
             natural_scroll = true,
@@ -43,6 +44,7 @@ hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("rofi -modi clipboard:/home/zaydaansayed/.config/rofi/clipboard.sh -show clipboard -show-icons"))
 hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("bemoji"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open settings"))
 
 -- Window control
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))

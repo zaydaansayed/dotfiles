@@ -3,29 +3,64 @@
 LAST_OUTPUT=""
 
 get_internet() {
-    local net_state wifi_state netname icon strength new_output
-    
+    local net_state wifi_state netname icon strength new_output ethernet
+    local wifi_on=false net_on=false
+
     net_state=$(nmcli networking)
     wifi_state=$(nmcli radio wifi)
-    netname=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes' | cut -d: -f2)
-    
+    [[ "$net_state" == "enabled" ]] && net_on=true
+    [[ "$wifi_state" == "enabled" ]] && wifi_on=true
+
+    netname=$(nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2-)
+
+    ethernet=false
+    if ip route 2>/dev/null | grep -qE "dev (eth|enp)"; then
+        ethernet=true
+    fi
+
     if [[ "$net_state" != "enabled" || "$wifi_state" != "enabled" ]]; then
         icon="󰤭"
-    elif ip route | grep -qE "dev (eth|enp)"; then
+    elif [[ "$ethernet" == true ]]; then
         icon=""
     else
         strength=$(nmcli -t -f SIGNAL,ACTIVE dev wifi 2>/dev/null | awk -F: '$2=="yes" {print $1}')
-        
-        if [[ -z "$strength" || "$strength" -eq 0 ]]; then 
+
+        if [[ -z "$strength" || "$strength" -eq 0 ]]; then
             icon="󰤯"
-        elif [[ $strength -le 25 ]]; then icon="󰤟" 
-        elif [[ $strength -le 50 ]]; then icon="󰤢" 
-        elif [[ $strength -le 75 ]]; then icon="󰤥" 
+        elif [[ $strength -le 25 ]]; then icon="󰤟"
+        elif [[ $strength -le 50 ]]; then icon="󰤢"
+        elif [[ $strength -le 75 ]]; then icon="󰤥"
         else icon="󰤨"
         fi
     fi
+    [[ "$strength" =~ ^[0-9]+$ ]] || strength=0
 
-    new_output=$(jq -nc --arg icon "$icon" --arg netname "$netname" '{"icon": $icon, "netname": $netname}')
+    local networks="[]"
+    if [[ "$wifi_on" == true ]]; then
+        networks=$(nmcli -t -f SSID,SIGNAL,SECURITY,IN-USE dev wifi list --rescan no 2>/dev/null \
+          | grep -v '^:' \
+          | awk -F: '!seen[$1]++' \
+          | head -n 20 \
+          | jq -R -s '
+              split("\n") | map(select(length > 0)) |
+              map(split(":") |
+                {"ssid": .[0],
+                 "signal": (.[1] | tonumber? // 0),
+                 "security": (.[2] // ""),
+                 "active": (.[3] == "*")})')
+        [[ -z "$networks" ]] && networks="[]"
+    fi
+
+    local active
+    active=$(echo "$networks" | jq -r '[.[] | select(.active) | .ssid] | first // ""')
+    [[ -z "$active" ]] && active="$netname"
+
+    new_output=$(jq -nc --arg icon "$icon" --arg netname "$netname" \
+      --argjson wifi_on "$wifi_on" --argjson net_on "$net_on" \
+      --argjson ethernet "$ethernet" --argjson strength "$strength" \
+      --arg active "$active" --argjson networks "$networks" \
+      '{icon: $icon, netname: $netname, wifi_on: $wifi_on, net_on: $net_on,
+        ethernet: $ethernet, strength: $strength, active: $active, networks: $networks}')
 
     if [[ "$new_output" != "$LAST_OUTPUT" ]]; then
         echo "$new_output"
@@ -37,7 +72,7 @@ get_internet
 
 (
     while true; do
-        sleep 60
+        sleep 30
         get_internet
     done
 ) &

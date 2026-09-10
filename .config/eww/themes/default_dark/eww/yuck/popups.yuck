@@ -3,7 +3,7 @@
 ;; =============================================================================
 
 ; Variables for this file
-(deflisten volinfo :initial '{"icon":" ","volume":50}' "~/.config/eww/themes/default_dark/eww/scripts/volinfo.sh")
+(deflisten volinfo :initial '{"icon":" ","volume":50}' "~/.config/eww/themes/default_dark/eww/scripts/volinfo.sh")
 (deflisten briginfo :initial '{"icon":"󰃠 ","brightness":50}' "~/.config/eww/themes/default_dark/eww/scripts/briginfo.sh")
 (deflisten mic_mute :initial '' "~/.config/eww/themes/default_dark/eww/scripts/mic_mute.sh")
 

@@ -3,9 +3,9 @@
 ;; =============================================================================
 
 ; Variables for this file
-(deflisten volinfo :initial '{"volume": 50, "vol_status": "UNMUTED", "bar": "░░░░░░░░░░"}' "~/.config/eww/themes/night_sky/eww/scripts/volinfo.sh")
-(deflisten briginfo :initial '{"icon":"󰃠 ","brightness":50}' "~/.config/eww/themes/night_sky/eww/scripts/briginfo.sh")
-(deflisten mic_mute :initial '' "~/.config/eww/themes/night_sky/eww/scripts/mic_mute.sh")
+(deflisten volinfo :initial '{"volume": 50, "vol_status": "UNMUTED", "bar": "░░░░░░░░░░", "icon": " "}' "~/.config/eww/themes/night_sky/eww/scripts/volinfo.sh")
+(deflisten briginfo :initial '{"brightness":50,"bar":"░░░░░░░░░░"}' "~/.config/eww/themes/night_sky/eww/scripts/briginfo.sh")
+(deflisten mic_mute :initial 'UNMUTED' "~/.config/eww/themes/night_sky/eww/scripts/mic_mute.sh")
 
 ; Volume popup window
 (defwindow volume

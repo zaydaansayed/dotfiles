@@ -9,17 +9,6 @@ return {
     config = function()
       local api = require("nvim-tree.api")
 
-      local function trigger_vault_sync(data)
-        local path = (data and (data.file or data.folder_name)) or ""
-        if _G.is_in_vault and _G.is_in_vault(path) then
-          _G.sync_obsidian_vault()
-        end
-      end
-
-      api.events.subscribe(api.events.Event.FileCreated, trigger_vault_sync)
-      api.events.subscribe(api.events.Event.NodeRenamed, trigger_vault_sync)
-      api.events.subscribe(api.events.Event.FileRemoved, trigger_vault_sync)
-
       require("nvim-tree").setup({})
     end,
   },
@@ -158,78 +147,6 @@ return {
     version = "*",
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-    },
-  },
-
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    opts = {
-      heading = {
-        sign = false,
-        icons = { "   ", "   ", "   ", "   ", "   ", "   " },
-      },
-      checkbox = {
-        enabled = true,
-        unchecked = { icon = "   " },
-        checked = { icon = " " },
-      },
-    },
-  },
-  {
-    "epwalsh/obsidian.nvim",
-    version = "*",
-    lazy = true,
-    ft = "markdown",
-    cmd = {
-      "ObsidianNew",
-      "ObsidianQuickSwitch",
-      "ObsidianToday",
-      "ObsidianSearch",
-      "ObsidianBacklinks",
-      "ObsidianLink",
-    },
-    opts = {
-      workspaces = {
-        {
-          name = "personal",
-          path = "~/vaults/personal",
-        },
-      },  
-    },
-  },
-  {
-    "HakonHarnes/img-clip.nvim",
-    event = "VeryLazy",
-    opts = {
-      default = {
-        dir_path = "assets",
-        use_absolute_path = false,
-        relative_to_current_file = true,
-      },
-    },
-    keys = {
-      { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from clipboard" },
-    },
-  },
-  {
-    "3rd/image.nvim",
-    opts = {
-      backend = "kitty",
-      integrations = {
-        markdown = {
-          enabled = true,
-          clear_in_insert_mode = false,
-          download_remote_images = true,
-          only_render_image_at_cursor = false,
-          filetypes = { "markdown", "vimwiki" },
-        },
-      },
-      max_width = 100,
-      max_height = 12,
-      max_width_window_percentage = math.huge,
-      max_height_window_percentage = 50,
-      window_overlap_clear_enabled = true,
-      window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
     },
   },
 }

@@ -1,0 +1,57 @@
+@use "../colors.scss" as c;
+
+.medium_icon {
+  font-size: 20px;
+}
+
+.settings_sidebar {
+  min-width: 190px;
+  padding: 5px;
+  border-right: 1px solid c.$border;
+}
+
+.settings_title {
+  font-size: 20px;
+  margin: 5px 5px 10px 5px;
+}
+
+.settings_nav {
+  padding: 8px 10px;
+  margin-bottom: 4px;
+}
+
+.settings_close {
+  padding: 6px 10px;
+}
+
+.settings_heading {
+  font-size: 17px;
+  margin: 5px;
+}
+
+.settings_big_icon {
+  font-size: 28px;
+  padding: 5px 8px;
+}
+
+.swatch {
+  min-width: 38px;
+  min-height: 26px;
+  padding: 0;
+}
+
+.swatch.on {
+  border: 2px solid #ffffff;
+}
+
+.long_btn {
+  padding: 6px;
+
+  &.reload {
+    padding-right: 9px;
+  }
+}
+
+.settings_scale {
+  margin-right: 10px;
+}

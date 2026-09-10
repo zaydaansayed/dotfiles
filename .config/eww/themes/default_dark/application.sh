@@ -9,6 +9,7 @@ echo "@use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/ai.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/quick_settings.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/sysnotif.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/theme_picker.scss';
+@use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/settings.scss';
 @use '$HOME/.config/eww/scss/launcher.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
@@ -23,7 +24,8 @@ echo "(include './yuck/variables.yuck')
 (include './yuck/sysnotif.yuck')
 (include './themes/default_dark/eww/yuck/main_menu.yuck')
 (include './yuck/theme_picker.yuck')
-(include './yuck/launcher.yuck')" > $HOME/.config/eww/eww.yuck
+(include './yuck/launcher.yuck')
+(include './yuck/settings.yuck')" > $HOME/.config/eww/eww.yuck
 
 echo "default_dark" > $HOME/.config/eww/themes/current_theme.txt
 

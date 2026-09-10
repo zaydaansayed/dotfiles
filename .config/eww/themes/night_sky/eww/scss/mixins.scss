@@ -1,7 +1,7 @@
 @use "./colors.scss" as c;
 
 .placeholder_txt {
-  color: #515152;
+  opacity: 0.65;
 
   &.icon {
     font-size: 90px;
@@ -16,6 +16,10 @@
 
   &.weather_loading {
     font-size: 100px;
+  }
+
+  &.medium {
+    font-size: 20px;
   }
 }
 
@@ -54,10 +58,28 @@
     padding: 0px 3px;
     margin-bottom: 3px;
   }
+
+  &.settings_card {
+    padding: 10px;
+  }
+
+  &.settings_list {
+    padding: 5px;
+    padding-left: 10px;
+  }
 }
 
 .l2 button {
     background-color: c.$l3;
+
+  &.on {
+    background-color: c.$on;
+    color: #000000;
+  }
+
+  &.on:hover {
+    background-color: c.$on_hover;
+  }
 }
 
 .l2 button:hover {
@@ -84,6 +106,15 @@
   &.notification_popup:hover {
     border: #ffffff 1px solid; 
     transition: 0.3s ease-in-out;
+  }
+
+  &.launcher button:focus {
+    background-color: c.$on;
+    color: #000000;
+  }
+
+  &.launcher button:focus:hover {
+    background-color: c.$on_hover;
   }
 }
 

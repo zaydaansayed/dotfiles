@@ -53,7 +53,7 @@
       (button :class {btinfo.icon == "󰂲" ? "quick_button bt" : "quick_button bt on"}
               :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
               :tooltip {btinfo.devcname}
-              {btinfo.icon})
+              {btinfo.icon == "" ? "󰂯" : btinfo.icon})
       (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
               :onclick "bzmenu -l rofi | eww close quick_settings | eww update quick_toggle=false"
               :tooltip {btinfo.devcname}

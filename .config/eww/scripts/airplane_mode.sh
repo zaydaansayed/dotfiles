@@ -1,18 +1,57 @@
 #!/bin/bash
 
+STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/eww-airplane-mode.state"
+rm -f "$STATE_FILE"
+
 get_airplane() {
-    
-    airplane_state=$([ -n "$(rfkill list | grep -i "Soft blocked: yes")" ] && echo "enabled" || echo "disabled")
-    
-    if [[ $airplane_state == "enabled" ]]; then
-        echo 󰀝
+    local wifi_off=false bt_off=false icon last
+
+    if rfkill list wifi 2>/dev/null | grep -qi "blocked: yes"; then
+        wifi_off=true
+    elif [[ "$(nmcli radio wifi 2>/dev/null)" != "enabled" ]]; then
+        wifi_off=true
+    elif [[ "$(nmcli networking 2>/dev/null)" != "enabled" ]]; then
+        wifi_off=true
+    fi
+
+    if rfkill list bluetooth 2>/dev/null | grep -qi "blocked: yes"; then
+        bt_off=true
+    elif ! bluetoothctl show 2>/dev/null | grep -q "Powered: yes"; then
+        bt_off=true
+    fi
+
+    if [[ "$wifi_off" == true && "$bt_off" == true ]]; then
+        icon="󰀝"
     else
-	echo 󰀞
+        icon="󰀞"
+    fi
+    last="$(cat "$STATE_FILE" 2>/dev/null)"
+    if [[ "$icon" != "$last" ]]; then
+        echo "$icon"
+        printf "%s" "$icon" > "$STATE_FILE"
     fi
 }
 
 get_airplane
 
-nmcli monitor 2>/dev/null | while read -r _; do
+( stdbuf -oL rfkill event 2>/dev/null | while read -r _; do
+    sleep 0.3
+    get_airplane
+done ) &
+
+( nmcli monitor 2>/dev/null | while read -r _; do
+    sleep 0.3
+    get_airplane
+done ) &
+
+( gdbus monitor --system --dest org.bluez 2>/dev/null \
+    | grep --line-buffered -E 'Powered|Connected|InterfacesAdded|InterfacesRemoved' \
+    | while read -r _; do
+        sleep 0.5
+        get_airplane
+    done ) &
+
+while true; do
+    sleep 10
     get_airplane
 done

@@ -76,7 +76,7 @@ def main():
             last_output = ""
 
         if not lyrics:
-            out = json.dumps({"past": "", "current": title if title else "No media playing", "future": ""})
+            out = json.dumps({"past": "", "current": title if title else "No lyrics found", "future": ""})
             if out != last_output:
                 print(out, flush=True)
                 last_output = out
