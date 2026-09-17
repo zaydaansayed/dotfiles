@@ -2,7 +2,7 @@
 
 artist=$(playerctl -p spotify metadata artist)
 title=$(playerctl -p spotify metadata title)
-status=$(playerctl status)
+status=$(playerctl -p spotify status)
 
 if [[ -z "$artist" ]]; then
     text="$title"

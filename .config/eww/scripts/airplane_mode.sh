@@ -1,4 +1,8 @@
 #!/bin/bash
+# Kill background monitors (rfkill/nmcli/gdbus) when eww kills this script,
+# otherwise `eww reload` leaves orphans that pile up and desync the daemon.
+cleanup() { jobs -p | xargs -r kill 2>/dev/null; pkill -P $$ 2>/dev/null; exit 0; }
+trap cleanup EXIT TERM INT
 
 STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/eww-airplane-mode.state"
 rm -f "$STATE_FILE"

@@ -1,4 +1,6 @@
 #!/bin/bash
+cleanup() { jobs -p | xargs -r kill 2>/dev/null; pkill -P $$ 2>/dev/null; exit 0; }
+trap cleanup EXIT TERM INT
 
 PIDF=/tmp/eww_bt_scan.pid
 EXPF=/tmp/eww_bt_scan.exp

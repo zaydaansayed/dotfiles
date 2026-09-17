@@ -25,6 +25,13 @@
          :space-evenly false
          :spacing 10
         :class "main_end"
+      (box :orientation "h"
+           :space-evenly false
+           :halign "end"
+        (button :onclick "eww close main_menu || true; eww update main_toggle=false"
+                :class "small_btn"
+                :tooltip "Close"
+          ""))
       (main_music_player)
       (files)
       (calendar :class "main_cal"))))
@@ -35,11 +42,11 @@
        :space-evenly false
        :spacing 5
        :class "main"
-    (button :onclick "fuzzel & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "fuzzel & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "List all apps"
             :class "main_app_launcher"
       "")
-    (button :onclick "firefox & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Firefox"
             :class "main_buttons"
       (box :orientation "h"
@@ -47,7 +54,7 @@
            :spacing 3
         (image :icon "firefox")
         (label :text "Firefox")))
-    (button :onclick "kitty & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "kitty & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Kitty"
             :class "main_buttons"
       (box :orientation "h"
@@ -55,7 +62,7 @@
            :spacing 3           
         (image :icon "kitty")
         (label :text "Kitty")))
-    (button :onclick "spotify-launcher & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "spotify-launcher & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Spotify"
             :class "main_buttons"
       (box :orientation "h"
@@ -63,7 +70,7 @@
            :spacing 3
         (image :icon "spotify-launcher")
         (label :text "Spotify")))
-    (button :onclick "kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Yazi"
             :class "main_buttons"
       (box :orientation "h"
@@ -71,12 +78,12 @@
            :spacing 3
         (image :icon "yazi")
         (label :text "Files")))
-    (button :onclick "cd $HOME/ && kitty -e nvim & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/ && kitty -e nvim & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Nvim"
             :class "main_buttons"
       (label :text "   Nvim"
              :halign "start"))
-    (button :onclick "kitty -e htop & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "kitty -e htop & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Htop"
             :class "main_buttons"
       (box :orientation "h"
@@ -84,7 +91,7 @@
            :spacing 3
         (image :icon "htop")
         (label :text "Htop")))
-    (button :onclick "$HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "$HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Settings Menu"
             :class "main_buttons"
       (box :orientation "h"
@@ -176,7 +183,7 @@
                                     "???"}
                    :class "weather_future_icon")
             (label :text "${hour.temp}°C"))))
-      (button :onclick "kitty -e --hold curl wttr.in & eww close main_menu && eww update main_toggle=false"
+      (button :onclick "kitty -e --hold curl wttr.in & eww close main_menu || true; eww update main_toggle=false"
         "More Weather"))))
 
 ; Web links
@@ -188,30 +195,30 @@
   (box :orientation "h"
        :space-evenly false
        :spacing 5
-    (button :onclick "firefox https://github.com & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://github.com & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Github"
             :class "main_shortcut github"
       "")
-    (button :onclick "firefox https://elkowar.github.io/eww/ & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://elkowar.github.io/eww/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Eww-documentation"
             :class "main_shortcut"
       "󰂺")
-    (button :onclick "firefox https://www.nerdfonts.com/cheat-sheet & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://www.nerdfonts.com/cheat-sheet & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Nerd fonts"
             :class "main_shortcut rest"
       ""))
   (box :orientation "h"
        :space-evenly false
        :spacing 5
-    (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "r/unixporn"
             :class "main_shortcut rest"
       "")
-    (button :onclick "firefox https://www.reddit.com/r/thinkpad/ & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://www.reddit.com/r/thinkpad/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "r/thinkPad"
             :class "main_shortcut thinkpad"
       "")
-    (button :onclick "firefox https://www.youtube.com & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "firefox https://www.youtube.com & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "YouTube"
             :class "main_shortcut_yt"
       ""))))
@@ -222,23 +229,23 @@
        :space-evenly false
        :spacing 5
        :class "main"
-    (button :onclick "cd $HOME/Downloads && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/Downloads && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Downloads folder"
       "󰉍  Downloads")
-    (button :onclick "cd $HOME/Documents && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/Documents && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Documents folder"
       "󰈙 Documents")
-    (button :onclick "cd $HOME/Pictures && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/Pictures && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Pictures folder"
       "   Pictures")
-    (button :onclick "cd $HOME/Desktop && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/Desktop && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Desktop folder"
       "   Desktop")
-    (button :onclick "cd $HOME/Videos && kitty -e yazi & eww close main_menu && eww update main_toggle=false"
+    (button :onclick "cd $HOME/Videos && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Videos folder"
       "󰯜  Videos")))
@@ -248,8 +255,7 @@
   (box :class "music_player_window"
        :orientation "h"
        :space-evenly false
-       :style "background-color: ${player_bg}; color: ${player_text};"
-    (box :orientation "v"
+           (box :orientation "v"
          :space-evenly false
          :hexpand false
          :spacing 10

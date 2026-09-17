@@ -8,9 +8,9 @@ echo "@use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/ai.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/popups.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/quick_settings.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/sysnotif.scss';
-@use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/theme_picker.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/settings.scss';
 @use '$HOME/.config/eww/scss/launcher.scss';
+@use '$HOME/.config/eww/scss/clipboard.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
 
@@ -23,9 +23,9 @@ echo "(include './yuck/variables.yuck')
 (include './themes/night_sky/eww/yuck/dock.yuck')
 (include './yuck/sysnotif.yuck')
 (include './themes/night_sky/eww/yuck/main_menu.yuck')
-(include './yuck/theme_picker.yuck')
 (include './yuck/launcher.yuck')
-(include './yuck/settings.yuck')" > $HOME/.config/eww/eww.yuck
+(include './yuck/clipboard.yuck')
+(include './themes/night_sky/eww/yuck/settings.yuck')" > $HOME/.config/eww/eww.yuck
 
 echo "night_sky" > $HOME/.config/eww/themes/current_theme.txt
 

@@ -1,11 +1,13 @@
 #!/bin/bash
 # audio_state.sh — settings > Audio device state (separate from volinfo).
 # Emits volumes/mutes + sink/source device lists via pactl JSON.
+cleanup() { jobs -p | xargs -r kill 2>/dev/null; pkill -P $$ 2>/dev/null; exit 0; }
+trap cleanup EXIT TERM INT
 
 LAST_OUTPUT=""
 
 audio_state() {
-  local sinks sources sink_vol source_vol sink_mute source_mute new_output
+  local sinks sources cards sink_vol source_vol sink_mute source_mute new_output
 
   sinks=$(pactl --format=json list sinks 2>/dev/null | jq '
     [.[] | {name: .name,
@@ -20,6 +22,14 @@ audio_state() {
        def: (.name == $def)}]' --arg def "$(pactl get-default-source 2>/dev/null)" 2>/dev/null)
   [[ -z "$sources" ]] && sources="[]"
 
+  cards=$(pactl --format=json list cards 2>/dev/null | jq '
+    [.[] | {name: .name,
+            desc: (.properties["device.description"] // .name),
+            active: .active_profile,
+            profiles: [.profiles | to_entries[]
+                       | select(.value.available != "no") | .key]}]')
+  [[ -z "$cards" ]] && cards="[]"
+
   sink_vol=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | grep -oP '\d+(?=%)' | head -n1)
   [[ "$sink_vol" =~ ^[0-9]+$ ]] || sink_vol=0
   source_vol=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -oP '\d+(?=%)' | head -n1)
@@ -32,9 +42,10 @@ audio_state() {
   new_output=$(jq -nc --argjson sink_vol "$sink_vol" --argjson source_vol "$source_vol" \
     --argjson sink_mute "$sink_mute" --argjson source_mute "$source_mute" \
     --argjson sinks "$sinks" --argjson sources "$sources" \
+    --argjson cards "$cards" \
     '{sink_vol: $sink_vol, source_vol: $source_vol,
       sink_mute: $sink_mute, source_mute: $source_mute,
-      sinks: $sinks, sources: $sources}')
+      sinks: $sinks, sources: $sources, cards: $cards}')
 
   if [[ "$new_output" != "$LAST_OUTPUT" ]]; then
     echo "$new_output"

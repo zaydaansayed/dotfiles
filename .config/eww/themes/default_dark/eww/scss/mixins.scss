@@ -54,14 +54,41 @@
     padding: 0px 3px;
     margin-bottom: 3px;
   }
+
+  &.settings_card {
+    padding: 10px;
+  }
+
+  &.settings_list {
+    background-color: c.$l3;
+    padding: 5px;
+    padding-left: 10px;
+  }
+
+  &.settings_list button {
+    background-color: c.$l3_hover;
+  }
+  
+  &.settings_list button:hover {
+    background-color: c.$l4;
+  }
 }
 
 .l2 button {
     background-color: c.$l3;
+
+  &.on {
+    background-color: c.$on;
+    color: #000000;
+  }
+
+  &.on:hover {
+    background-color: c.$on_hover;
+  }
 }
 
 .l2 button:hover {
-  background-color: c.$l3_hover;
+    background-color: c.$l3_hover;
 }
 
 .l2 entry {
@@ -119,9 +146,10 @@
   }
 
   &.default_dark {
-    background-image: url('./themes/default_dark/images/wallpaper.png');
+    background-color: #1a1a1a;
     min-width: 256px;
     min-height: 144px;
+    margin-bottom: 5px;
   }
 
   &.night_sky {

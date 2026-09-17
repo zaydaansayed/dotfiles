@@ -195,7 +195,7 @@ os.replace(tmp, p)
     fi
   fi
 
-  close_ui
+  close_ui 
 }
 
 close_ui() {
@@ -203,6 +203,7 @@ close_ui() {
     eww close launcher 2>/dev/null || true
     eww update launcher_query="" 2>/dev/null || true
     eww update launcher_dinput="" 2>/dev/null || true
+    hyprctl dispatch 'hl.dsp.submap ("reset")'
   }
 }
 

@@ -8,7 +8,7 @@ if eww active-windows | grep -q "copy-popup"; then
         kill "$OLD_PID" 2>/dev/null
     fi
 else 
-    eww open copy-popup 2>/dev/null
+    eww open --no-daemonize copy-popup 2>/dev/null
 fi
 
 (

@@ -11,19 +11,19 @@
   (box :orientation "v"
        :space-evenly false
        :class "window"
-    (label :text sysnotif_text_main
-           :valign "center"
-           :vexpand true)
+     (label :text sysnotif_text_main
+            :valign "center"
+            :vexpand true)
     (box :orientation "h"
          :space-evenly false
-         :spacing 3
+         :spacing 5
          :visible {sysnotif_type == "input"}
       (input :value {sysnotif_text_input == "{}" ? "" : sysnotif_text_input}
              :onaccept sysnotif_commandia
+             :hexpand true
              :class "sysnotif_input")
       (button :onclick sysnotif_commandia
               :halign "end"
-              :hexpand true
               :class "sysnotif_iconfirm"
         ""))
     (box :orientation "h"

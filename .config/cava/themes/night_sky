@@ -1,0 +1,12 @@
+# eww night_sky theme: violet -> pink -> salmon -> orange, bottom to top
+# background left unset so the transparent terminal shows through
+[color]
+gradient = 1
+gradient_color_1 = '#A358D1'
+gradient_color_2 = '#B868DD'
+gradient_color_3 = '#D17CE9'
+gradient_color_4 = '#E99AFF'
+gradient_color_5 = '#E98FD4'
+gradient_color_6 = '#E684A6'
+gradient_color_7 = '#E07D68'
+gradient_color_8 = '#FFB07C'

@@ -25,7 +25,7 @@ dbus-monitor "interface='org.freedesktop.Notifications',member='Notify'" | while
                    '. += [{"id": $id, "app": $app, "title": $title, "body": $body}]')
         
         eww update notifications_json="$NEW_ARRAY"
-        eww open notification_popup
+        eww open --no-daemonize notification_popup
 
         (
             sleep 5

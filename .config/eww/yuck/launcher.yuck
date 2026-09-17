@@ -4,21 +4,23 @@
 
 (defwindow launcher
   :monitor 0
-  :geometry (geometry :x "0px" :y "0px" :width "480px" :height "500px" :anchor "center")
+  :geometry (geometry :x "0px" :y "0px" :width "500px" :height "500px" :anchor "center")
   :stacking "fg"
   :focusable true
-  (box :class "window launcher"
+  (box :class "window"
        :orientation "v"
        :spacing 10
        :space-evenly false
-    (box :orientation "h"
-         :spacing 20
-         :space-evenly false
-      (label :text ">" 
-             :class "launcher_searchicon")
-      (input :value launcher_dinput
-             :hexpand true
-             :onchange "eww update launcher_query='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'"))
+     (box :orientation "h"
+          :spacing 5
+          :space-evenly false
+       (box :space-evenly false
+            :spacing 20
+            :hexpand true
+         (label :text ">"
+                :class "launcher_searchicon")
+         (input :hexpand true
+                :onchange "eww update launcher_query='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'")))
     (scroll :vscroll true
             :hscroll false
             :vexpand true
@@ -26,7 +28,7 @@
            :spacing 4
            :space-evenly false
         (for app in launcher_list
-          (button :class "launcher_app"
+          (button :class "focusable launcher_app"
                   :tooltip {app.exec}
                   :visible {matches(app.name, "(?i)${launcher_query}")}
                   :onclick `~/.config/eww/scripts/launcher.sh launch ${app.id} &`

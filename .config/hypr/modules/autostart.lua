@@ -10,15 +10,15 @@
    hl.exec_cmd("wl-paste --watch cliphist store")
    hl.exec_cmd("hypridle")
 
-   -- Visual tasks
-   hl.exec_cmd("mako")
-   hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh") 
-   hl.exec_cmd("eww open bar")
-   hl.exec_cmd("hyprpaper")
-   hl.exec_cmd("sleep 1 && eww open dock")
+    -- Visual tasks
+    hl.exec_cmd("mako")
+    hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
+    hl.exec_cmd("eww daemon")
+    hl.exec_cmd("eww open-many bar dock --no-daemonize")
+    hl.exec_cmd("hyprpaper")
 
     -- Tasks that go to the tray
-    hl.exec_cmd("udiskie --tray") 
+    hl.exec_cmd("udiskie --tray")
     hl.exec_cmd("kdeconnectd")
 end)
 

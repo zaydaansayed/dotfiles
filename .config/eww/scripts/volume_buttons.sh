@@ -8,7 +8,7 @@ if eww active-windows | grep -q "volume"; then
         kill "$OLD_PID" 2>/dev/null
     fi
 else 
-    eww open volume 2>/dev/null
+    eww open --no-daemonize volume 2>/dev/null
 fi
 
 (

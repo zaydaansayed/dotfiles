@@ -1,0 +1,23 @@
+.clipboard_item {
+  padding: 8px;
+  font-size: 15px;
+}
+
+.clipboard_image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  min-width: 160px;
+  min-height: 90px;
+}
+
+.clipboard_text {
+  font-size: 15px;
+}
+
+.clipboard_delete {
+  padding: 0px 10px 0px 8px;
+}
+
+.clipboard_wipe {
+  padding: 0px 12px 0px 8px
+}

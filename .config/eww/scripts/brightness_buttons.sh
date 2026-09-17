@@ -9,7 +9,7 @@ if eww active-windows | grep -q "brightness"; then
     fi
 else
     
-    eww open brightness 2>/dev/null
+    eww open --no-daemonize brightness 2>/dev/null
 fi
 
 (

@@ -8,7 +8,7 @@ if eww active-windows | grep -q "mic_status"; then
         kill "$OLD_PID" 2>/dev/null
     fi
 else 
-    eww open mic_status 2>/dev/null
+    eww open --no-daemonize mic_status 2>/dev/null
 fi
 
 (

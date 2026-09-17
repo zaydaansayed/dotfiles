@@ -11,7 +11,7 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
+            active_border   = { colors = {"rgb(E99AFF)", "rgb(549D9D)"}, angle = 0 },
             inactive_border = "rgba(595959aa)",
         },
 
@@ -25,7 +25,7 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 10,
+        rounding       = 9,
         rounding_power = 2,
 
         -- Change transparency of focused and unfocused windows
@@ -62,7 +62,6 @@ hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1, 1} 
 -- Default springs
 hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
 
-hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
 hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
 hl.animation({ leaf = "windows",       enabled = true,  speed = 4.79, spring = "easy" })
 hl.animation({ leaf = "windowsIn",     enabled = true,  speed = 4.1,  spring = "easy",         style = "popin 87%" })

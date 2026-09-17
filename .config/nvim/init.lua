@@ -37,25 +37,8 @@ cmp.setup({
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = true
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     pcall(vim.treesitter.start)
-  end,
-})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(event)
-    local opts = { buffer = event.buf }
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
   end,
 })
 
@@ -90,3 +73,12 @@ vim.opt.clipboard = "unnamedplus"
 
 vim.cmd("cnoreabbrev W w")
 vim.o.shell = "fish"
+
+vim.opt.number = true
+vim.opt.cursorline = true
+vim.opt.signcolumn = "yes"
+vim.opt.showmode = false -- lualine shows the mode instead
+
+-- Wallpaper theme (matches fish prompt + fastfetch + kitty)
+require("config.theme").setup()
+

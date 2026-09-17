@@ -1,0 +1,44 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "chafa",
+    "source": "/home/zaydaansayed/Downloads/fast_fetch_img.png"
+  },
+  "display": {
+    "separator": ": ",
+    "color": {
+      "keys": "#A358D1",
+      "title": "#549D9D",
+      "separator": "#777777",
+      "output": "#FFFFFF"
+    },
+    "percent": {
+      "type": 9,
+      "color": {
+        "green": "#549D9D",
+        "yellow": "#FFB07C",
+        "red": "#C26B59"
+      }
+    }
+  },
+  "modules": [
+    "title",
+    "separator",
+    "os",
+    "host",
+    "kernel",
+    "uptime",
+    "packages",
+    "shell",
+    "terminal",
+    "de",
+    "wm",
+    "theme",
+    "icons",
+    "font",
+    "cursor",
+    "battery",
+    "break",
+    "colors"
+  ]
+}

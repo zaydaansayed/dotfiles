@@ -37,14 +37,14 @@ hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("kitty"))
 hl.bind(mainMod .. " + S",      hl.dsp.window.close())
 hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + F",      hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd("eww open --toggle --no-daemonize launcher && eww update launcher_query='' && eww update launcher_dinput=''"))
--- hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd("rofi -show drun"))
+hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd("eww open --no-daemonize --toggle launcher; eww update launcher_query='' 2>/dev/null; eww update launcher_dinput='' 2>/dev/null"))
+hl.bind(mainMod .. " + SPACE",  hl.dsp.submap("eww_close_launcher"))
 hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("rofi -modi clipboard:/home/zaydaansayed/.config/rofi/clipboard.sh -show clipboard -show-icons"))
-hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("bemoji"))
+hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize clipboard"))
+hl.bind(mainMod .. " + V",      hl.dsp.submap("eww_close_clipboard"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open settings"))
+hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize settings"))
 
 -- Window control
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -63,9 +63,6 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + mouse:272",  hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273",  hl.dsp.window.resize(), { mouse = true })
 
--- Escape key
-hl.bind("Escape", hl.dsp.exec_cmd("/home/zaydaansayed/dotfiles/.config/eww/scripts/window_close.sh"), { locked = true, repeating = true })
-
 -- Function Buttons
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 10%+ && ~/.config/eww/scripts/volume_buttons.sh"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%- && ~/.config/eww/scripts/volume_buttons.sh"), { locked = true, repeating = true })
@@ -73,7 +70,7 @@ hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ to
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && ~/.config/eww/scripts/mic_mute_btn.sh"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -n10 set 10%+ && ~/.config/eww/scripts/brightness_buttons.sh"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -n10 set 10%- && ~/.config/eww/scripts/brightness_buttons.sh"), { locked = true, repeating = true })
-hl.bind("Print", hl.dsp.exec_cmd("eww open --toggle screenprint"), { locked = true, repeating = true })
+hl.bind("Print", hl.dsp.exec_cmd("eww open --no-daemonize --toggle screenprint"), { locked = true, repeating = true })
 hl.bind("XF86Favorites", hl.dsp.exec_cmd("wtype zaydaansayed@icloud.com"), { locked = true, repeating = true })
 
 -- Music buttons
@@ -81,6 +78,20 @@ hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+
+hl.define_submap("eww_close_launcher", function()
+
+    hl.bind("escape", hl.dsp.exec_cmd("eww close launcher"))
+    hl.bind("escape", hl.dsp.submap("reset"))
+
+end)
+
+hl.define_submap("eww_close_clipboard", function()
+
+    hl.bind("escape", hl.dsp.exec_cmd("eww close clipboard && eww update clipboard_query=''"))
+    hl.bind("escape", hl.dsp.submap("reset"))
+
+end)
 
 -------------------------------------------------------------------------------- 
 ------------------------ MADE BY ZAYDAAN SAYED 2026 ----------------------------

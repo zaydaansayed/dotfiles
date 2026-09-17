@@ -13,16 +13,16 @@
        :style "background-color: ${player_bg}; color: ${player_text};"
     (box :orientation "v"
          :space-evenly false
-         :hexpand false
-         :spacing 10
+         :spacing 5
+         :valign "center"
       (album_art)
       (music_buttons)
       (box :orientation "v"
         (label :text {player_data.artist}
-               :limit-width 20
+               :limit-width 0
                :visible {strlength(player_data.artist) > 0})
       (label :text {player_data.title}
-             :limit-width 20)))
+             :limit-width 0)))
     (lyrics)))
 
   (defwidget lyrics []
@@ -31,8 +31,7 @@
          :valign "center"
          :halign "center"
          :hexpand true
-         :visible {strlength(lyrics.current) > 0 || strlength(lyrics.future) > 0 || strlength(lyrics.past) > 0}
-          :class "lyrics"
+         :class "lyrics"
       (label :text {lyrics.past}
              :show-truncated false
              :class "lyrics_unfocused"

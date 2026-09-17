@@ -15,12 +15,12 @@
            :orientation "h"
            :space-evenly false
            :spacing "10"
-        (button :onclick {main_toggle ? "eww close main_menu && eww update main_toggle=false" : "eww update main_toggle=true && eww open main_menu"}
+        (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh main_menu main_toggle"
                 :class {main_toggle ? "main_menu_button on" : "main_menu_button"}
                 :tooltip "Main Menu"
-          "")
+          "")
         (apps)
-        (button :onclick {tray_toggle ? "eww close systemtray && eww update tray_toggle=false" : "eww open systemtray && eww update tray_toggle=true"}
+        (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh systemtray tray_toggle"
                 :class "tray_button"
                 :valign "center"
                 :tooltip "System tray"
@@ -99,22 +99,22 @@
   :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
   :stacking "fg"
   (box :class "window"
-    (eventbox :onhoverlost "eww close app_multiple_instances"
+     (eventbox :onhoverlost "eww close app_multiple_instances || true"
       (box :orientation "h"
            :space-evenly false
         (for app in {pinned_apps.apps}
           (box :visible {app.name == selected_app}
-            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })' && eww close app_multiple_instances`
+            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })'; eww close app_multiple_instances || true`
                     :class {app.focused ? "dock_button on" : "dock_button"}
                     :tooltip {app.title}
-              (image :icon selected_app   
+              (image :icon selected_app
                      :icon-size "dialog"))))))))
 
 (defwindow systemtray
   :monitor 0
   :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
-  (eventbox :onhoverlost "eww close systemtray && eww update tray_toggle=false"
+  (eventbox :onhoverlost "eww close systemtray || true; eww update tray_toggle=false"
     (systray :spacing 4
              :prepend-new true
              :class "window")))

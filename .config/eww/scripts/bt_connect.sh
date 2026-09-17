@@ -16,7 +16,7 @@ connect_mode() {
   eww update "sysnotif_text_butr=Dismiss"
   eww update "sysnotif_commandbl=kill $(cat "$PIDF" 2>/dev/null) 2>/dev/null; eww close system_notification"
   eww update sysnotif_commandbr="eww close system_notification"
-  eww open system_notification
+  eww open --no-daemonize system_notification
 
   coproc BT { bluetoothctl 2>&1; }
   local bin=${BT[1]} bout=${BT[0]} buf="" chunk answered=false
@@ -61,7 +61,7 @@ connect_mode() {
     eww update "sysnotif_text_butr=Dismiss"
     eww update "sysnotif_commandbl=$CONF/bt_connect.sh \"$(esc "$mac")\" \"$(esc "$name")\" &"
     eww update sysnotif_commandbr="eww close system_notification"
-    eww open system_notification
+    eww open --no-daemonize system_notification
   }
 
   send "agent on"; sleep 1

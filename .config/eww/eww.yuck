@@ -7,6 +7,6 @@
 (include './themes/night_sky/eww/yuck/dock.yuck')
 (include './yuck/sysnotif.yuck')
 (include './themes/night_sky/eww/yuck/main_menu.yuck')
-(include './yuck/theme_picker.yuck')
 (include './yuck/launcher.yuck')
-(include './yuck/settings.yuck')
+(include './yuck/clipboard.yuck')
+(include './themes/night_sky/eww/yuck/settings.yuck')

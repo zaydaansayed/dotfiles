@@ -1,0 +1,65 @@
+;; =============================================================================
+;; clipboard.yuck
+;; =============================================================================
+
+(deflisten clipboard_list :initial "[]"
+  "~/.config/eww/scripts/clipboard.sh listen 50")
+
+(defwindow clipboard
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "350px" :height "500px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "window"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false 
+    (box :orientation "h"
+         :spacing 5
+         :space-evenly false
+      (box :space-evenly false
+           :spacing 20
+           :hexpand true
+        (label :text ">"
+               :class "launcher_searchicon")
+        (input :hexpand true
+               :onchange "eww update clipboard_query='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'"))
+      (button :onclick "~/.config/eww/scripts/clipboard.sh wipe &"
+              :class "clipboard_wipe"
+              :tooltip "Clear all history"
+        ""))
+    (scroll :vscroll true
+            :hscroll false
+            :vexpand true
+      (box :orientation "v"
+           :spacing 6
+           :space-evenly false
+        (for item in clipboard_list
+          (box :orientation "h"
+               :spacing 5
+               :space-evenly false
+               :visible {matches("${item.preview} ${item.type}", "(?i)${clipboard_query}")}
+            (button :class "focusable clipboard_item"
+                    :hexpand true
+                    :tooltip "Click to copy"
+                    :onclick `~/.config/eww/scripts/clipboard.sh copy ${item.id} &`
+              (box :orientation "h"
+                   :spacing 10
+                   :space-evenly false 
+                (box :style "background-image: url(\"${item.image}\")"
+                     :halign "center"
+                     :hexpand true
+                     :visible {item.type == "image"}
+                     :class "clipboard_image")
+                  (label :text {item.preview} 
+                         :limit-width 40
+                         :visible {item.type == "text"}
+                         :class "clipboard_text")))
+            (button :onclick `~/.config/eww/scripts/clipboard.sh delete ${item.id} &`
+                    :class "clipboard_delete"
+                    :tooltip "Delete entry"
+              "")))))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

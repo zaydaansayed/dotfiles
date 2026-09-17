@@ -4,7 +4,7 @@
 (deflisten batinfo :initial "󰁹 100%" "~/.config/eww/scripts/batinfo.sh")
 (deflisten netinfo :initial '{"icon":"󰤭","netname":"offline","wifi_on":false,"net_on":false,"ethernet":false,"strength":0,"active":"","networks":[]}' "~/.config/eww/scripts/netinfo.sh")
 (deflisten btinfo :initial '{"icon":"󰂲","devcname":"","bt_on":false,"scanning":false,"devices":[]}' "~/.config/eww/scripts/btinfo.sh")
-(deflisten audio_state :initial '{"sink_vol":50,"source_vol":50,"sink_mute":false,"source_mute":false,"sinks":[],"sources":[]}' "~/.config/eww/scripts/audio_state.sh")
+(deflisten audio_state :initial '{"sink_vol":50,"source_vol":50,"sink_mute":false,"source_mute":false,"sinks":[],"sources":[],"cards":[]}' "~/.config/eww/scripts/audio_state.sh")
 (deflisten active_workspace :initial "1" "~/.config/eww/scripts/workspaces.sh")
 (deflisten player_data :initial '{"text":"","artist":"","title":"","icon":"","shuffle_icon":"","repeat_icon":"","image":"none","visible":"false"}' "~/.config/eww/scripts/player_data.sh")
 (deflisten notif_visibility :initial "false" "~/.config/eww/scripts/notif_visibility.sh")
@@ -25,9 +25,8 @@
 (defpoll current_theme :interval "24h" "cat ~/.config/eww/themes/current_theme.txt")
 (defpoll weather_current :interval "1h" "weather-Cli get -r")
 (defpoll weather_future :interval "1h" "~/.config/eww/scripts/weather_future.sh")
-(defpoll launcher_list :initial "[]" :interval "30s" "~/.config/eww/scripts/launcher.sh")
-(deflisten hypr_state :initial '{"gaps_in":5,"gaps_out":7,"border_size":2,"rounding":10,"active_op":100,"inactive_op":100,"blur":true,"shadow":true,"anims":true,"tearing":false,"sens":0,"nat_scroll":true,"tap_click":true,"monitor":"eDP-1","scale":1.33,"cursor_size":24,"gtk_theme":"Adwaita-dark","hide_logo":true,"autostart":[]}' "~/.config/eww/scripts/hypr_state.sh")
-(defpoll eww_theme :interval "5s" :initial '{"bg_alpha":50,"accent":"#E99AFF"}' "~/.config/eww/scripts/eww_theme_state.sh")
+(defpoll launcher_list :initial "[]" :interval "24h" "~/.config/eww/scripts/launcher.sh")
+(deflisten dns :initial '{"con":"","servers":[],"auto":true,"preset":"auto"}' "~/.config/eww/scripts/dns.sh")
 
 ;; =============================================================================
 ;; VARIABLES
@@ -58,13 +57,13 @@
 (defvar ai_menu_toggle false)
 (defvar ai_menu_chats "[]")
 (defvar launcher_query "")
-(defvar launcher_dinput "")
+(defvar clipboard_query "")
 (defvar player_bg "rgba(9, 4, 9, 0.5)")
 (defvar player_text "#ffffff")
 (defvar connections_vis true)
 (defvar audio_vis false)
-(defvar system_vis false)
 (defvar ui_vis false)
+(defvar as_vis false)
 
 ; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
 

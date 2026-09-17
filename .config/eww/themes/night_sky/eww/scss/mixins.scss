@@ -61,6 +61,10 @@
 
   &.settings_card {
     padding: 10px;
+
+    &.audio {
+      padding-right: 20px;
+    }
   }
 
   &.settings_list {
@@ -104,17 +108,9 @@
   border-radius: 7px;
 
   &.notification_popup:hover {
+    background-color: rgba(255, 255, 255, 0.2);
     border: #ffffff 1px solid; 
     transition: 0.3s ease-in-out;
-  }
-
-  &.launcher button:focus {
-    background-color: c.$on;
-    color: #000000;
-  }
-
-  &.launcher button:focus:hover {
-    background-color: c.$on_hover;
   }
 }
 
@@ -147,32 +143,29 @@
   }
 
   &.default_dark {
-    background-image: url('./themes/default_dark/images/wallpaper.png');
+    background-color: #1a1a1a;
     min-width: 256px;
     min-height: 144px;
+    margin-bottom: 5px;
   }
 
   &.night_sky {
     background-image: url('./themes/night_sky/images/wallpaper.png');
     min-width: 256px;
     min-height: 144px;
-
+    margin-bottom: 5px;
   }
 }
 
-.transparent_btn {
-  background: unset;
-
-  &.music {
-    color: c.$accent_3;
-    padding: 0px 7px;
-
-    &.on {
-      color: #000000;
-    }
-  }
+.small_btn {
+  padding: 0px 2px;
 }
 
-.transparent_btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.focusable:focus {
+  background-color: c.$on;
+  color: #000000;
+}
+
+.focusable:focus:hover {
+  background-color: c.$on_hover;
 }

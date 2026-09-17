@@ -1,0 +1,497 @@
+;; =============================================================================
+;; settings.yuck
+;; =============================================================================
+
+(defwindow settings
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "920px" :height "600px" :anchor "center")
+  :stacking "fg"
+  (box :orientation "h"
+       :space-evenly false
+       :class "window"
+       :spacing 10
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 5
+         :class "settings_sidebar"
+      (label :text "Settings"
+             :halign "start"
+             :class "settings_title")
+      (button :class {connections_vis ? "settings_nav on" : "settings_nav"}
+              :onclick "eww update connections_vis=true audio_vis=false ui_vis=false as_vis=false"
+        "󱘖 Connections")
+      (button :class {audio_vis ? "settings_nav on" : "settings_nav"}
+              :onclick "eww update connections_vis=false audio_vis=true ui_vis=false as_vis=false"
+        " Audio")
+      (button :class {ui_vis ? "settings_nav on" : "settings_nav"}
+              :onclick "eww update connections_vis=false audio_vis=false ui_vis=true as_vis=false"
+        "󱂬 UI")
+      (button :class {as_vis ? "settings_nav on" : "settings_nav"}
+              :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=true"
+        (label :text "  About and support"
+               :limit-width 0))
+      (button :onclick "eww close settings"
+              :class "settings_nav"
+              :valign "end"
+              :vexpand true
+        " Close"))
+    (box :hexpand true
+         :vexpand true
+      (connections)
+      (audio)
+      (ui)
+      (about_support))))
+
+(defwidget connections []
+  (box :orientation "v"
+       :space-evenly false
+       :vexpand true
+       :spacing 10
+       :visible connections_vis
+    (label :text "Connections"
+           :halign "start"
+           :class "settings_heading")
+    (scroll :vscroll true 
+            :hscroll false 
+            :vexpand true
+            :height 510
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 13
+            (label :text {netinfo.wifi_on ? "󰖩" : "󰖪"}
+                   :class "settings_big_icon")
+            (label :text "Wi-Fi"
+                   :halign "start"
+                   :vexpand true
+                   :valign "center")
+            (box :orientation "h"
+                 :space-evenly false
+                 :halign "end"
+                 :spacing 5
+                 :hexpand true
+            (button :onclick "nmcli radio wifi ${netinfo.wifi_on ? "off" : "on"}"
+                    :valign "center"
+                    :class "long_btn"
+              {netinfo.wifi_on ? "Disable" : "Enable"})
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/wifi_connect.sh --rescan"
+                    :valign "center"
+                    :class "long_btn reload"
+                    :tooltip "Rescan networks"
+              "󰑓")))
+          (box :orientation "v"
+               :space-evenly false
+               :height 175
+               :valign "center"
+               :visible {netinfo.wifi_on && arraylength(netinfo.networks) == 0}
+            (label :text "Scanning for networks  ${spinner}"
+                   :halign "center"
+                   :class "placeholder_txt"))
+          (scroll :vscroll true
+                  :hscroll false
+                  :height 175
+                  :visible {netinfo.wifi_on && arraylength(netinfo.networks) > 0}
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+                 :spacing 3
+              (for net in {netinfo.networks}
+                (box :orientation "h"
+                     :space-evenly false
+                     :hexpand true
+                     :vexpand true
+                     :class "l2 settings_list"
+                     :spacing 20
+                  (label :text {net.signal > 75 ? "󰤨" : net.signal > 50 ? "󰤥" : net.signal > 25 ? "󰤢" : "󰤟"}
+                         :valign "center"
+                         :class "settings_big_icon")
+                  (box :orientation "v"
+                       :space-evenly false
+                       :hexpand true
+                    (label :text {net.ssid}
+                           :halign "start"
+                           :limit-width 30)
+                    (label :text {net.active ? "connected" : net.security == "" ? "open" : "secured"}
+                           :halign "start"
+                           :class "placeholder_txt"))
+                  (button :onclick "$HOME/dotfiles/.config/eww/scripts/wifi_connect.sh --prompt \"${net.ssid}\" &"
+                          :visible {!net.active && net.security != ""}
+                          :valign "center"
+                          :class "long_btn"
+                    "Connect")
+                  (button :onclick "$HOME/dotfiles/.config/eww/scripts/wifi_connect.sh \"${net.ssid}\" &"
+                          :visible {!net.active && net.security == ""}
+                          :valign "center"
+                          :class "long_btn"
+                    "Connect")
+                  (button :onclick "$HOME/dotfiles/.config/eww/scripts/wifi_connect.sh --disconnect \"${net.ssid}\" &"
+                          :visible {net.active}
+                          :valign "center"
+                          :class "long_btn on"
+                    "Disconnect"))))))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text {btinfo.bt_on ? "󰂱" : "󰂲"}
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "Bluetooth"
+                     :halign "start")
+              (label :text {btinfo.bt_on ? "${arraylength(btinfo.devices)} device(s) nearby" : "Off"}
+                     :halign "start"
+                     :class "placeholder_txt"))
+            (box :orientation "h"
+                 :space-evenly false
+                 :spacing 5
+              (button :onclick "rfkill unblock all && bluetoothctl power ${btinfo.bt_on ? "off" : "on"}"
+                      :valign "center"
+                      :class "long_btn"
+                {btinfo.bt_on ? "Disable" : "Enable"}) 
+              (button :onclick "$HOME/dotfiles/.config/eww/scripts/bt_scan.sh toggle &"
+                      :visible {btinfo.bt_on}
+                      :valign "center"
+                      :tooltip "Toggle 25s scan"
+                      :class "long_btn reload"
+                {btinfo.scanning ? "Scanning  ${spinner}" : "󰑓"})))
+          (box :orientation "v"
+               :space-evenly false
+               :vexpand true
+               :visible {btinfo.bt_on && arraylength(btinfo.devices) == 0}
+            (label :text "Scanning for devices ${spinner}"
+                   :halign "center"
+                   :class "placeholder_txt"))
+          (scroll :vscroll true
+                  :hscroll false
+                  :height 135 
+                  :visible {btinfo.bt_on && arraylength(btinfo.devices) > 0}
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+                 :spacing 3
+              (for dev in {btinfo.devices}
+              (box :orientation "h"
+                   :space-evenly false
+                   :vexpand true
+                   :spacing 10
+                   :class "l2 settings_list"
+                (label :text {dev.connected ? "󰂱" : ""}
+                       :valign "center"
+                       :class "settings_big_icon")
+                (box :orientation "v"
+                     :space-evenly false
+                     :valign "center"
+                     :hexpand true
+                  (label :text {dev.name}
+                         :halign "start"
+                         :limit-width 30)
+                  (label :text {dev.connected ? "connected" : dev.nearby && dev.paired ? "paired · nearby" : dev.nearby ? "nearby — Connect to pair" : dev.paired ? "paired" : dev.mac}
+                         :halign "start"
+                         :class "placeholder_txt"))
+                (box :orientation "h"
+                     :space-evenly false
+                     :spacing 5
+                  (button :onclick "$HOME/dotfiles/.config/eww/scripts/bt_connect.sh ${dev.connected ? "--disconnect" : ""} \"${dev.mac}\" \"${dev.name}\" &"
+                          :valign "center"
+                          :class "long_btn"
+                    {dev.connected ? "Disconnect" : "Connect"})
+                  (button :onclick "bluetoothctl remove \"${dev.mac}\" &"
+                          :visible {dev.paired}
+                          :valign "center"
+                          :class "long_btn"
+                          :tooltip "Forget device"
+                    "󰆴")))))))
+        (box :orientation "h"
+             :space-evenly false
+             :spacing 10
+             :class "l2 settings_card"
+          (label :text {airplane_mode}
+                 :class "settings_big_icon")
+          (box :orientation "v"
+               :space-evenly false
+               :hexpand true
+            (label :text "Airplane mode"
+                   :halign "start")
+            (label :text {airplane_mode == "󰀝" ? "On" : "Off"}
+                   :halign "start"
+                   :class "placeholder_txt"))
+          (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
+                  :valign "center"
+                  :class "long_btn"
+            {airplane_mode == "󰀝" ? "Disable" : "Enable"}))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text "󰇖"
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "DNS — ${dns.con}"
+                     :halign "start")
+              (label :text {dns.auto ? "Automatic" : "Manual"}
+                     :halign "start"
+                     :class "placeholder_txt"))
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/dns_set.sh auto &"
+                    :valign "center"
+                    :class {dns.auto ? "long_btn on" : "long_btn"}
+              "Auto"))
+          (label :text "Servers"
+                 :halign "start"
+                 :class "placeholder_txt")
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 3
+            (for srv in {dns.servers}
+              (label :text {srv}
+                     :halign "start")))
+          (label :text "Changing DNS reconnects briefly"
+                 :halign "start"
+                 :class "placeholder_txt")
+          (box :orientation "h" :space-evenly false :spacing 5
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/dns_set.sh preset cloudflare &"
+                    :hexpand true
+                    :class {dns.preset == "cloudflare" ? "long_btn on" : "long_btn"}
+              "1.1.1.1")
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/dns_set.sh preset google &"
+                    :hexpand true
+                    :class {dns.preset == "google" ? "long_btn on" : "long_btn"}
+              "8.8.8.8")
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/dns_set.sh preset quad9 &"
+                    :hexpand true
+                    :class {dns.preset == "quad9" ? "long_btn on" : "long_btn"}
+              "9.9.9.9")
+            (button :onclick "$HOME/dotfiles/.config/eww/scripts/dns_set.sh preset adguard &"
+                    :hexpand true
+                    :class {dns.preset == "adguard" ? "long_btn on" : "long_btn"}
+              "AdGuard"))
+          (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input='' && eww update sysnotif_text_main='Custom DNS (space-separated)' && eww update sysnotif_commandia='$HOME/dotfiles/.config/eww/scripts/dns_set.sh custom \"{}\" & eww close system_notification' && eww open --no-daemonize system_notification"
+                  :class "long_btn"
+            "Custom…"))))))
+
+(defwidget audio []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+       :visible audio_vis
+    (label :text "Audio"
+           :halign "start"
+           :class "settings_heading")
+    (scroll :vscroll true 
+            :hscroll false 
+            :vexpand true 
+            :height 450
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card audio"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text {audio_state.sink_mute ? "󰖁" : "󰕾"}
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+                 :spacing 10
+              (label :text "Output — ${audio_state.sink_vol}%"
+                     :halign "start")
+              (scale :value {audio_state.sink_vol}
+                     :min 0
+                     :max 100
+                     :hexpand true
+                     :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")))
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 5
+            (button :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+                    :hexpand true
+                    :class "long_btn"
+              {audio_state.sink_mute ? "󰕾 Unmute" : "󰖁 Mute"}))
+          (label :text "Output device"
+                 :halign "start"
+                 :class "placeholder_txt")
+          (label :text "Loading devices…  ${spinner}"
+                 :halign "start"
+                 :class "placeholder_txt"
+                 :visible {arraylength(audio_state.sinks) == 0})
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 3
+            (for sink in {audio_state.sinks}
+              (button :onclick "pactl set-default-sink \"${sink.name}\""
+                      :class {sink.def ? "long_btn on" : "long_btn"}
+                "${sink.def ? "● " : "○ "}${sink.desc}"))))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card audio"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text {audio_state.source_mute ? "󰍭" : ""}
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :spacing 10
+                 :hexpand true
+              (label :text "Input — ${audio_state.source_vol}%"
+                     :halign "start")
+              (scale :value {audio_state.source_vol}
+                     :min 0
+                     :max 100
+                     :hexpand true
+                     :onchange "pactl set-source-volume @DEFAULT_SOURCE@ {}%")))
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 5
+            (button :onclick "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+                    :hexpand true
+                    :class "long_btn"
+              {audio_state.source_mute ? " Unmute mic" : "󰍭 Mute mic"}))
+          (label :text "Input device"
+                 :halign "start"
+                 :class "placeholder_txt")
+          (label :text "Loading devices…  ${spinner}"
+                 :halign "start"
+                 :class "placeholder_txt"
+                 :visible {arraylength(audio_state.sources) == 0})
+           (box :orientation "v"
+               :space-evenly false
+               :spacing 3
+             (for src in {audio_state.sources}
+               (button :onclick "pactl set-default-source \"${src.name}\""
+                       :class {src.def ? "long_btn on" : "long_btn"}
+                 "${src.def ? "● " : "○ "}${src.desc}")))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (label :text "󰓃 Card profiles"
+                 :halign "start")
+          (label :text "Loading…  ${spinner}"
+                 :halign "start"
+                 :class "placeholder_txt"
+                 :visible {arraylength(audio_state.cards) == 0})
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 8
+            (for card in {audio_state.cards}
+              (box :orientation "v"
+                   :space-evenly false
+                   :spacing 3
+                (label :text "${card.desc} — ${card.active}"
+                       :halign "start"
+                       :limit-width 45
+                       :class "placeholder_txt")
+                (scroll :vscroll true
+                        :hscroll false
+                        :height 110
+                  (box :orientation "v"
+                       :space-evenly false
+                       :hexpand true
+                       :spacing 3
+                    (for prof in {card.profiles}
+                      (button :onclick "pactl set-card-profile \"${card.name}\" \"${prof}\""
+                              :class {card.active == prof ? "long_btn on" : "long_btn"}
+                        "${card.active == prof ? "● " : "○ "}${prof}")))))))))))))
+
+(defwidget ui []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+       :visible {ui_vis}
+    (label :text "UI"
+           :halign "start"
+           :class "settings_heading")
+    (scroll :hscroll false
+            :vscroll true 
+            :vexpand true
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+        (box :orientation "v"
+           :space-evenly false
+           :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text ""
+                   :class "settings_big_icon")
+            (label :text "Themes"))
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 5 
+            (button :onclick "$HOME/.config/eww/themes/default_dark/application.sh"
+                    :class {current_theme == "default_dark" ? "theme_btn on" : "theme_btn"}
+              (box :orientation "v"
+                   :space-evenly false 
+                (box :class "image default_dark")
+                (label :text "Default dark"
+                       :halign "center")))
+            (button :onclick "$HOME/.config/eww/themes/night_sky/application.sh"
+                    :class {current_theme == "night_sky" ? "theme_btn on" : "theme_btn"}
+              (box :orientation "v"
+                   :space-evenly false 
+                (box :class "image night_sky")
+                (label :text "Night sky"
+                       :halign "center")))))
+        (box :orientation "v"
+             :space-evenly false
+             :class "l2 settings_card"
+             :spacing 5
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text ""
+                   :class "settings_big_icon")
+            (label :text "Advanced configs"))
+          (button :onclick "kitty -d $HOME/.config/hypr/ -e nvim & eww close settings"
+                  :class "long_btn"
+            " Hyprland config")
+          (button :onclick "kitty -d $HOME/.config/eww/ -e nvim & eww close settings"
+                  :class "long_btn"
+            "󱍕 Eww config"))))))
+
+(defwidget about_support []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+       :visible {as_vis}
+    (label :text "About and Support"
+           :halign "start"
+           :class "settings_heading")
+    (box :orientation "v"
+         :space-evenly false
+         :class "l2 settings_card"
+         :spacing 5
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text ""
+                   :class "settings_big_icon")
+            (label :text "Info"))
+          (button :onclick "kitty --class fastfetch-term --hold -e fastfetch &"
+                  :class "long_btn"
+            "󰌢 System-info")
+          (button :onclick "firefox https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md"
+                  :class "long_btn"
+            " Support"))))

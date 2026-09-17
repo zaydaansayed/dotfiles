@@ -12,15 +12,18 @@
        :space-evenly false
     (box :orientation "v"
          :space-evenly false
+         :valign "cente"
          :hexpand false
-         :spacing 10
+         :spacing 5
       (album_art)
       (music_buttons)
       (box :orientation "v"
         (label :text {player_data.artist}
+               :limit-width 0
                :visible {strlength(player_data.artist) > 0}
                :class "music_text")
-      (label :text {player_data.title})))
+      (label :text {player_data.title}
+             :limit-width 0)))
     (lyrics)))
 
   (defwidget lyrics []

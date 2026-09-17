@@ -25,6 +25,7 @@
 
 .workspace {
   background-size: contain;
+  border: unset;
   background-repeat: no-repeat;
   background-color: rgba($color: #000000, $alpha: 0);
   padding: 3px 3px 3px 5px;
@@ -41,6 +42,21 @@
 .workspace:hover {
   opacity: 0.75;
   background-color: unset;
+}
+
+.music_player_btn {
+  background: unset;
+  border: unset;
+  color: c.$accent_3;
+  padding: 0px 7px;
+
+  &.on {
+    color: #000000;
+  }
+}
+
+.music_player_btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .play-pause {

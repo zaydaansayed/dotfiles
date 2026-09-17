@@ -1,0 +1,3 @@
+ollama
+pypdf
+duckduckgo-search

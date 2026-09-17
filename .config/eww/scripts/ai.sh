@@ -1,6 +1,6 @@
 #!/bin/bash
 
-eww open loading-popup
+eww open --no-daemonize loading-popup
 
 CHAT_DIR="$HOME/Documents/ai_chats"
 INDEX_FILE="$CHAT_DIR/index.json"

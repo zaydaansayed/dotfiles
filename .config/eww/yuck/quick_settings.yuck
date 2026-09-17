@@ -22,15 +22,15 @@
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-    (button :onclick "eww close quick_settings && eww update quick_toggle=false"
-            :class "quick_close"
+    (button :onclick "eww close quick_settings || true; eww update quick_toggle=false"
+            :class "small_btn"
             :tooltip "Close"
       "")
-    (button :onclick "eww open power_menu && eww close quick_settings && eww update quick_toggle=false"
+    (button :onclick "eww open --no-daemonize power_menu || true; eww close quick_settings || true; eww update quick_toggle=false"
             :class "quick_power"
             :tooltip "Open Power Menu"
       "")
-    (button :onclick "eww update quick_toggle=false && eww close quick_settings && $HOME/.config/rofi/settings/settings_menu.sh &"
+    (button :onclick "eww update quick_toggle=false; eww close quick_settings || true; $HOME/.config/rofi/settings/settings_menu.sh &"
             :tooltip "Open Settings"
             :class "quick_set_button"
       "")))
@@ -47,7 +47,7 @@
               :tooltip {netinfo.netname}
               {netinfo.icon})
       (button :class {netinfo.icon == "󰤭" ? "quick_extend net" : "quick_extend net on"}
-              :onclick "networkmanager_dmenu | eww close quick_settings | eww update quick_toggle=false"
+              :onclick "networkmanager_dmenu; eww close quick_settings || true; eww update quick_toggle=false"
               :tooltip {netinfo.netname}
               ">")
       (button :class {btinfo.icon == "󰂲" ? "quick_button bt" : "quick_button bt on"}
@@ -55,7 +55,7 @@
               :tooltip {btinfo.devcname}
               {btinfo.icon == "" ? "󰂯" : btinfo.icon})
       (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
-              :onclick "bzmenu -l rofi | eww close quick_settings | eww update quick_toggle=false"
+              :onclick "bzmenu -l rofi; eww close quick_settings || true; eww update quick_toggle=false"
               :tooltip {btinfo.devcname}
              ">")
       (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
@@ -122,7 +122,7 @@
                :onchange "brightnessctl set {}%"
                 :min 1)
         (label :text {briginfo.icon})))
-      (button :onclick "pwmenu --launcher rofi | eww close quick_settings | eww update quick_toggle=false"
+      (button :onclick "pwmenu --launcher rofi; eww close quick_settings || true; eww update quick_toggle=false"
                 :class "vol_settings"
                 :tooltip "Volume Settings"
                 :halign "end"

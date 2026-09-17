@@ -7,18 +7,15 @@
 }
 
 button {
-  padding: 0;
   background: c.$l2;
-  border: none;
   border-radius: 7px;
   min-width: 15px;
   color: #ffffff;
-  box-shadow: none;
-  text-shadow: none;
   transition: background-color 0.3s ease-in-out;
 
   &.on {
     background-color: c.$on;
+    box-shadow: 0 0 14px rgba(233, 154, 255, 0.3);
     color: #000000;
   }
 
@@ -60,7 +57,7 @@ scale {
     min-width: 18px;
     margin: -8px 0px;
     border-radius: 100px;
-    border: #0051ff 1px solid;
+    border: c.$on 1px solid;
     background-color: #ffffff;
   }
 }

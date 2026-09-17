@@ -17,11 +17,11 @@
     (box :orientation "h"
          :space-evenly false
          :spacing 3
-      (button :onclick { ai_menu_toggle ? "eww close ai_menu && eww update ai_menu_toggle=false" : "eww update ai_menu_chats=\"$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\" && eww open ai_menu && eww update ai_menu_toggle=true" }                       
+      (button :onclick { ai_menu_toggle ? "eww close ai_menu || true; eww update ai_menu_toggle=false" : "eww update ai_menu_chats=\"$(cat $HOME/Documents/ai_chats/index.json 2>/dev/null || echo '[]')\"; eww open --no-daemonize ai_menu || true; eww update ai_menu_toggle=true" }
               :class {ai_menu_toggle ? "ai_menu_button on" : "ai_menu_button"}
               :tooltip "Open Menu"
         "")
-    (button :onclick "${EWW_CONFIG_DIR}/scripts/ai_menu_close.sh && ${EWW_CONFIG_DIR}/scripts/aipopup_close.sh && eww update ai_toggle=false && killall ollama && eww close ai"
+    (button :onclick "${EWW_CONFIG_DIR}/scripts/ai_menu_close.sh; ${EWW_CONFIG_DIR}/scripts/aipopup_close.sh; eww update ai_toggle=false; pkill -x ollama || true; eww close ai || true"
             :class "ai_close"
             :tooltip "Close"
       ""))))
@@ -170,7 +170,7 @@
        :space-evenly false
        :class "window"
        :spacing 3
-    (button :onclick "eww update ai_chat_id='' && eww update ai_txt='[]' && eww update ai_menu_toggle=false && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id=''; eww update ai_txt='[]'; eww update ai_menu_toggle=false; eww close ai_menu || true"
             :class "ai_new_chat"
             :tooltip "Create New Chat"
             "+ New Chat")
@@ -185,21 +185,21 @@
   (box :orientation "h"
        :space-evenly false
        :spacing 3
-    (button :onclick "eww update ai_chat_id='${chat.id}' && eww update ai_txt=\"$(cat $HOME/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\" && eww update ai_menu_toggle=false && eww close ai_menu"
+    (button :onclick "eww update ai_chat_id='${chat.id}'; eww update ai_txt=\"$(cat $HOME/Documents/ai_chats/${chat.id}.json 2>/dev/null || echo '[]')\"; eww update ai_menu_toggle=false; eww close ai_menu || true"
             :tooltip {chat.title}
             :class {ai_chat_id == chat.id ? "ai_chat on" : "ai_chat"}
       (label :text {chat.title}
              :limit-width 20))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandia='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=${chat.title} && eww update sysnotif_text_main='Rename Chat' && eww update sysnotif_commandia='$HOME/dotfiles/.config/eww/scripts/ai_rename_chat.sh ${chat.id} \"{}\" & eww close system_notification' && eww open --no-daemonize system_notification"
             :tooltip "Rename Chat"
       "󰏫")
    (button :onclick "~/.config/eww/scripts/ai_delete_chat.sh ${chat.id} &"
           :tooltip "Delete Chat"
      "󰆴")))))
-    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandia='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open system_notification"
+    (button :onclick "eww update sysnotif_type='input' && eww update sysnotif_text_input=\"$(cat $HOME/Documents/ai_dynam_context.txt)\" && eww update sysnotif_text_main='Change AI Personality' && eww update sysnotif_commandia='echo '{}' > $HOME/Documents/ai_dynam_context.txt && eww close system_notification' && eww open --no-daemonize system_notification"
             :tooltip "Change AI Personality"
       "")
-    (button :onclick "eww update ai_menu_toggle=false && eww close ai_menu"
+    (button :onclick "eww update ai_menu_toggle=false; eww close ai_menu || true"
             :valign "end"
             :tooltip "Close"
       "")))

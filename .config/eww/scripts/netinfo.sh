@@ -1,4 +1,6 @@
 #!/bin/bash
+cleanup() { jobs -p | xargs -r kill 2>/dev/null; pkill -P $$ 2>/dev/null; exit 0; }
+trap cleanup EXIT TERM INT
 
 LAST_OUTPUT=""
 

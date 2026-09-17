@@ -35,11 +35,11 @@
                  :class "planeicon"
                  :tooltip "Airplane Mode on")
          (label  :text batinfo)
-         (button :onclick {quick_toggle ? "eww update quick_toggle=false && eww close quick_settings" : "eww update quick_toggle=true && eww open quick_settings"}
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "") 
-         (button :onclick {ai_toggle ? "${EWW_CONFIG_DIR}/scripts/aipopup_close.sh && eww update ai_toggle=false && killall ollama && eww close ai" : "eww update ai_toggle=true && eww open ai && ollama serve &"}
+          (button :onclick {ai_toggle ? "${EWW_CONFIG_DIR}/scripts/aipopup_close.sh; eww update ai_toggle=false; pkill -x ollama || true; eww close ai || true" : "eww update ai_toggle=true; eww open --no-daemonize ai || true; pgrep -x ollama >/dev/null || ollama serve &"}
                  :class {ai_toggle ? "ai_center on" : "ai_center"}
                  :tooltip "Open Isaac AI"
            "󰚩"))))
@@ -58,17 +58,17 @@
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace2.png');"
             :tooltip "Switch to workspace 2"
       "2")
-    (button :onclick "hyprctl dispatch workspace 3"
+    (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'`
             :class {active_workspace == "3" ? "workspace b ws_on" : "workspace b off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace3.png');"
             :tooltip "Switch to workspace 3"
       "3")
-    (button :onclick "hyprctl dispatch workspace 4"
+    (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'`
             :class {active_workspace == "4" ? "workspace b ws_on" : "workspace b off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace4.png');"
             :tooltip "Switch to workspace 4"
       "4")
-    (button :onclick "hyprctl dispatch workspace 5"
+    (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'`
             :class {active_workspace == "5" ? "workspace a ws_on" : "workspace a off"}
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace5.png');"
             :tooltip "Switch to workspace 5"
@@ -85,8 +85,8 @@
             :tooltip "Play/Pause"
             :class "play-pause"
       "${player_data.icon}")
-    (button :onclick {music_toggle ? "eww update music_toggle=false && eww close music_player_window" : "eww update music_toggle=true && eww open music_player_window"}
-            :class {music_toggle ? "transparent_btn music on" : "transparent_btn music"}
+    (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh music_player_window music_toggle"
+            :class {music_toggle ? "music_player_btn on" : "music_player_btn"}
       (label :text {player_data.text}
              :limit-width 100
              :tooltip {player_data.text}))))
@@ -99,19 +99,19 @@
   (box :orientation "h"
        :spacing 3
        :class "window_small"
-       (button :onclick "hyprshot -m output -o $HOME/Pictures/Screenshots | eww close screenprint" 
+        (button :onclick "hyprshot -m output -o $HOME/Pictures/Screenshots | eww close screenprint"
                :tooltip "Fullscreen"
                :class "quick_button" 
                "󰍹")
-       (button :onclick "hyprshot -m window -o $HOME/Pictures/Screenshots | eww close screenprint" 
+        (button :onclick "hyprshot -m window -o $HOME/Pictures/Screenshots | eww close screenprint"
                :class "quick_button" 
                :tooltip "Window"
                "󰖯")
-       (button :onclick "hyprshot -m region -o $HOME/Pictures/Screenshots | eww close screenprint" 
+        (button :onclick "hyprshot -m region -o $HOME/Pictures/Screenshots | eww close screenprint"
                :class "quick_button" 
                :tooltip "Region"
                "")
-       (button :onclick "eww close screenprint" 
+        (button :onclick "eww close screenprint"
                :class "quick_button"                
                :tooltip "Close"
                "")))
@@ -133,15 +133,15 @@
             :class "quick_button"
             :tooltip "Shut-down"
             "")
-    (button :onclick "systemctl hibernate && eww close power_menu"
+    (button :onclick "systemctl hibernate; eww close power_menu || true"
             :class "quick_button"
             :tooltip "Hibernate"
             "")
-    (button :onclick "systemctl suspend && eww close power_menu"
+    (button :onclick "systemctl suspend; eww close power_menu || true"
             :class "quick_button"
             :tooltip "Sleep"
             "")
-    (button :onclick "eww close power_menu"
+    (button :onclick "eww close power_menu || true"
             :class "quick_button"
             :tooltip "Close"
             "")))

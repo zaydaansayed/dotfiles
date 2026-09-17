@@ -2,7 +2,14 @@ return {
   "nvim-tree/nvim-web-devicons",
   "nvim-lua/plenary.nvim",
   "MunifTanjim/nui.nvim",
-  "rcarriga/nvim-notify",
+  {
+    "rcarriga/nvim-notify",
+    config = function()
+      require("notify").setup({
+        background_colour = "#151020",
+      })
+    end,
+  },
 
   {
     "nvim-tree/nvim-tree.lua",
@@ -102,17 +109,87 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    opts = {},
+    config = function()
+      local p = require("config.theme").palette
+      local wallpaper = {
+        normal = {
+          a = { bg = p.violet, fg = p.bg, gui = "bold" },
+          b = { bg = p.surface, fg = p.fg },
+          c = { bg = "NONE", fg = p.muted },
+        },
+        insert = {
+          a = { bg = p.teal, fg = p.bg, gui = "bold" },
+          b = { bg = p.surface, fg = p.fg },
+          c = { bg = "NONE", fg = p.muted },
+        },
+        visual = {
+          a = { bg = p.peach, fg = p.bg, gui = "bold" },
+          b = { bg = p.surface, fg = p.fg },
+          c = { bg = "NONE", fg = p.muted },
+        },
+        replace = {
+          a = { bg = p.brick, fg = p.bg, gui = "bold" },
+          b = { bg = p.surface, fg = p.fg },
+          c = { bg = "NONE", fg = p.muted },
+        },
+        command = {
+          a = { bg = p.pink, fg = p.bg, gui = "bold" },
+          b = { bg = p.surface, fg = p.fg },
+          c = { bg = "NONE", fg = p.muted },
+        },
+        inactive = {
+          a = { bg = p.surface, fg = p.muted },
+          b = { bg = p.surface, fg = p.muted },
+          c = { bg = "NONE", fg = p.muted },
+        },
+      }
+      require("lualine").setup({
+        options = {
+          theme = wallpaper,
+          section_separators = "",
+          component_separators = "|",
+        },
+      })
+    end,
   },
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    opts = {},
+    config = function()
+      local p = require("config.theme").palette
+      require("bufferline").setup({
+        options = {
+          separator_style = "thin",
+          show_buffer_close_icons = false,
+        },
+        highlights = {
+          fill = { bg = "NONE", fg = p.muted },
+          background = { bg = "NONE", fg = p.muted },
+          buffer_selected = { bg = "NONE", fg = p.fg, bold = true },
+          buffer_visible = { bg = "NONE", fg = p.fg },
+          separator = { bg = "NONE", fg = p.muted },
+          separator_selected = { bg = "NONE", fg = p.violet },
+          indicator_selected = { bg = "NONE", fg = p.violet },
+          tab_selected = { bg = "NONE", fg = p.peach, bold = true },
+          numbers_selected = { bg = "NONE", fg = p.peach, bold = true },
+          modified = { bg = "NONE", fg = p.orange },
+          modified_selected = { bg = "NONE", fg = p.orange },
+          error = { bg = "NONE", fg = p.brick },
+          error_selected = { bg = "NONE", fg = p.brick, bold = true },
+          warning = { bg = "NONE", fg = p.orange },
+          warning_selected = { bg = "NONE", fg = p.orange, bold = true },
+          hint = { bg = "NONE", fg = p.teal },
+        },
+      })
+    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = {},
+    opts = {
+      indent = { highlight = "IblIndent" },
+      scope = { highlight = "IblScope" },
+    },
   },
   {
     "folke/noice.nvim",
@@ -148,5 +225,9 @@ return {
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
+  },
+  {
+    "giusgad/pets.nvim",
+    dependencies = { "MunifTanjim/nui.nvim", "giusgad/hologram.nvim" },
   },
 }

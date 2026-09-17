@@ -10,7 +10,7 @@ prompt_mode() {
   eww update sysnotif_text_input=""
   eww update "sysnotif_text_main=Password for $e"
   eww update "sysnotif_commandia=$CONF/wifi_connect.sh \"$e\" \"{}\" &"
-  eww open system_notification
+  eww open --no-daemonize system_notification
 }
 
 connect_mode() {
@@ -31,7 +31,7 @@ connect_mode() {
     eww update "sysnotif_text_butr=Dismiss"
     eww update "sysnotif_commandbl=$CONF/wifi_connect.sh --prompt \"$(esc "$ssid")\" &"
     eww update sysnotif_commandbr="eww close system_notification"
-    eww open system_notification
+    eww open --no-daemonize system_notification
   fi
 }
 
