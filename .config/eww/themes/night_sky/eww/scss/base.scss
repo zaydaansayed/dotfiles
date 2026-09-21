@@ -15,7 +15,7 @@ button {
 
   &.on {
     background-color: c.$on;
-    box-shadow: 0 0 14px rgba(233, 154, 255, 0.3);
+    box-shadow: 0 0 14px c.$accent_3_glow;
     color: #000000;
   }
 

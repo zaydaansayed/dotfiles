@@ -39,9 +39,9 @@
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "") 
-          (button :onclick {ai_toggle ? "${EWW_CONFIG_DIR}/scripts/aipopup_close.sh; eww update ai_toggle=false; pkill -x ollama || true; eww close ai || true" : "eww update ai_toggle=true; eww open --no-daemonize ai || true; pgrep -x ollama >/dev/null || ollama serve &"}
-                 :class {ai_toggle ? "ai_center on" : "ai_center"}
-                 :tooltip "Open Isaac AI"
+          (button :onclick "kitty -d $HOME -e opencode &"
+                  :class "ai_center"
+                  :tooltip "Open Isaac AI"
            "󰚩"))))
 
 ; Workspaces widget

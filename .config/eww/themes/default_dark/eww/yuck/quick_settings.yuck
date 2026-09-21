@@ -1,0 +1,188 @@
+;; =============================================================================
+;; quick_settings.yuck
+;; =============================================================================
+
+; Quick settings window
+(defwindow quick_settings
+  :monitor 0
+  :geometry (geometry :x "6px" :y "3px" :width "0px" :height "0px" :anchor "top right")
+  :stacking "fg"
+    (box :orientation "v"
+         :space-evenly false
+         :class "window"
+         :spacing 5
+      (quickS_topbar)
+      (quick_controls)
+      (tlp_menu)
+      (quick_sliders)
+      (notification_history)))
+
+; Quick settings top-bar
+(defwidget quickS_topbar []
+  (box :orientation "h"
+       :space-evenly false
+       :spacing 3
+    (button :onclick "eww close quick_settings && eww update quick_toggle=false"
+            :class "small_btn"
+            :tooltip "Close"
+      "")
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 3
+         :halign "end"
+         :hexpand true
+    (button :onclick "eww close quick_settings && eww update quick_toggle=false && eww open --no-daemonize power_menu"
+            :class "quick_power"
+            :tooltip "Open Power Menu"
+      "")
+    (button :onclick "eww close quick_settings && eww update quick_toggle=false && eww open --no-daemonize settings"
+            :tooltip "Open Settings"
+            :class "quick_set_button"
+      ""))))
+
+; Quick settings main buttons
+(defwidget quick_controls []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 5
+    (box :orientation "h"
+         :space-evenly false
+      (button :class {netinfo.icon == "󰤭" ? "quick_button net" : "quick_button net on"}
+              :onclick "nmcli networking | grep -q 'enabled' && nmcli networking off || nmcli networking on"
+              :tooltip {netinfo.netname}
+              {netinfo.icon})
+      (button :class {netinfo.icon == "󰤭" ? "quick_extend net" : "quick_extend net on"}
+              :onclick "networkmanager_dmenu; eww close quick_settings || true; eww update quick_toggle=false"
+              :tooltip {netinfo.netname}
+              ">")
+      (button :class {btinfo.icon == "󰂲" ? "quick_button bt" : "quick_button bt on"}
+              :onclick "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+              :tooltip {btinfo.devcname}
+              {btinfo.icon == "" ? "󰂯" : btinfo.icon})
+      (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
+              :onclick "bzmenu -l rofi; eww close quick_settings || true; eww update quick_toggle=false"
+              :tooltip {btinfo.devcname}
+             ">")
+      (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
+              :class {airplane_mode == "󰀝" ? "quick_button on" : "quick_button"} 
+              :tooltip "Airplane Mode"
+              {airplane_mode}))
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 5
+      (button :class "quick_button_big"
+              :onclick "eww open --no-daemonize color_picker && eww close quick_settings && eww update quick_toggle=false"
+              :tooltip "Color-Picker"
+        "") 
+      (button :class "quick_button_big"
+              :onclick "hypruler &"
+              :tooltip "Ruler"
+        "󰑭")
+      (button :class {tlp_toggle ? "quick_button_big on" : "quick_button_big"}
+              :onclick {tlp_toggle ? "eww update tlp_toggle=false" : "eww update tlp_toggle=true"}
+              :tooltip "Power Profiles"
+        {tlpicon}))))
+
+; Tlp power-profiles buttons
+(defwidget tlp_menu []
+  (box :orientation "h"
+       :space-evenly false
+       :class "tlp_menu"
+       :visible tlp_toggle
+       :spacing 5
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl power-saver &"
+           :tooltip "Low power mode"
+           "")
+   (button :class {tlpicon == "" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl balanced &"
+           :tooltip "Balanced"
+           "")
+   (button :class {tlpicon == "󱐋" ? "prfp_button on" : "prfp_button"}
+           :onclick "tlpctl performance &"
+           :tooltip "Performance"
+           "󱐋")))
+
+; Volume and brightness sliders
+(defwidget quick_sliders []
+  (box :orientation "h"
+       :space-evenly false
+       :class "quick_sliders"
+       :spacing 4
+    (box :orientation "v"
+         :space-evenly false
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {volinfo.volume}
+           :spacing 15
+           :class "quickV_scale"
+        (scale :value {volinfo.volume}
+                :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")        
+        (label :text {volinfo.icon}))
+      (box :orientation "h"
+           :space-evenly false
+           :tooltip {briginfo.brightness}
+           :spacing 15
+        (scale :value {briginfo.brightness}
+               :onchange "brightnessctl set {}%"
+                :min 1)
+        (label :text {briginfo.icon})))
+      (button :onclick "eww open --no-daemonize settings && eww update quick_toggle=false connections_vis=false audio_vis=true && eww close quick_settings"
+                :class "vol_settings"
+                :tooltip "Volume Settings"
+                :halign "end"
+                :hexpand true
+        "")))
+
+; Notification history
+(defwidget notification_history []
+  (box :orientation "v"
+       :space-evenly false
+       :visible notif_visibility
+    (scroll :vscroll true
+            :hscroll false
+            :height 180
+            :class "nhtext_box"
+      (box :orientation "v"
+           :space-evenly false
+        (for entry in notif_history
+          (box :orientation "v"
+               :space-evenly false
+               :class "l2 nhis_box"
+            (label :text {entry.app}
+                   :limit-width 0)
+            (label :text {entry.title}
+                   :limit-width 0)))))
+    (button :onclick "killall mako && mako"
+      "Clear All")))
+
+(defwindow color_picker
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "0px" :height "0px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+    (box :orientation "v"
+         :space-evenly false
+         :class "window"
+         :spacing 5
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 3
+        (button :onclick "eww close color_picker"
+                :class "small_btn"
+                :halign "start"
+          "")
+        (button :onclick " eww close color_picker && sleep 0.2 && hyprpicker -a &"
+                :tooltip "Pick a color"
+                :class "color_picker_btn"
+          ""))
+      (color-chooser :onchange "wl-copy '{}' &"
+                     :use-alpha true)))
+
+; Most other files are found in the variables.yuck file
+
+; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

@@ -18,7 +18,7 @@
         (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh main_menu main_toggle"
                 :class {main_toggle ? "main_menu_button on" : "main_menu_button"}
                 :tooltip "Main Menu"
-          "")
+          "")
         (apps)
         (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh systemtray tray_toggle"
                 :class "tray_button"
@@ -57,7 +57,7 @@
        :spacing 0
     (box :orientation "h"
          :space-evenly false
-         :style {arraylength(active_apps.apps) > 0 ? "border-right: 1px solid #7a7a7a; margin-right: 7px;" : ""} 
+         :style {arraylength(active_apps.apps) > 0 ? "border-right: 1px solid #7a7a7a; margin-right: 7px;"} 
       (button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
               :onrightclick "firefox &"
               :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button on" : "dock_button background"}
@@ -70,20 +70,25 @@
               :tooltip "Spotify"
         (image :icon "spotify-launcher"
                :icon-size "dialog"))
-
-      (button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
+      (button :onclick "kitty -d $HOME/dotfiles/.config -e nvim &"
               :class "dock_button"
+              :onrightclick "kitty -d $HOME/dotfiles/.config -e nvim &"
               :tooltip "Rice"
         (image :icon "kitty"
                :icon-size "dialog"))
-
-      (button :onclick "cd $HOME/ && kitty -e yazi &"
-              :class "dock_button"
-              :style {arraylength(active_apps.apps) > 0 ? "margin-right: 7px;" : ""}
+      (button :onclick "kitty -d $HOME -e yazi &"
+              :onrightclick "kitty -d $HOME -e yazi &"
+              :class "dock_button" 
               :tooltip "Yazi"
         (image :icon "yazi"
+               :icon-size "dialog"))
+      (button :onclick {pinned_apps.obsidian_open ? "eww update selected_app=md.obsidian.Obsidian && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "obsidian &"}
+              :onrightclick "obsidian &"
+              :class {!pinned_apps.obsidian_open ? "dock_button" : pinned_apps.obsidian_focused ? "dock_button on" : "dock_button background"}
+              :tooltip "Obsidian"
+              :style {arraylength(active_apps.apps) > 0 ? "margin-right: 7px;" : ""}
+        (image :icon "obsidian"
                :icon-size "dialog")))
-
     (for app in {active_apps.apps}
       (box :orientation "h"
            :space-evenly false
@@ -94,9 +99,9 @@
                  :icon-size "dialog"))))))
 
 ; Window that opens when you have multiple apps open
-(defwindow app_multiple_instances 
+(defwindow app_multiple_instances
   :monitor 0
-  :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
+  :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
   (box :class "window"
      (eventbox :onhoverlost "eww close app_multiple_instances || true"
@@ -107,7 +112,7 @@
             (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })'; eww close app_multiple_instances || true`
                     :class {app.focused ? "dock_button on" : "dock_button"}
                     :tooltip {app.title}
-              (image :icon selected_app
+              (image :icon {selected_app == "md.obsidian.Obsidian" ? "obsidian" : selected_app}
                      :icon-size "dialog"))))))))
 
 (defwindow systemtray

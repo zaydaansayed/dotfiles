@@ -75,16 +75,23 @@
               :tooltip "Spotify"
         (image :icon "spotify-launcher"
                :icon-size "dialog"))
-
       (button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
+              :onrightclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
               :class "dock_button"
               :tooltip "Rice"
         (image :icon "kitty"
                :icon-size "dialog"))
       (button :onclick "cd $HOME/ && kitty -e yazi &"
+              :onrightclick "cd $HOME/ && kitty -e yazi &"
               :class "dock_button"
               :tooltip "Yazi"
         (image :icon "yazi"
+               :icon-size "dialog"))
+      (button :onclick {pinned_apps.obsidian_open ? "eww update selected_app=md.obsidian.Obsidian && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "obsidian &"}
+              :onrightclick "obsidian &"
+              :class {!pinned_apps.obsidian_open ? "dock_button" : pinned_apps.obsidian_focused ? "dock_button Oon" : "dock_button Obackground"}
+              :tooltip "Obsidian"
+        (image :icon "obsidian"
                :icon-size "dialog")))
     (label :text "|
 |
@@ -102,7 +109,7 @@
 ; Window that opens when you have multiple apps open
 (defwindow app_multiple_instances 
   :monitor 0
-  :geometry (geometry :x "570px" :y "70px" :width "0px" :height "0px" :anchor "bottom left")
+  :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
   (box :class "window"
     (eventbox :onhoverlost "eww close app_multiple_instances || true"

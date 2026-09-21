@@ -17,17 +17,12 @@
   }
 
   &.volume {
-    color: #FFB07C;
+    color: c.$accent_1;
     min-height: 20px;
     padding: 10px 0px;
   }
 
   .popup-text {
     font-size: 17px;
-  }
-
-  .ascii-bar {
-    font-size: 15px;
-    letter-spacing: 1px;
   }
 }

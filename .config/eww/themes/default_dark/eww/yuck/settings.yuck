@@ -471,10 +471,10 @@
             (label :text "Advanced configs"))
           (button :onclick "kitty -d $HOME/.config/hypr/ -e nvim & eww close settings"
                   :class "long_btn"
-            " Hyprland config")
+            "   Hyprland config")
           (button :onclick "kitty -d $HOME/.config/eww/ -e nvim & eww close settings"
                   :class "long_btn"
-            "󱍕 Eww config"))))))
+            "󱍕   Eww config"))))))
 
 (defwidget about_support []
   (box :orientation "v"

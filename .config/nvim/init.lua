@@ -74,11 +74,27 @@ vim.opt.clipboard = "unnamedplus"
 vim.cmd("cnoreabbrev W w")
 vim.o.shell = "fish"
 
-vim.opt.number = true
-vim.opt.cursorline = true
-vim.opt.signcolumn = "yes"
-vim.opt.showmode = false -- lualine shows the mode instead
+-- Theme is optional: default_dark links no theme.lua (stock nvim look),
+-- night_sky links its own. Missing module = defaults, no error.
+local theme_ok, theme = pcall(require, "config.theme")
+if theme_ok then theme.setup() end
 
--- Wallpaper theme (matches fish prompt + fastfetch + kitty)
-require("config.theme").setup()
-
+-- Re-apply the linked theme without restarting.
+-- eww application.sh swaps the theme.lua file on disk, but a running
+-- nvim keeps the old module + highlights cached, so run :ThemeReload
+-- (or restart nvim) after switching themes.
+vim.api.nvim_create_user_command("ThemeReload", function()
+  package.loaded["config.theme"] = nil
+  local ok, t = pcall(require, "config.theme")
+  if not ok then
+    vim.notify("theme reload failed: " .. tostring(t), vim.log.levels.ERROR)
+    return
+  end
+  t.setup()
+  local ok_l, lualine = pcall(require, "lualine")
+  if ok_l then lualine.setup(t.lualine_opts()) end
+  local ok_b, bufferline = pcall(require, "bufferline")
+  if ok_b then bufferline.setup(t.bufferline_opts()) end
+  local ok_n, notify = pcall(require, "notify")
+  if ok_n then notify.setup(t.notify_opts()) end
+end, { desc = "Reload linked eww theme without restarting" })

@@ -8,6 +8,7 @@ get_target_apps() {
       ((.initialClass // .class) | ascii_downcase) as $lookup |
       if ($lookup | contains("firefox")) then "firefox"
       elif ($lookup | contains("spotify")) then "Spotify"
+      elif ($lookup | contains("obsidian")) then "md.obsidian.Obsidian"
       else empty
       end as $app_name |
       {
@@ -22,7 +23,9 @@ get_target_apps() {
       firefox_open: ($apps | any(.name == "firefox")),
       firefox_focused: ($apps | any(.name == "firefox" and .focused)),
       spotify_open: ($apps | any(.name == "Spotify")),
-      spotify_focused: ($apps | any(.name == "Spotify" and .focused))
+      spotify_focused: ($apps | any(.name == "Spotify" and .focused)),
+      obsidian_open: ($apps | any(.name == "md.obsidian.Obsidian")),
+      obsidian_focused: ($apps | any(.name == "md.obsidian.Obsidian" and .focused))
     }
   '
 }

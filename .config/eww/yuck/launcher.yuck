@@ -39,7 +39,7 @@
                      :icon-size "dialog"
                      :valign "center"
                      :class "launcher_icon")
-                 (label :text {app.name}))))))))
+                  (label :text {app.name}))))))))
 
 ;; =============================================================================
 ;; Made by Zaydaan Sayed 2026

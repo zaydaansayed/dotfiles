@@ -80,6 +80,7 @@
 
   &.on {
     background-color: c.$accent_1;
+    box-shadow: 0 0 14px c.$accent_1_glow;
 
     label {
       color: #000000;

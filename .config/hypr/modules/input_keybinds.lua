@@ -44,7 +44,6 @@ hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize clipboard"))
 hl.bind(mainMod .. " + V",      hl.dsp.submap("eww_close_clipboard"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize settings"))
 
 -- Window control
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))

@@ -169,7 +169,7 @@ active_apps() {
     lookup=$(jq -r '.lookup' <<< "$row")
 
     case "$lookup" in
-      *firefox*|*spotify*) continue ;;
+      *firefox*|*spotify*|*obsidian*) continue ;;
     esac
 
     icon=$(get_icon "$lookup" "$title" "$pid")

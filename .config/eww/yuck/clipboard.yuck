@@ -2,9 +2,6 @@
 ;; clipboard.yuck
 ;; =============================================================================
 
-(deflisten clipboard_list :initial "[]"
-  "~/.config/eww/scripts/clipboard.sh listen 50")
-
 (defwindow clipboard
   :monitor 0
   :geometry (geometry :x "0px" :y "0px" :width "350px" :height "500px" :anchor "center")

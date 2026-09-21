@@ -159,3 +159,16 @@
 
   }
 }
+
+.focusable:focus {
+  background-color: c.$on;
+  color: #000000;
+}
+
+.focusable:focus:hover {
+  background-color: c.$on_hover;
+}
+
+.small_btn {
+  padding: 0px 2px;
+}

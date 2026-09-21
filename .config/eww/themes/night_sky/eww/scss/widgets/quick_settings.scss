@@ -1,3 +1,5 @@
+@use "../colors.scss" as c;
+
 .quick_power {
   padding-right: 4px;
 }
@@ -71,5 +73,21 @@
     border-radius: 10px;
     padding: 5px;
     margin-bottom: 5px;
-  }
+}
 
+.notif_clear {
+  padding: 4px 0px;
+}
+
+.quick_volslide {
+  color: c.$accent_1;
+}
+
+.quick_brigslide {
+  color: c.$accent_2;
+}
+
+.color_picker_btn {
+  padding: 2px;
+  padding-right: 7px;
+}

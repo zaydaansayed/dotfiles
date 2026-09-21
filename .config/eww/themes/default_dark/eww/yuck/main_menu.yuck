@@ -13,11 +13,11 @@
       (user_info)
       (main_apps))
     (box :orientation "v"
-        :space-evenly false
-        :class "main_middle"
-        :spacing 5
-        :vexpand true
-        :hexpand true
+         :space-evenly false
+         :class "main_middle"
+         :spacing 5
+         :vexpand true
+         :hexpand true
       (weather)
       (links))
     (box :orientation "v"
@@ -26,13 +26,6 @@
          :class "main_end"
          :vexpand true
          :hexpand true
-      (box :orientation "h"
-           :space-evenly false
-           :halign "end"
-        (button :onclick "eww close main_menu || true; eww update main_toggle=false"
-                :class "quick_close"
-                :tooltip "Close"
-          ""))
       (main_music_player)
       (files)
       (calendar :class "main_cal"
@@ -94,23 +87,23 @@
             :hexpand true
       (label :text "   Nvim"
              :halign "start"))
-    (button :onclick "kitty -e htop & eww close main_menu || true; eww update main_toggle=false"
-            :tooltip "Htop"
+    (button :onclick "kitty -e btop & eww close main_menu || true; eww update main_toggle=false"
+            :tooltip "Btop"
             :class "main_buttons"
             :hexpand true
       (box :orientation "h"
            :space-evenly false
            :spacing 3
-        (image :icon "htop")
-        (label :text "Htop")))
-    (button :onclick "$HOME/dotfiles/.config/fuzzel/settings/settings_menu.sh & eww close main_menu || true; eww update main_toggle=false"
+        (image :icon "btop")
+        (label :text "Btop")))
+    (button :onclick "eww open --no-daemonize settings & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Settings Menu"
             :class "main_buttons"
             :hexpand true
       (box :orientation "h"
            :space-evenly false
            :spacing 3
-        (label :text "  Settings")))))
+        (label :text "   Settings")))))
 
 ; User information
 (defwidget user_info [] 
@@ -179,7 +172,6 @@
       (box :orientation "h"
            :valign "end"
            :vexpand true
-           :homogeneous true
         (for hour in weather_future
           (box :orientation "v"
                :space-evenly false
@@ -215,7 +207,6 @@
        :class "main"
        :hexpand true
   (box :orientation "h"
-       :homogeneous true
        :spacing 5
        :hexpand true
     (button :onclick "firefox https://github.com & eww close main_menu || true; eww update main_toggle=false"
@@ -234,7 +225,6 @@
             :hexpand true
       ""))
   (box :orientation "h"
-       :homogeneous true
        :spacing 5
        :hexpand true
     (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu || true; eww update main_toggle=false"
@@ -265,12 +255,12 @@
             :class "main_buttons"
             :tooltip "Downloads folder"
             :hexpand true
-      "󰉍  Downloads")
+      "󰉍   Downloads")
     (button :onclick "cd $HOME/Documents && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Documents folder"
             :hexpand true
-      "󰈙 Documents")
+      "󰈙  Documents")
     (button :onclick "cd $HOME/Pictures && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Pictures folder"
@@ -305,7 +295,6 @@
         (album_art)
         (box :orientation "v"
           (label :text {player_data.artist}
-                 :visible {strlength(player_data.artist) > 0}
-                 :class "music_text")
+                 :visible {strlength(player_data.artist) > 0})
           (label :text {player_data.title})))
       (music_buttons))))

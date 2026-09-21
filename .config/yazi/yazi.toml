@@ -23,12 +23,16 @@ pdf = [
 edit = [
 	{ run = "nvim %s", block = true },
 ]
+obsidian = [
+        { run = "obsidian %s", orphan = true }
+]
 
 [open]
 prepend_rules = [
 	{ url = "*.pdf", use = "pdf" },
 	{ url = "*.zip", use = "unzip" },
-	{ url = "*.exe", use = "play-wine"}
+	{ url = "*.exe", use = "play-wine" },
+	{ url = "*.md",  use = "obsidian" }
 ]
 
 [[plugin.prepend_fetchers]]

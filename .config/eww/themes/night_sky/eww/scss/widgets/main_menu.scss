@@ -1,9 +1,4 @@
 @use "../colors.scss" as c;
-.main_menu {
-  padding: 5px;
-  border-radius: 7px;
-  background-color: rgba(9, 4, 9, 0.4);
-}
 
 .main_buttons {
   min-height: 30px;
@@ -44,6 +39,12 @@
   }
 }
 
+.main_file {
+  min-height: 67px;
+  font-size: 17px;
+  min-width: 250px;
+}
+
 .main_shortcut_yt {
   min-width: 56px;
   min-height: 60px;
@@ -59,23 +60,14 @@
   margin-right: 10px;
 }
 
-.main_end {
-  min-width: 205px;
-}
-
-.main_cal {
-  background-color: c.$bg;
-  border-radius: 7px;
-}
-
 .main_cal:selected {
   background-color: c.$on;
   color: #000000;
 }
 
 .main_app_launcher {
-  min-height: 50px;
-  font-size: 30px;
+  min-height: 70px;
+  font-size: 40px;
 }
 
 .user_info {
@@ -98,4 +90,24 @@
   background-color: c.$bg;
   padding: 5px;
   border-radius: 7px;
+}
+
+.main_music_player {
+  background-color: c.$bg;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.no_main_music {
+  background-color: c.$bg;
+  border-radius: 7px;
+  min-height: 150px;
+}
+
+.more_weather {
+  padding: 5px 0px;
+}
+
+.main_music_text {
+  margin-left: 20px;
 }

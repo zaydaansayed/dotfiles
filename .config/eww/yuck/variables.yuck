@@ -13,6 +13,8 @@
 (deflisten active_apps :initial '{"apps":[],"workspace_windows":0}' "~/.config/eww/scripts/active_apps.sh")
 (deflisten pinned_apps :initial '{"apps":[],"firefox_open":"false","firefox_focused":false,"spotify_open":false,"spotify_focused":false}' "~/.config/eww/scripts/pinned_apps.sh")
 (deflisten lyrics :initial '{"past":"","current":"","future":""}' "~/.config/eww/scripts/lyrics.py")
+(deflisten dns :initial '{"con":"","servers":[],"auto":true,"preset":"auto"}' "~/.config/eww/scripts/dns.sh")
+(deflisten clipboard_list :initial "[]" "~/.config/eww/scripts/clipboard.sh listen 50")
 
 ;; =============================================================================
 ;; POLLERS
@@ -26,7 +28,6 @@
 (defpoll weather_current :interval "1h" "weather-Cli get -r")
 (defpoll weather_future :interval "1h" "~/.config/eww/scripts/weather_future.sh")
 (defpoll launcher_list :initial "[]" :interval "24h" "~/.config/eww/scripts/launcher.sh")
-(deflisten dns :initial '{"con":"","servers":[],"auto":true,"preset":"auto"}' "~/.config/eww/scripts/dns.sh")
 
 ;; =============================================================================
 ;; VARIABLES
@@ -47,15 +48,6 @@
 (defvar main_toggle false)
 (defvar selected_app "")
 (defvar tray_toggle false)
-(defvar ai_prompt "")
-(defvar ai_toggle false)
-(defvar ai_dinput "")
-(defvar ai_file_paths "[]")
-(defvar ai_image false)
-(defvar ai_chat_id "")
-(defvar ai_txt "[]")
-(defvar ai_menu_toggle false)
-(defvar ai_menu_chats "[]")
 (defvar launcher_query "")
 (defvar clipboard_query "")
 (defvar player_bg "rgba(9, 4, 9, 0.5)")

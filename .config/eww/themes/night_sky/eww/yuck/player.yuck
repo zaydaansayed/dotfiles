@@ -76,7 +76,7 @@
     (button :onclick "playerctl play-pause"
             :tooltip "Play/Pause"
             :class "music_btn"
-      "${player_data.icon}")
+      {player_data.icon})
     (button :onclick "playerctl next"
             :tooltip "Next"
             :class "music_btn"
@@ -84,7 +84,7 @@
     (button :onclick "bash -c 'current=$(playerctl loop); if [ \"$current\" = \"None\" ]; then playerctl loop Playlist; elif [ \"$current\" = \"Playlist\" ]; then playerctl loop Track; else playerctl loop None; fi'"
             :class "music_btn repeat_button"
             :tooltip "Repeat"
-      "${player_data.repeat_icon}")))
+      {player_data.repeat_icon})))
 
 ; Most other files are in the variables.yuck file
 

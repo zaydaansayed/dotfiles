@@ -13,8 +13,10 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_THEME", "Bibata-Modern-Classic")
 hl.env("HYPRCURSOR_SIZE", "24")
 
--- Set the GTK theme
-hl.env("GTK_THEME", "Adwaita-dark")
+-- GTK theme is managed by the eww theme switcher (settings.ini + theme
+-- files), NOT by env: a global GTK_THEME override forces libadwaita apps
+-- off their stylesheet (broken look) and shadows per-theme switching.
+-- hl.env("GTK_THEME", "Adwaita-dark")
 
 -------------------------------------------------------------------------------- 
 ------------------------ MADE BY ZAYDAAN SAYED 2026 ----------------------------

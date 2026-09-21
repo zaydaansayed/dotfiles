@@ -1,13 +1,27 @@
+[[mgr.prepend_keymap]]
+on   = [ "f","g" ]
+run  = "plugin fg"
+desc = "find file by content (fuzzy match)"
+
+[[mgr.prepend_keymap]]
+on   = [ "f","f" ]
+run  = "plugin fg -- fzf"
+desc = "find file by filename"
+
+[[mgr.prepend_keymap]]
+on  = "M"
+run = "plugin mount"
+
 # sudo cp/mv
 [[mgr.prepend_keymap]]
-on = ["R", "X"]
-run = "shell --block 'sudo cp -r -t %s %y && sudo rm -rf %y'"
-desc = "sudo cut"
+on = ["R", "p", "p"]
+run = "plugin sudo -- paste"
+desc = "sudo paste"
 
 # sudo cp/mv --force
 [[mgr.prepend_keymap]]
 on = ["R", "P"]
-run = "shell --block 'sudo cp -r -t %s %y'"
+run = "plugin sudo -- paste --force"
 desc = "sudo paste"
 
 # sudo mv
@@ -57,17 +71,3 @@ desc = "sudo delete"
 on = ["R", "m"]
 run = "plugin sudo -- chmod"
 desc = "sudo chmod"
-
-[[mgr.prepend_keymap]]
-on   = [ "f","g" ]
-run  = "plugin fg"
-desc = "find file by content (fuzzy match)"
-
-[[mgr.prepend_keymap]]
-on   = [ "f","f" ]
-run  = "plugin fg -- fzf"
-desc = "find file by filename"
-
-[[mgr.prepend_keymap]]
-on  = "M"
-run = "plugin mount"

@@ -1,0 +1,145 @@
+# eww night_sky theme (eww/scss/colors.scss)
+# accent_1 #E07D68 salmon / accent_2 #549D9D teal / accent_3 #E99AFF pink
+# accent_5 #A358D1 purple / $l4 #777777 muted / $border #090409
+
+[mgr]
+cwd = { fg = "#E07D68", bold = true }
+find_keyword = { fg = "#E99AFF", bold = true, underline = true }
+find_position = { fg = "#549D9D", bold = true }
+symlink_target = { fg = "#549D9D", italic = true }
+marker_copied = { fg = "#549D9D", bg = "#549D9D" }
+marker_cut = { fg = "#C26B59", bg = "#C26B59" }
+marker_marked = { fg = "#FFB07C", bg = "#FFB07C" }
+marker_selected = { fg = "#A358D1", bg = "#A358D1" }
+count_copied = { fg = "#549D9D", bold = true }
+count_cut = { fg = "#C26B59", bold = true }
+count_selected = { fg = "#A358D1", bold = true }
+border_symbol = "│"
+border_style = { fg = "#777777" }
+
+[tabs]
+active = { fg = "#090409", bg = "#A358D1", bold = true }
+inactive = { fg = "#777777" }
+
+[mode]
+normal_main = { fg = "#090409", bg = "#A358D1", bold = true }
+normal_alt = { fg = "#A358D1", bg = "#1B1428" }
+select_main = { fg = "#090409", bg = "#E07D68", bold = true }
+select_alt = { fg = "#E07D68", bg = "#1B1428" }
+unset_main = { fg = "#090409", bg = "#777777", bold = true }
+unset_alt = { fg = "#777777", bg = "#1B1428" }
+
+[indicator]
+current = { bg = "#1B1428" }
+preview = { bg = "#151020" }
+parent = { bg = "#151020" }
+
+[status]
+overall = { fg = "#FFFFFF" }
+sep_left = { open = "", close = " " }
+sep_right = { open = " ", close = "" }
+perm_type = { fg = "#A358D1", bold = true }
+perm_read = { fg = "#E99AFF" }
+perm_write = { fg = "#E07D68" }
+perm_exec = { fg = "#549D9D" }
+perm_sep = { fg = "#777777" }
+progress_label = { fg = "#FFB07C", bold = true }
+progress_normal = { fg = "#549D9D", bg = "#1B1428" }
+progress_error = { fg = "#C26B59", bg = "#1B1428" }
+
+[which]
+cols = 3
+mask = { bg = "#151020" }
+cand = { fg = "#549D9D", bold = true }
+rest = { fg = "#FFFFFF" }
+desc = { fg = "#A358D1" }
+separator = " → "
+separator_style = { fg = "#777777" }
+
+[confirm]
+border = { fg = "#A358D1" }
+title = { fg = "#E07D68", bold = true }
+body = { fg = "#FFFFFF" }
+list = { fg = "#E99AFF" }
+btn_yes = { bg = "#549D9D", fg = "#090409", bold = true }
+btn_no = { bg = "#2A2138", fg = "#FFFFFF" }
+
+[spot]
+border = { fg = "#A358D1" }
+title = { fg = "#E07D68", bold = true }
+tbl_col = { fg = "#A358D1", bold = true }
+tbl_cell = { fg = "#549D9D", bg = "#1B1428" }
+
+[notify]
+title_info = { fg = "#549D9D", bold = true }
+title_warn = { fg = "#FFB07C", bold = true }
+title_error = { fg = "#C26B59", bold = true }
+
+[pick]
+border = { fg = "#A358D1" }
+active = { fg = "#E07D68", bg = "#1B1428", bold = true }
+inactive = { fg = "#FFFFFF" }
+
+[input]
+border = { fg = "#A358D1" }
+title = { fg = "#E07D68", bold = true }
+value = { fg = "#FFFFFF" }
+selected = { bg = "#1B1428" }
+
+[cmp]
+border = { fg = "#A358D1" }
+active = { fg = "#E07D68", bg = "#1B1428", bold = true }
+inactive = { fg = "#FFFFFF" }
+
+[tasks]
+border = { fg = "#A358D1" }
+title = { fg = "#E07D68", bold = true }
+hovered = { fg = "#E07D68", bg = "#1B1428", underline = true }
+
+[help]
+border = { fg = "#A358D1" }
+chord = { fg = "#549D9D", bold = true }
+action = { fg = "#FFFFFF" }
+hovered = { fg = "#E07D68", bg = "#1B1428" }
+
+[filetype]
+rules = [
+  { mime = "image/*", fg = "#FFB07C" },
+  { mime = "video/*", fg = "#A358D1" },
+  { mime = "audio/*", fg = "#549D9D" },
+  { mime = "application/zip", fg = "#E07D68" },
+  { mime = "application/gzip", fg = "#E07D68" },
+  { mime = "application/x-tar", fg = "#E07D68" },
+  { mime = "application/x-bzip*", fg = "#E07D68" },
+  { mime = "application/x-7z-compressed", fg = "#E07D68" },
+  { mime = "application/pdf", fg = "#C26B59" },
+  { mime = "inode/empty", fg = "#777777" },
+  { url = "*", is = "orphan", fg = "#C26B59" },
+  { url = "*", is = "exec", fg = "#549D9D" },
+  { url = "*/", fg = "#E99AFF" },
+  { url = "*", fg = "#FFFFFF" },
+]
+
+# Folder icons: yazi's genuine glyphs, recolored to eww night_sky tones
+# (prepend = wins over builtins)
+[icon]
+prepend_dirs = [
+  { name = ".config", text = "", fg = "#FFB07C" },
+  { name = ".git", text = "", fg = "#A358D1" },
+  { name = ".github", text = "", fg = "#A358D1" },
+  { name = ".npm", text = "", fg = "#E99AFF" },
+  { name = "Desktop", text = "", fg = "#E99AFF" },
+  { name = "Development", text = "", fg = "#E99AFF" },
+  { name = "Documents", text = "", fg = "#E99AFF" },
+  { name = "Downloads", text = "", fg = "#E99AFF" },
+  { name = "Library", text = "", fg = "#E99AFF" },
+  { name = "Movies", text = "", fg = "#E99AFF" },
+  { name = "Music", text = "", fg = "#E99AFF" },
+  { name = "Pictures", text = "", fg = "#E99AFF" },
+  { name = "Public", text = "", fg = "#E99AFF" },
+  { name = "Videos", text = "", fg = "#E99AFF" },
+]
+prepend_conds = [
+  { if = "dir & hovered", text = "", fg = "#E99AFF" },
+  { if = "dir", text = "", fg = "#E99AFF" },
+]

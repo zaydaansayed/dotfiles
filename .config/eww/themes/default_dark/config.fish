@@ -15,16 +15,8 @@ function rice
 end
 
 function dotgit
-	cd ~/dotfiles
-	lazygit
+    cd ~/dotfiles
+    lazygit
 end
 
 fish_add_path ~/.opencode/bin
-
-if type -q fastfetch
-    if test "$TERM" = "xterm-kitty"; or set -q KITTY_WINDOW_ID
-        if not set -q SHLVL; or test "$SHLVL" -le 2
-            fastfetch
-        end
-    end
-end

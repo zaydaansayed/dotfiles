@@ -1,3 +1,11 @@
+-- Theme option helper: returns the linked theme's opts table,
+-- or {} (plugin defaults) when no theme.lua is linked (default_dark).
+local function theme_opts(key)
+  local ok, theme = pcall(require, "config.theme")
+  if ok and theme[key] then return theme[key]() end
+  return {}
+end
+
 return {
   "nvim-tree/nvim-web-devicons",
   "nvim-lua/plenary.nvim",
@@ -5,9 +13,7 @@ return {
   {
     "rcarriga/nvim-notify",
     config = function()
-      require("notify").setup({
-        background_colour = "#151020",
-      })
+      require("notify").setup(theme_opts("notify_opts"))
     end,
   },
 
@@ -19,20 +25,6 @@ return {
       require("nvim-tree").setup({})
     end,
   },
-
-  {
-    "nvim-treesitter/nvim-treesitter",
-    branch = "main",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter").setup({
-        install_dir = vim.fn.stdpath("data") .. "/site",
-        ensure_installed = { "lua", "bash", "markdown", "markdown_inline" },
-        highlight = { enable = true },
-      })
-    end,
-  },
-
   {
     "elkowar/yuck.vim"
   },
@@ -110,86 +102,22 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     config = function()
-      local p = require("config.theme").palette
-      local wallpaper = {
-        normal = {
-          a = { bg = p.violet, fg = p.bg, gui = "bold" },
-          b = { bg = p.surface, fg = p.fg },
-          c = { bg = "NONE", fg = p.muted },
-        },
-        insert = {
-          a = { bg = p.teal, fg = p.bg, gui = "bold" },
-          b = { bg = p.surface, fg = p.fg },
-          c = { bg = "NONE", fg = p.muted },
-        },
-        visual = {
-          a = { bg = p.peach, fg = p.bg, gui = "bold" },
-          b = { bg = p.surface, fg = p.fg },
-          c = { bg = "NONE", fg = p.muted },
-        },
-        replace = {
-          a = { bg = p.brick, fg = p.bg, gui = "bold" },
-          b = { bg = p.surface, fg = p.fg },
-          c = { bg = "NONE", fg = p.muted },
-        },
-        command = {
-          a = { bg = p.pink, fg = p.bg, gui = "bold" },
-          b = { bg = p.surface, fg = p.fg },
-          c = { bg = "NONE", fg = p.muted },
-        },
-        inactive = {
-          a = { bg = p.surface, fg = p.muted },
-          b = { bg = p.surface, fg = p.muted },
-          c = { bg = "NONE", fg = p.muted },
-        },
-      }
-      require("lualine").setup({
-        options = {
-          theme = wallpaper,
-          section_separators = "",
-          component_separators = "|",
-        },
-      })
+      require("lualine").setup(theme_opts("lualine_opts"))
     end,
   },
   {
     "akinsho/bufferline.nvim",
     version = "*",
     config = function()
-      local p = require("config.theme").palette
-      require("bufferline").setup({
-        options = {
-          separator_style = "thin",
-          show_buffer_close_icons = false,
-        },
-        highlights = {
-          fill = { bg = "NONE", fg = p.muted },
-          background = { bg = "NONE", fg = p.muted },
-          buffer_selected = { bg = "NONE", fg = p.fg, bold = true },
-          buffer_visible = { bg = "NONE", fg = p.fg },
-          separator = { bg = "NONE", fg = p.muted },
-          separator_selected = { bg = "NONE", fg = p.violet },
-          indicator_selected = { bg = "NONE", fg = p.violet },
-          tab_selected = { bg = "NONE", fg = p.peach, bold = true },
-          numbers_selected = { bg = "NONE", fg = p.peach, bold = true },
-          modified = { bg = "NONE", fg = p.orange },
-          modified_selected = { bg = "NONE", fg = p.orange },
-          error = { bg = "NONE", fg = p.brick },
-          error_selected = { bg = "NONE", fg = p.brick, bold = true },
-          warning = { bg = "NONE", fg = p.orange },
-          warning_selected = { bg = "NONE", fg = p.orange, bold = true },
-          hint = { bg = "NONE", fg = p.teal },
-        },
-      })
+      require("bufferline").setup(theme_opts("bufferline_opts"))
     end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = {
-      indent = { highlight = "IblIndent" },
-      scope = { highlight = "IblScope" },
-    },
+    config = function()
+      require("ibl").setup(theme_opts("ibl_opts"))
+    end,
   },
   {
     "folke/noice.nvim",
@@ -218,16 +146,11 @@ return {
       require("alpha").setup(startify.config)
     end,
   },
-
   {
     "nvim-telescope/telescope.nvim",
     version = "*",
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
-  },
-  {
-    "giusgad/pets.nvim",
-    dependencies = { "MunifTanjim/nui.nvim", "giusgad/hologram.nvim" },
-  },
+  }
 }

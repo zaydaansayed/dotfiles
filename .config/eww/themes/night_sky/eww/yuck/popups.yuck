@@ -22,7 +22,7 @@
              :class "popup-text"
              :visible {volinfo.vol_status == "MUTED"})
       (label :text {volinfo.bar}
-                :class "ascii-bar")))
+             :class "ascii-bar")))
 
 ; Brightness popup window
 (defwindow brightness
@@ -34,9 +34,9 @@
          :spacing 10
          :class "popup brightness"
       (label :text "BRIGHTNESS"
-               :class "popup-text")
+             :class "popup-text")
       (label :text {briginfo.bar}
-                :class "ascii-bar")))
+             :class "ascii-bar")))
 
 ; Mic status popup
 (defwindow mic_status

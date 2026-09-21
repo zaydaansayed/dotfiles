@@ -8,7 +8,7 @@
 
 button {
   padding: 0;
-  background: c.$l2;
+  background-color: c.$l2;
   border: none;
   border-radius: 7px;
   min-width: 15px;
@@ -80,6 +80,11 @@ entry {
 
 entry:focus {
   border: c.$on 1px solid;
+}
+
+entry selection {
+  background-color: #ffffff;
+  color: #000000;
 }
 
 tooltip {
