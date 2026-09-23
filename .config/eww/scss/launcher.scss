@@ -11,3 +11,36 @@
   min-width: 48px;
   min-height: 48px;
 }
+
+.app_pin {
+  min-width: 50px;
+  font-size: 16px;
+}
+
+// Spotlight additions: section headers, file rows, web-search row.
+.launcher_section {
+  font-size: 13px;
+  opacity: 0.7;
+  margin: 10px 0 4px 6px;
+}
+
+.launcher_filepath {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.launcher_web {
+  opacity: 0.9;
+  padding: 8px 6px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+// Emoji picker row glyph.
+.emoji_char {
+  font-size: 22px;
+  min-width: 36px;
+  margin-right: 4px;
+  padding: 2px 0;
+}

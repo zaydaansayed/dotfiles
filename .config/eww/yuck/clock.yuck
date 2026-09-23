@@ -1,0 +1,164 @@
+(defwindow clock
+  :monitor 0
+  :geometry (geometry :x "0px" :y "3px" :width "400px" :height "230px" :anchor "top center")
+  :stacking "fg" 
+  (box :class "window clock"
+       :orientation "v"
+       :space-evenly false
+       :spacing 10
+    (box :orientation "h"
+         :space-evenly false
+         :class "clock_tabs"
+         :spacing 3
+         :halign "center"
+      (button :onclick "eww update time_toggle=false timer_toggle=false stopwatch_toggle=true"
+              :class {stopwatch_toggle ? "long_btn on" : "long_btn"}
+        "Stopwatch")
+      (button :onclick "eww update time_toggle=true timer_toggle=false stopwatch_toggle=false"
+              :class {time_toggle ? "long_btn on" : "long_btn"}
+        "Time")
+      (button :onclick "eww update time_toggle=false timer_toggle=true stopwatch_toggle=false"
+              :class {timer_toggle ? "long_btn on" : "long_btn"}
+        "Timer"))
+    (stopwatch)
+    (time)
+    (timer)
+    ))
+
+(defwidget time []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 40
+       :visible {time_toggle}
+    (label :text "TIME"
+           :class "placeholder_txt")
+    (label :text timenums
+           :halign "center"
+           :class "time_txt")
+    (label :text date
+           :class "placeholder_txt")))
+
+(defwidget stopwatch []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 12
+       :visible {stopwatch_toggle}
+    (label :text "STOPWATCH"
+           :class "placeholder_txt")
+    (label :text {stopwatch_state.time}
+           :halign "center"
+           :class "time_txt")
+    (label :text {stopwatch_state.status == "running" ? "● running" : stopwatch_state.status == "paused" ? "❚❚ paused" : "○ idle"}
+           :halign "center"
+           :class {stopwatch_state.status == "running" ? "clock_status running" : stopwatch_state.status == "paused" ? "clock_status paused" : "clock_status idle"})
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 8
+         :class "clock_btn_row"
+      (button :onclick "~/.config/eww/scripts/clock.sh stopwatch start"
+              :visible {stopwatch_state.status == "idle"}
+              :class "clock_btn on"
+              :tooltip "Start stopwatch"
+        "▶ Start")
+      (button :onclick "~/.config/eww/scripts/clock.sh stopwatch pause"
+              :visible {stopwatch_state.status == "running"}
+              :class "clock_btn"
+              :tooltip "Pause stopwatch"
+        "⏸ Pause")
+      (button :onclick "~/.config/eww/scripts/clock.sh stopwatch resume"
+              :visible {stopwatch_state.status == "paused"}
+              :class "clock_btn on"
+              :tooltip "Resume stopwatch"
+        "▶ Resume")
+      (button :onclick "~/.config/eww/scripts/clock.sh stopwatch reset"
+              :visible {stopwatch_state.status != "idle"}
+              :class "clock_btn"
+              :tooltip "Reset stopwatch"
+        "󰓛 Reset"))))
+
+(defwidget timer []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+       :visible {timer_toggle}
+    (label :text "TIMER"
+           :class "placeholder_txt")
+    (label :text {timer_state.time}
+           :halign "center"
+           :class "time_txt")
+    (label :text {timer_state.status == "running" ? "● running" : timer_state.status == "paused" ? "❚❚ paused" : timer_state.status == "done" ? "  done" : "○ idle"}
+           :halign "center"
+           :class {timer_state.status == "running" ? "clock_status running" : timer_state.status == "paused" ? "clock_status paused" : timer_state.status == "done" ? "clock_status done" : "clock_status idle"})
+    (progress :value {timer_state.progress}
+               :orientation "h"
+               :halign "center"
+               :class "timer_progress"
+               :tooltip "${timer_state.remaining}s / ${timer_state.total}s")
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 16
+         :visible {timer_state.status == "idle"}
+         :class "timer_steppers"
+      (box :orientation "v" :spacing 2
+        (button :onclick "eww update timer_h=${timer_h >= 99 ? 0 : timer_h + 1}" :class "step_btn" "▲")
+        (label :text "${timer_h}h" :class "step_label")
+        (button :onclick "eww update timer_h=${timer_h <= 0 ? 99 : timer_h - 1}" :class "step_btn" "▼"))
+      (box :orientation "v" :spacing 2
+        (button :onclick "eww update timer_m=${timer_m >= 59 ? 0 : timer_m + 1}" :class "step_btn" "▲")
+        (label :text "${timer_m}m" :class "step_label")
+        (button :onclick "eww update timer_m=${timer_m <= 0 ? 59 : timer_m - 1}" :class "step_btn" "▼"))
+      (box :orientation "v" :spacing 2
+        (button :onclick "eww update timer_s=${timer_s >= 59 ? 0 : timer_s + 1}" :class "step_btn" "▲")
+        (label :text "${timer_s}s" :class "step_label")
+        (button :onclick "eww update timer_s=${timer_s <= 0 ? 59 : timer_s - 1}" :class "step_btn" "▼")))
+    ;; quick presets while idle
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 6
+         :visible {timer_state.status == "idle"}
+      (button :onclick "eww update timer_h=0 && eww update timer_m=1 && eww update timer_s=0" :class "preset_btn" "1m")
+      (button :onclick "eww update timer_h=0 && eww update timer_m=5 && eww update timer_s=0" :class "preset_btn" "5m")
+      (button :onclick "eww update timer_h=0 && eww update timer_m=10 && eww update timer_s=0" :class "preset_btn" "10m")
+      (button :onclick "eww update timer_h=0 && eww update timer_m=25 && eww update timer_s=0" :class "preset_btn" "25m"))
+    ;; transport controls
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 8
+         :class "clock_btn_row"
+      (button :onclick "~/.config/eww/scripts/clock.sh timer set ${timer_h} ${timer_m} ${timer_s} && ~/.config/eww/scripts/clock.sh timer start"
+              :visible {timer_state.status == "idle"}
+              :class "clock_btn on"
+              :tooltip "Start countdown"
+        "▶ Start")
+      (button :onclick "~/.config/eww/scripts/clock.sh timer pause"
+              :visible {timer_state.status == "running"}
+              :class "clock_btn"
+              :tooltip "Pause timer"
+        "⏸ Pause")
+      (button :onclick "~/.config/eww/scripts/clock.sh timer resume"
+              :visible {timer_state.status == "paused"}
+              :class "clock_btn on"
+              :tooltip "Resume timer"
+        "▶ Resume")
+      (button :onclick "~/.config/eww/scripts/clock.sh timer start"
+              :visible {timer_state.status == "done"}
+              :class "clock_btn on"
+              :tooltip "Restart timer"
+        "↻ Restart")
+      (button :onclick "~/.config/eww/scripts/clock.sh timer reset"
+              :visible {timer_state.status != "idle"}
+              :class "clock_btn"
+              :tooltip "Reset timer"
+        "󰓛 Reset"))
+    ;; nudge a running/paused timer without resetting it
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 6
+         :visible {timer_state.status == "running" || timer_state.status == "paused"}
+      (button :onclick "~/.config/eww/scripts/clock.sh timer +60" :class "preset_btn" "+1m")
+      (button :onclick "~/.config/eww/scripts/clock.sh timer -60" :class "preset_btn" "-1m"))))

@@ -10,10 +10,6 @@
     margin-right: 40px;
   }
 
-  &.time {
-    color: c.$accent_2;
-  }
-
   &.bar_end {
     color: c.$accent_1;
 
@@ -44,7 +40,7 @@
   background-color: unset;
 }
 
-.music_player_btn {
+.transparent_btn {
   background: unset;
   border: unset;
   color: c.$accent_3;
@@ -55,7 +51,7 @@
   }
 }
 
-.music_player_btn:hover {
+.transparent_btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -104,3 +100,57 @@
     }
   }
 }
+
+// Stopwatch / timer status chips next to the clock
+.sw_chip,
+.tm_chip {
+  padding: 0px 8px;
+  border-radius: 7px;
+  background: unset;
+  border: 1px solid transparent;
+
+  .chip_dot {
+    font-size: 10px;
+
+    &.running {
+      color: #8fff8f;
+    }
+
+    &.paused {
+      color: #ffd97a;
+    }
+
+    &.done {
+      color: #ff9d9d;
+      font-size: 13px;
+    }
+  }
+
+  &.running {
+    border-color: rgba(143, 255, 143, 0.35);
+  }
+
+  &.paused {
+    border-color: rgba(255, 217, 122, 0.35);
+  }
+
+  &.done {
+    border-color: rgba(255, 157, 157, 0.5);
+  }
+}
+
+.sw_chip:hover,
+.tm_chip:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+// OBS indicator (visible only while OBS runs; red while recording).
+.obsicon {
+  padding: 2px 8px;
+  margin: 0px 2px;
+
+  &.rec {
+    color: #ff5f5f;
+  }
+}
+

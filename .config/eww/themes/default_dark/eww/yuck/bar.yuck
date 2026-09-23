@@ -31,26 +31,38 @@
                  :visible {airplane_mode == "󰀝"}
                  :class "planeicon"
                  :tooltip "Airplane Mode on")
-         (label  :text batinfo)
-         (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
+          (label  :text batinfo)
+          ;; OBS indicator — visible only while OBS runs (red while recording).
+          (button :visible {obs_state.running}
+                  :onclick "pgrep -x obs >/dev/null && hyprctl dispatch 'hl.dsp.focus({ window = \"class:^(obs)$\" })' || obs &"
+                  :class {obs_state.recording ? "obsicon rec" : "obsicon"}
+                  :tooltip {obs_state.recording ? "OBS — recording ● (click to focus)" : "OBS running (click to focus)"}
+            "󰻃")
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "")
-         (button :onclick "kitty -d $HOME -e opencode &"
-                 :class "ai_center"
-                 :tooltip "OpenCode (goated ai)"
-           "󰚩"))))
+          (button :onclick "kitty -d $HOME -e opencode &"
+                  :class "ai_center"
+                  :tooltip "OpenCode (goated ai)"
+            "󰚩"))))
 
 ; Workspaces widget
 (defwidget workspaces []
   (box :orientation "h"
        :spacing 3
        :class "workspaces"
-    (for i in "[1, 2, 3, 4, 5]"
-      (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'`
-              :class {active_workspace == i ? "on" : ""}
-              :tooltip "Switch to workspace ${i}"
-              (label :text i)))))
+     (for i in "[1, 2, 3, 4, 5]"
+       (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'`
+               :class {active_workspace == i ? "on" : ""}
+               :tooltip "Switch to workspace ${i}"
+               (label :text i)))
+     ;; Dynamic buttons for workspaces above 5 (no background-image — add your own).
+     (for i in ws_extra
+       (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'`
+               :class {active_workspace == "${i}" ? "on" : ""}
+               :tooltip "Switch to workspace ${i}"
+               (label :text i)))))
 
 ; Player widget
 (defwidget player []

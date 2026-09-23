@@ -112,6 +112,10 @@
     border: #ffffff 1px solid; 
     transition: 0.3s ease-in-out;
   }
+
+  &.clock {
+    color: c.$accent_3;
+  }
 }
 
 .window_small {

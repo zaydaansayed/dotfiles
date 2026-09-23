@@ -131,3 +131,8 @@ progressbar {
     border-radius: 100px;
   }
 }
+
+calendar:selected {
+  background-color: c.$on;
+  color: #000000;
+}

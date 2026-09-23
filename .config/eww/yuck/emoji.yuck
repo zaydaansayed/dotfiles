@@ -1,0 +1,45 @@
+;; =============================================================================
+;; emoji.yuck — offline emoji picker (116 emojis, search by name).
+;; Open with SUPER+PERIOD. Click an emoji to copy it (wl-copy) AND type it
+;; into the focused window via wtype. Data: scripts/emoji.sh (edit the list).
+;; Reuses the launcher styles (scss/launcher.scss).
+;; =============================================================================
+
+(defwindow emoji
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "420px" :height "440px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "window"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false
+    (box :orientation "h"
+         :spacing 5
+         :space-evenly false
+      (label :text "😀"
+             :class "launcher_searchicon")
+      (input :hexpand true
+             :onchange "eww update emoji_query='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'"))
+    (scroll :vscroll true
+            :hscroll false
+            :vexpand true
+      (box :orientation "v"
+           :spacing 4
+           :space-evenly false
+        (for e in emoji_list
+          (button :class "focusable launcher_app"
+                  :hexpand true
+                  :visible {matches(e.name, "(?i)${emoji_query}")}
+                  :onclick `$HOME/dotfiles/.config/eww/scripts/emoji.sh pick '${e.char}' &`
+                  :tooltip "Copy + type ${e.name}"
+            (box :orientation "h"
+                 :spacing 12
+                 :space-evenly false
+              (label :text {e.char}
+                     :class "emoji_char")
+              (label :text {e.name}))))))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

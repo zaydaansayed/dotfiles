@@ -1,0 +1,63 @@
+;; =============================================================================
+;; setup.yuck — first-run setup window for this rice.
+;; Open with: eww open --no-daemonize setup
+;; Runs ~/dotfiles/setup.sh stages in a terminal so new users can watch.
+;; Uses the shared kb_* styles (see scss/keybinds.scss).
+;; =============================================================================
+
+(defwindow setup
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "620px" :height "460px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "kb_window"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false
+    (box :orientation "h"
+         :space-evenly false
+      (label :text "Rice setup"
+             :hexpand true
+             :halign "start"
+             :class "kb_title")
+      (button :onclick "eww close setup"
+              :class "kb_close"
+              :tooltip "Close"
+        ""))
+    (label :text "Run each step once on a fresh install. Steps open in a terminal."
+           :halign "start"
+           :class "kb_row")
+    (scroll :vscroll true
+            :hscroll false
+            :vexpand true
+      (box :orientation "v"
+           :spacing 8
+           :space-evenly false
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "1 · Dependencies" :halign "start" :class "kb_heading")
+          (label :text "Installs repo + AUR packages, enables Wi-Fi/Bluetooth." :halign "start" :class "kb_row")
+          (button :onclick "kitty -e $HOME/dotfiles/setup.sh deps & eww close setup"
+                  :class "long_btn"
+            "Install dependencies"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "2 · Link dotfiles" :halign "start" :class "kb_heading")
+          (label :text "Symlinks .config entries, installs app launchers." :halign "start" :class "kb_row")
+          (button :onclick "kitty -e $HOME/dotfiles/setup.sh link & eww close setup"
+                  :class "long_btn"
+            "Link dotfiles"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "3 · Apply theme" :halign "start" :class "kb_heading")
+          (label :text "Regenerates eww + Hyprland theme files (night_sky)." :halign "start" :class "kb_row")
+          (button :onclick "kitty -e $HOME/dotfiles/setup.sh theme & eww close setup"
+                  :class "long_btn"
+            "Apply theme"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "4 · Keybinds" :halign "start" :class "kb_heading")
+          (label :text "Learn the shortcuts for this rice." :halign "start" :class "kb_row")
+          (button :onclick "eww open --no-daemonize keybinds & eww close setup"
+                  :class "long_btn"
+            "Open keybinds"))))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

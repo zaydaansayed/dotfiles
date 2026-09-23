@@ -25,31 +25,8 @@
   padding: 3px;
   border-bottom: 2px solid c.$bg;
 
-  &.Fon {
-    box-shadow: 0 0 14px c.$accent_2_glow;
-    background-color: c.$accent_2;
-  }
-
-  &.Fbackground {
-    border-bottom: 2px solid c.$accent_2;
-  }
-
-  &.Son {
-    box-shadow: 0 0 14px c.$accent_1_glow;
-    background-color: c.$accent_1;
-  }
-
-  &.Sbackground {
-    border-bottom: 1px solid c.$accent_1;  
-  }
-
-  &.Oon {
-    box-shadow: 0 0 14px c.$accent_5_glow;
-    background-color: c.$accent_5;
-  }
-
-  &.Obackground {
-    border-bottom: 1px solid c.$accent_5;
+  &.background {
+    border-bottom: 2px solid c.$accent_3;
   }
 }
 

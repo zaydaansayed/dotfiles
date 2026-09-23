@@ -40,9 +40,7 @@
 }
 
 .main_file {
-  min-height: 67px;
-  font-size: 17px;
-  min-width: 250px;
+  min-height: 27px;
 }
 
 .main_shortcut_yt {
@@ -58,6 +56,12 @@
 
 .main_middle {
   margin-right: 10px;
+}
+
+.main_cal {
+  background-color: c.$bg;
+  border-radius: 7px;
+  padding: 3px;
 }
 
 .main_cal:selected {
@@ -110,4 +114,10 @@
 
 .main_music_text {
   margin-left: 20px;
+}
+
+// Unpin () button next to each pinned app in the main menu.
+.main_unpin {
+  padding: 4px 12px;
+  margin-left: 4px;
 }

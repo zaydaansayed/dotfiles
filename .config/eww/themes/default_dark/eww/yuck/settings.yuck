@@ -21,16 +21,19 @@
                 :hexpand true
                 :class "settings_title"))
       (button :class {connections_vis ? "settings_nav on" : "settings_nav"}
-              :onclick "eww update connections_vis=true audio_vis=false ui_vis=false as_vis=false"
+              :onclick "eww update connections_vis=true audio_vis=false ui_vis=false as_vis=false sys_vis=false"
         "󱘖   Connections")
       (button :class {audio_vis ? "settings_nav on" : "settings_nav"}
-              :onclick "eww update connections_vis=false audio_vis=true ui_vis=false as_vis=false"
+              :onclick "eww update connections_vis=false audio_vis=true ui_vis=false as_vis=false sys_vis=false"
         "   Audio")
       (button :class {ui_vis ? "settings_nav on" : "settings_nav"}
-              :onclick "eww update connections_vis=false audio_vis=false ui_vis=true as_vis=false"
+              :onclick "eww update connections_vis=false audio_vis=false ui_vis=true as_vis=false sys_vis=false"
         "󱂬   UI")
+      (button :class {sys_vis ? "settings_nav on" : "settings_nav"}
+              :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=false sys_vis=true"
+        "󰒓   System")
       (button :class {as_vis ? "settings_nav on" : "settings_nav"}
-              :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=true"
+              :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=true sys_vis=false"
         (label :text "    About and support"
                :limit-width 0))
       (button :onclick "eww close settings"
@@ -43,6 +46,7 @@
       (connections)
       (audio)
       (ui)
+      (systemset)
       (about_support))))
 
 (defwidget connections []
@@ -475,6 +479,84 @@
           (button :onclick "kitty -d $HOME/.config/eww/ -e nvim & eww close settings"
                   :class "long_btn"
             "󱍕   Eww config"))))))
+
+; System settings page — brightness slider, hypridle awake toggle (SUPER+I),
+; wallpaper cycler. Sidebar button above toggles sys_vis.
+(defwidget systemset []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+       :visible sys_vis
+    (label :text "System"
+           :halign "start"
+           :class "settings_heading")
+    (scroll :hscroll false
+            :vscroll true
+            :vexpand true
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text "󰃠"
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "Display brightness — ${briginfo.brightness}%"
+                     :halign "start")
+              (scale :value {briginfo.brightness}
+                     :min 5
+                     :max 100
+                     :hexpand true
+                     :onchange "brightnessctl set {}% &"))))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text "󰒓"
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "Idle & lock"
+                     :halign "start")
+              (label :text {idle_awake == "true" ? "Awake — never dims or locks" : "Auto dim after 2m, lock after 10m"}
+                     :halign "start"
+                     :class "placeholder_txt")))
+          (button :onclick "$HOME/.config/hypr/scripts/hypridle-toggle.sh &"
+                  :class {idle_awake == "true" ? "long_btn on" : "long_btn"}
+                  :tooltip "Also bound to SUPER+I"
+            {idle_awake == "true" ? "Disable awake mode" : "Enable awake mode"}))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 10
+            (label :text ""
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "Wallpaper"
+                     :halign "start")
+              (label :text {wallpaper_name}
+                     :halign "start"
+                     :class "placeholder_txt")))
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/wallpaper-next.sh &"
+                  :class "long_btn"
+                  :tooltip "Cycle ~/Pictures/Wallpapers + theme wallpapers"
+            "Next wallpaper"))))))
 
 (defwidget about_support []
   (box :orientation "v"

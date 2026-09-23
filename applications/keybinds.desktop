@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Rice Keybinds
+Comment=Show this rice's Hyprland keybindings
+Exec=sh -c 'eww open --no-daemonize keybinds'
+Icon=keyboard
+Terminal=false
+Categories=Settings;Utility;

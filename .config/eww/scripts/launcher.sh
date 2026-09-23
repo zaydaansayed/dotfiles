@@ -132,7 +132,7 @@ for d in dirs:
                 last = 0
             age_days = max(0, (now - last) / 86400) if last else 9999
             apps.append({
-                "id": fn, "name": name, "exec": exec_clean,
+                "id": fn[:-len(".desktop")] if fn.endswith(".desktop") else fn, "name": name, "exec": exec_clean,
                 "terminal": terminal, "icon": icon,
                 "_score": (count * 100 - min(age_days, 365), name.lower()),
             })
@@ -202,13 +202,46 @@ close_ui() {
   command -v eww >/dev/null 2>&1 && {
     eww close launcher 2>/dev/null || true
     eww update launcher_query="" 2>/dev/null || true
-    eww update launcher_dinput="" 2>/dev/null || true
+    eww update files_json="[]" 2>/dev/null || true
     hyprctl dispatch 'hl.dsp.submap ("reset")'
   }
+}
+
+# files <query> — up to 20 files/dirs under $HOME matching <query>.
+# Prints a JSON array: [{"name": basename, "path": full path}].
+# Needs 2+ chars; noisy dirs pruned. Used by the launcher file section.
+do_files() {
+  local q="$1"
+  if [[ "${#q}" -lt 2 ]]; then echo '[]'; return 0; fi
+  if command -v fd >/dev/null 2>&1; then
+    fd -H -F -t f -t d --max-results 20 \
+      -E .cache -E .cargo -E .rustup -E .mozilla -E .local/share/Trash \
+      -E node_modules -E .git -E __pycache__ \
+      "$q" "$HOME" 2>/dev/null | head -n 20 | python3 -c '
+import json, os, sys
+out = []
+for line in sys.stdin:
+    p = line.rstrip("\n")
+    if p:
+        out.append({"name": os.path.basename(p.rstrip("/")), "path": p})
+print(json.dumps(out))'
+  else
+    find "$HOME" \( -path "$HOME/.cache*" -o -path "$HOME/.mozilla*" \
+      -o -name .git -o -name node_modules -o -name __pycache__ \) -prune \
+      -o -iname "*$q*" -print 2>/dev/null | head -n 20 | python3 -c '
+import json, os, sys
+out = []
+for line in sys.stdin:
+    p = line.rstrip("\n")
+    if p:
+        out.append({"name": os.path.basename(p.rstrip("/")), "path": p})
+print(json.dumps(out))'
+  fi
 }
 
 case "${1:-list}" in
   list|"") do_list ;;
   launch|open|start) shift; do_launch "$@" ;;
-  *) echo "usage: launcher.sh [list|launch <id>]" >&2; exit 1 ;;
+  files) shift; do_files "${*:-}" ;;
+  *) echo "usage: launcher.sh [list|launch <id>|files <query>]" >&2; exit 1 ;;
 esac

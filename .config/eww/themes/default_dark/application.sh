@@ -10,6 +10,9 @@ echo "@use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/bar.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/settings.scss';
 @use '$HOME/.config/eww/scss/launcher.scss';
 @use '$HOME/.config/eww/scss/clipboard.scss';
+@use '$HOME/.config/eww/scss/clock.scss';
+@use '$HOME/.config/eww/scss/widgets.scss';
+@use '$HOME/.config/eww/scss/keybinds.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
 
@@ -23,15 +26,24 @@ echo "(include './yuck/variables.yuck')
 (include './themes/default_dark/eww/yuck/main_menu.yuck')
 (include './yuck/launcher.yuck')
 (include './yuck/clipboard.yuck')
+(include './yuck/clock.yuck')
+(include './yuck/widgets.yuck')
+(include './yuck/keybinds.yuck')
+(include './yuck/setup.yuck')
+(include './yuck/emoji.yuck')
 (include './themes/default_dark/eww/yuck/settings.yuck')" > $HOME/.config/eww/eww.yuck
 
 sed -i '14s/.*/            active_border   = "rgb(ffffff)",/' $HOME/.config/hypr/modules/look_feel.lua
 
-sed -i '3c\    path = $HOME/.config/eww/themes/default_dark/images/wallpaper.png' $HOME/.config/hypr/hyprpaper.conf
+# Absolute wallpaper path (hyprpaper does not expand $HOME) + detached restart
+# so the new hyprpaper survives the terminal that runs this script.
+sed -i "3c\    path = $HOME/.config/eww/themes/default_dark/images/wallpaper.png" $HOME/.config/hypr/hyprpaper.conf
 echo "source = $HOME/.config/eww/themes/default_dark/hypr/hyprlock.conf" > $HOME/.config/hypr/hyprlock.conf
 
-killall hyprpaper 2>/dev/null
-hyprpaper &
+killall hyprpaper 2>/dev/null || true
+sleep 0.5
+setsid nohup hyprpaper >/dev/null 2>&1 < /dev/null &
+disown 2>/dev/null || true
 
 gsettings set org.gnome.desktop.interface icon-theme "Adwaita"
 gsettings set org.gnome.desktop.interface font-name "Adwaita Sans 11"

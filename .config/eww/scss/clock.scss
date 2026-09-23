@@ -1,0 +1,72 @@
+.time_txt {
+  font-size: 50px;
+}
+
+.clock_tabs {
+  margin-right: 37px;
+}
+
+.clock_status {
+  font-size: 15px;
+  padding: 2px 12px;
+  border-radius: 100px;
+
+  &.running {
+    color: #8fff8f;
+  }
+
+  &.paused {
+    color: #ffd97a;
+  }
+
+  &.done {
+    color: #ff9d9d;
+  }
+
+  &.idle {
+    color: #777777;
+  }
+}
+
+.clock_btn_row {
+  margin-top: 4px;
+}
+
+.clock_btn {
+  padding: 6px 14px;
+  font-size: 15px;
+}
+
+.step_btn {
+  padding: 2px 14px;
+  font-size: 13px;
+}
+
+.step_label {
+  font-size: 17px;
+  min-width: 52px;
+}
+
+.preset_btn {
+  padding: 3px 10px;
+  font-size: 13px;
+}
+
+.timer_steppers {
+  margin-top: 2px;
+}
+
+.timer_progress {
+  min-width: 220px;
+
+  trough {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    min-height: 8px;
+  }
+
+  trough progress {
+    background-color: #e99aff;
+    border-radius: 100px;
+  }
+}

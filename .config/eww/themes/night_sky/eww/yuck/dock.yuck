@@ -11,7 +11,7 @@
             :onhoverlost "eww update dock_visibility=false"
     (revealer :transition "slideup"
               :class "dock_revealed"
-              :reveal {dock_visibility || active_apps.workspace_windows == 0}
+              :reveal {dock_visibility || apps.dock_clear || dock_busy}
       (box :orientation "h"
            :space-evenly false
            :spacing 5
@@ -26,88 +26,95 @@
 |"
                :class "main_btn_separator")
         (apps)
-        (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh systemtray tray_toggle"
+        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle"
                 :class "tray_button"
                 :valign "center"
                 :tooltip "System tray"
             (label :text {tray_toggle ? "" : ""}))))))
 
-; Apps widget
-
-; To pin an app that can be opened with multiple instances and isnt a terminal app use this as an example (You might needa configure different files also):
-;button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
-;             :onrightclick "firefox &"
-;            :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button on" : "dock_button background"}
-;              :tooltip "Firefox"
-;        (box :orientation "v"
-;          (image :icon "firefox"
-;                 :icon-size "dialog")))
-
-; To pin a non-terminal app that cant be open multiple times use this format (You might needa configure different files also):
-;(button :onclick {pinned_apps.spotify_open ? "hyprctl dispatch 'hl.dsp.focus({ window: \"class:Spotify\" })'" : "spotify-launcher &"}
-;              :class {!pinned_apps.spotify_open ? "dock_button" : pinned_apps.spotify_focused ? "dock_button on" : "dock_button background"}
-;              :tooltip "Spotify"
-;        (image :icon "spotify-launcher"
-;               :icon-size "dialog"))
-
-; To pin a terminal app use this format (you do not needa configure any different files):
-;(button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
-;              :class "dock_button"
-;              :tooltip "Rice"
-;        (image :icon "kitty"
-;               :icon-size "dialog"))
-
 (defwidget apps []
   (box :orientation "h"
        :space-evenly false
-       :spacing 0
-    (box :orientation "h"
-         :space-evenly false
-      (button :onclick {pinned_apps.firefox_open ? "eww update selected_app=firefox && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "firefox &"}
-              :onrightclick "firefox &"
-              :class {!pinned_apps.firefox_open ? "dock_button" : pinned_apps.firefox_focused ? "dock_button Fon" : "dock_button Fbackground"}
-              :tooltip "Firefox"
+       :spacing 5
+    (box
+      (for app in {apps.pinned}
         (box :orientation "v"
-          (image :icon "firefox"
-                 :icon-size "dialog")))
-      (button :onclick {pinned_apps.spotify_open ? `hyprctl dispatch 'hl.dsp.focus({ window = "class:Spotify" })'` : "spotify-launcher &"}
-              :class {!pinned_apps.spotify_open ? "dock_button" : pinned_apps.spotify_focused ? "dock_button Son" : "dock_button Sbackground"}
-              :tooltip "Spotify"
-        (image :icon "spotify-launcher"
-               :icon-size "dialog"))
-      (button :onclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
-              :onrightclick "cd $HOME/dotfiles/.config && kitty -e nvim &"
-              :class "dock_button"
-              :tooltip "Rice"
-        (image :icon "kitty"
-               :icon-size "dialog"))
-      (button :onclick "cd $HOME/ && kitty -e yazi &"
-              :onrightclick "cd $HOME/ && kitty -e yazi &"
-              :class "dock_button"
-              :tooltip "Yazi"
-        (image :icon "yazi"
-               :icon-size "dialog"))
-      (button :onclick {pinned_apps.obsidian_open ? "eww update selected_app=md.obsidian.Obsidian && $HOME/dotfiles/.config/eww/scripts/onclick_pinned_apps.sh" : "obsidian &"}
-              :onrightclick "obsidian &"
-              :class {!pinned_apps.obsidian_open ? "dock_button" : pinned_apps.obsidian_focused ? "dock_button Oon" : "dock_button Obackground"}
-              :tooltip "Obsidian"
-        (image :icon "obsidian"
-               :icon-size "dialog")))
+             :space-evenly false
+             :spacing 0
+          (button :timeout "5s" :onclick {app.count > 1 ? "~/.config/eww/scripts/apps-preview.sh ${app.id} && eww open --no-daemonize app_multiple_instances" : "/home/zaydaansayed/dotfiles/.config/eww/scripts/pinned_apps.sh launch ${app.id} &"}
+                  :onrightclick "eww update selected_app_id='${app.id}' selected_app_name='${app.name}' selected_app_icon=${app.icon} selected_app_desktop=${app.desktop} selected_app_pinned=true dock_busy=true && eww open --no-daemonize app_rightclick"
+                  :class {app.focused ? "dock_button on" : app.active ? "dock_button background" : "dock_button"}
+                  :tooltip {app.active ? app.tooltip : app.name}
+            (image :icon {app.icon}
+                   :icon-size "dialog")))))
     (label :text "|
 |
 |"
-           :visible {arraylength(active_apps.apps) > 0})
-    (for app in {active_apps.apps}
-      (box :orientation "h"
-           :space-evenly false
-        (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "pid:${app.pid}" })'`
+           :visible {arraylength(apps.active) > 0})
+    (box
+      (for app in {apps.active}
+        (button :timeout "5s" :onclick {app.count > 1 ? "~/.config/eww/scripts/apps-preview.sh ${app.desktop} && eww open --no-daemonize app_multiple_instances" : "hyprctl dispatch \"hl.dsp.focus({ window = \\\"address:${app.focus_address}\\\" })\""}
+                :onrightclick "eww update selected_app_id='${app.desktop}' selected_app_name='${app.name}' selected_app_icon=${app.icon} selected_app_desktop='${app.desktop}' selected_app_pinned=false dock_busy=true && eww open --no-daemonize app_rightclick"
                 :class {app.focused ? "dock_button on" : "dock_button"}
-                :tooltip {app.title}
+                :tooltip {app.tooltip}
           (image :icon {app.icon}
                  :icon-size "dialog"))))))
 
-; Window that opens when you have multiple apps open
-(defwindow app_multiple_instances 
+(defwindow app_rightclick
+  :monitor 0
+  :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
+  :stacking "fg"
+  (eventbox :onhoverlost "eww close app_rightclick && eww update dock_busy=false" 
+    (box :orientation "v"
+         :space-evenly false
+         :class "window"
+         :spacing 10 
+      (box :orientation "h"
+           :space-evenly false
+           :spacing 10
+        (image :icon selected_app_icon
+               :icon-size "dialog")
+        (label :text selected_app_name))
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+           :visible {selected_app_pinned == "false"}
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh add ${selected_app_desktop} && eww close app_rightclick"
+                :class "long_btn"
+          "Pin app 󰤱")
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww close app_rightclick"
+                :class "long_btn"
+          "End Task"))
+      (box :orientation "v"
+           :space-evenly false
+           :spacing 10
+           :visible selected_app_pinned
+        (for p in {apps.pinned}
+          (box :visible {p.id == selected_app_id}
+               :orientation "v"
+               :space-evenly false
+               :spacing 10
+            (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh open ${selected_app_id}"
+                    :class "long_btn"
+              "Open new window")
+            (button :visible {p.active}
+                    :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
+                    :class "long_btn"
+              "End Task")))
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} -"
+                :class "long_btn"
+                :visible {selected_app_id != apps.is_first}
+          " Move Left") 
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} +"
+                :class "long_btn"
+                :visible {selected_app_id != apps.is_last}
+          "Move Right ")
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh rm ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
+                :class "long_btn"
+          "Unpin 󰤰")))))
+
+; Window with live previews when an app has multiple windows open
+(defwindow app_multiple_instances
   :monitor 0
   :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
@@ -115,13 +122,23 @@
     (eventbox :onhoverlost "eww close app_multiple_instances || true"
       (box :orientation "h"
            :space-evenly false
-        (for app in {pinned_apps.apps}
-          (box :visible {app.name == selected_app}
-            (button :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "address:${app.address}" })'; eww close app_multiple_instances || true`
-                    :class {app.focused ? "dock_button on" : "dock_button"}
-                    :tooltip {app.title}
-              (image :icon selected_app
-                     :icon-size "dialog"))))))))
+           :spacing 8
+        (for win in {selected_windows}
+          (button :onclick "~/.config/eww/scripts/pinned_apps.sh focus ${win.address} && eww close app_multiple_instances || true"
+                  :class {win.focused ? "dock_button on" : "dock_button"}
+                  :tooltip {win.title}
+            (box :orientation "v"
+                 :space-evenly false
+                 :spacing 4
+              (image :visible {win.shot}
+                     :path {win.preview}
+                     :image-width 200)
+              (image :visible {!win.shot}
+                     :icon {win.icon}
+                     :icon-size "dialog")
+              (label :text {win.title}
+                     :limit-width 24
+                     :wrap true))))))))
 
 (defwindow systemtray
   :monitor 0

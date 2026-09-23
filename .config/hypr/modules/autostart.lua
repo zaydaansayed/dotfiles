@@ -14,7 +14,8 @@
     hl.exec_cmd("mako")
     hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
     hl.exec_cmd("eww daemon")
-    hl.exec_cmd("eww open-many bar dock --no-daemonize")
+    -- Bar, dock + desktop widgets (clock/sysmon/music, see eww yuck/widgets.yuck)
+    hl.exec_cmd("eww open-many bar dock widget_clock widget_sys widget_music --no-daemonize")
     hl.exec_cmd("hyprpaper")
 
     -- Tasks that go to the tray

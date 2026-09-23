@@ -1,0 +1,38 @@
+// widgets.scss — theme-neutral desktop widget styles.
+
+.dwidget {
+  background-color: rgba(9, 4, 9, 0.72);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px 18px;
+  margin: 4px;
+  color: #ffffff;
+}
+
+.dwidget_clock_time {
+  font-size: 38px;
+  margin-bottom: 2px;
+}
+
+.dwidget_sub {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.dwidget_title {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.dwidget_label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-right: 12px;
+}
+
+.dwidget_music_btn {
+  padding: 8px 6px;
+  margin-top: 4px;
+}

@@ -53,7 +53,7 @@
                          :visible {item.type == "text"}
                          :class "clipboard_text")))
             (button :onclick `~/.config/eww/scripts/clipboard.sh delete ${item.id} &`
-                    :class "clipboard_delete"
+                    :class "focusable clipboard_delete"
                     :tooltip "Delete entry"
               "")))))))
 

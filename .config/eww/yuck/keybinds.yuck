@@ -1,0 +1,70 @@
+;; =============================================================================
+;; keybinds.yuck — keybinding reference window.
+;; Opened from the Rice Keybinds .desktop entry:
+;;   eww open --no-daemonize keybinds
+;; NOTE: kept in sync with hypr modules/input_keybinds.lua by hand.
+;; =============================================================================
+
+(defwindow keybinds
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "700px" :height "520px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "kb_window"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false
+    (box :orientation "h"
+         :space-evenly false
+      (label :text "Keybinds  (SUPER = 󰖳)"
+             :hexpand true
+             :halign "start"
+             :class "kb_title")
+      (button :onclick "eww close keybinds"
+              :class "kb_close"
+              :tooltip "Close"
+        ""))
+    (scroll :vscroll true
+            :hscroll false
+            :vexpand true
+      (box :orientation "v"
+           :spacing 8
+           :space-evenly false
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Apps & system" :halign "start" :class "kb_heading")
+          (label :text "SUPER + A ......... terminal (kitty)" :halign "start" :class "kb_row")
+          (label :text "SUPER + S ......... close window" :halign "start" :class "kb_row")
+          (label :text "SUPER + M ......... shutdown menu" :halign "start" :class "kb_row")
+          (label :text "SUPER + L ......... lock screen" :halign "start" :class "kb_row")
+          (label :text "SUPER + SPACE ... app launcher" :halign "start" :class "kb_row")
+          (label :text "SUPER + V ......... clipboard history" :halign "start" :class "kb_row")
+          (label :text "SUPER + . ......... emoji picker" :halign "start" :class "kb_row")
+          (label :text "Print ............. screenshot menu" :halign "start" :class "kb_row"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Windows" :halign "start" :class "kb_heading")
+          (label :text "SUPER + F ......... float toggle" :halign "start" :class "kb_row")
+          (label :text "SUPER + E ......... borderless zen mode (toggle)" :halign "start" :class "kb_row")
+          (label :text "SUPER + P ......... pseudotile" :halign "start" :class "kb_row")
+          (label :text "SUPER + D ......... toggle split" :halign "start" :class "kb_row")
+          (label :text "SUPER + arrows .... focus window" :halign "start" :class "kb_row")
+          (label :text "SUPER + drag ...... move window" :halign "start" :class "kb_row")
+          (label :text "SUPER + right-drag  resize window" :halign "start" :class "kb_row"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Workspaces" :halign "start" :class "kb_heading")
+          (label :text "SUPER + 1..0 ...... go to workspace" :halign "start" :class "kb_row")
+          (label :text "SUPER + SHIFT + 1..0  move window to workspace" :halign "start" :class "kb_row")
+          (label :text "SUPER + C ......... scratchpad" :halign "start" :class "kb_row")
+          (label :text "SUPER + scroll .... prev/next workspace" :halign "start" :class "kb_row"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Power & idle" :halign "start" :class "kb_heading")
+          (label :text "SUPER + I ......... awake mode — no auto dim/lock (toggle)" :halign "start" :class "kb_row"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Touchpad" :halign "start" :class "kb_heading")
+          (label :text "3-finger horizontal  switch workspace" :halign "start" :class "kb_row"))
+        (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
+          (label :text "Media keys" :halign "start" :class "kb_heading")
+          (label :text "Volume / mic / brightness / player — see input_keybinds.lua" :halign "start" :class "kb_row"))))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

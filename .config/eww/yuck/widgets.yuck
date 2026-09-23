@@ -1,0 +1,77 @@
+;; =============================================================================
+;; widgets.yuck — desktop widgets (clock, system monitor, now playing).
+;; HOW TO MOVE: edit the :x / :y / :anchor literals in each
+;; (geometry ...) below, then: eww close <window> && eww open --no-daemonize <window>
+;; (geometry applies when the window opens).
+;; Anchors: "top left" | "top center" | "top right" | "center" |
+;;          "bottom left" | "bottom center" | "bottom right"
+;; Toggle all: eww open --no-daemonize widget_clock widget_sys widget_music
+;; =============================================================================
+
+;; NOTE: :stacking "bottom" (not "bg") so widgets sit ABOVE the hyprpaper
+;; wallpaper but BELOW normal windows.
+(defwindow widget_clock
+  :monitor 0
+  :geometry (geometry :x "20px" :y "50px"
+                     :width "220px" :height "110px" :anchor "top right")
+  :stacking "bottom"
+  :focusable false
+  (box :class "dwidget"
+       :orientation "v"
+       :space-evenly false
+    (label :text timenum
+           :class "dwidget_clock_time")
+    (label :text date
+           :class "dwidget_sub")))
+
+(defwindow widget_sys
+  :monitor 0
+  :geometry (geometry :x "20px" :y "180px"
+                     :width "220px" :height "150px" :anchor "top right")
+  :stacking "bottom"
+  :focusable false
+  (box :class "dwidget"
+       :orientation "v"
+       :spacing 8
+       :space-evenly false
+    (label :text "System"
+           :halign "start"
+           :class "dwidget_title")
+    (box :orientation "h" :space-evenly false
+      (label :text "CPU" :class "dwidget_label")
+      (label :text "${sysmon.cpu}%"
+             :halign "end" :hexpand true))
+    (box :orientation "h" :space-evenly false
+      (label :text "MEM" :class "dwidget_label")
+      (label :text "${sysmon.mem}%"
+             :halign "end" :hexpand true))
+    (box :orientation "h" :space-evenly false
+      (label :text "DISK" :class "dwidget_label")
+      (label :text "${sysmon.disk}%"
+             :halign "end" :hexpand true))
+    (box :orientation "h" :space-evenly false
+      (label :text "BAT" :class "dwidget_label")
+      (label :text batinfo
+             :halign "end" :hexpand true))))
+
+(defwindow widget_music
+  :monitor 0
+  :geometry (geometry :x "20px" :y "90px"
+                     :width "260px" :height "90px" :anchor "bottom right")
+  :stacking "bottom"
+  :focusable false
+  (box :class "dwidget"
+       :orientation "v"
+       :space-evenly false
+    (label :text "Now playing"
+           :halign "start"
+           :class "dwidget_title")
+    (button :onclick "playerctl play-pause"
+            :class "dwidget_music_btn"
+            :tooltip "Play/Pause"
+      (label :text {player_data.visible ? "${player_data.icon}  ${player_data.text}" : "nothing playing"}
+             :limit-width 30))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================
