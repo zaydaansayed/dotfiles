@@ -144,7 +144,7 @@ darkness and beauty of the night sky."
       (button :onclick "eww update setup_step=3"
               :class "setup_back"
         "<- Back")
-      (button :onclick "eww close setup"
+      (button :onclick "$HOME/.config/eww/scripts/setup_end_btn.sh"
               :class "setup_getstarted"
         "Go to desktop"))))
 

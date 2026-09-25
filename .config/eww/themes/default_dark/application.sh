@@ -13,6 +13,7 @@ echo "@use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/bar.scss';
 @use '$HOME/.config/eww/scss/clock.scss';
 @use '$HOME/.config/eww/scss/widgets.scss';
 @use '$HOME/.config/eww/scss/keybinds.scss';
+@use '$HOME/.config/eww/scss/profile_picker.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/widgets/setup.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/default_dark/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
@@ -28,6 +29,7 @@ echo "(include './yuck/variables.yuck')
 (include './yuck/launcher.yuck')
 (include './yuck/clipboard.yuck')
 (include './yuck/clock.yuck')
+(include './yuck/profile_picker.yuck')
 (include './themes/default_dark/eww/yuck/widgets.yuck')
 (include './yuck/keybinds.yuck')
 (include './themes/default_dark/eww/yuck/setup.yuck')

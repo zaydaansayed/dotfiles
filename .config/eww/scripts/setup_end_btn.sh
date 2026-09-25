@@ -28,5 +28,5 @@ end)
 ------------------------ MADE BY ZAYDAAN SAYED 2026 ----------------------------
 --------------------------------------------------------------------------------' > $HOME/.config/hypr/modules/autostart.lua
 
-eww open-many --no-daemonize bar dock widget_clock widget_calendar
 eww close setup
+eww open-many --no-daemonize bar dock widget_clock widget_calendar

@@ -9,6 +9,7 @@
 (include './yuck/launcher.yuck')
 (include './yuck/clipboard.yuck')
 (include './yuck/clock.yuck')
+(include './yuck/profile_picker.yuck')
 (include './themes/night_sky/eww/yuck/widgets.yuck')
 (include './yuck/keybinds.yuck')
 (include './themes/night_sky/eww/yuck/setup.yuck')

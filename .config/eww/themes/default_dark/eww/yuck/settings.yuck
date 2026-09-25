@@ -458,12 +458,39 @@
                        :halign "center")))
             (button :onclick "$HOME/.config/eww/themes/night_sky/application.sh"
                     :class {current_theme == "night_sky" ? "theme_btn on" : "theme_btn"}
-            (box :orientation "v"
-                 :space-evenly false 
-              (box :class "image night_sky")
-              (label :text "Night sky"
-                     :halign "center")))))
-        (box :orientation "v"
+             (box :orientation "v"
+                  :space-evenly false 
+               (box :class "image night_sky")
+               (label :text "Night sky"
+                      :halign "center")))))
+         (box :orientation "v"
+              :space-evenly false
+              :class "l2 settings_card"
+              :spacing 5
+           (box :orientation "h"
+                :space-evenly false
+                :spacing 10
+             (label :text ""
+                    :class "settings_big_icon")
+             (label :text "Profile picture"))
+           (box :orientation "h"
+                :space-evenly false
+                :spacing 10
+             (box :class "image profile_picture")
+             (box :orientation "v"
+                  :space-evenly false
+                  :hexpand true
+                  :valign "center"
+               (label :text username
+                      :halign "start")
+               (label :text "images/profile_picture.png"
+                      :halign "start"
+                      :class "placeholder_txt")))
+           (button :onclick "/home/zaydaansayed/dotfiles/.config/eww/scripts/profile-picker.sh open &"
+                   :class "long_btn"
+                   :tooltip "Pick a new profile picture"
+             " Change profile picture"))
+         (box :orientation "v"
              :space-evenly false
              :class "l2 settings_card"
              :spacing 5
