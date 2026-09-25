@@ -1,4 +1,4 @@
-sudo pacman -S gtk-layer-shell udiskie socat jq ttf-jetbrains-mono hyprshot tlp base-devel rust yazi neovim firefox fish
+sudo pacman -S gtk-layer-shell udiskie socat stow jq ttf-jetbrains-mono hyprshot tlp libdbusmenu-glib base-devel rust yazi neovim firefox fish
 cd $HOME
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
