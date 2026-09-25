@@ -1,4 +1,4 @@
-# zaydaansayed's rice 🌃
+# zaydaansayed's rice
 
 Hyprland + eww desktop rice with two themes (`night_sky`, `default_dark`),
 a spotlight launcher, desktop widgets, and a one-command setup script.
@@ -30,8 +30,7 @@ cd ~/dotfiles
 ./setup.sh all        # needs sudo for packages (or run steps separately)
 ```
 
-Then log out and pick the **Hyprland** session. Or open the Setup window:
-`eww open --no-daemonize setup`.
+Then log out and pick the **Hyprland** session.
 
 ## Keybinds
 
