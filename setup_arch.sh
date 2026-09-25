@@ -1,4 +1,5 @@
 sudo pacman -S gtk-layer-shell udiskie socat stow jq ttf-jetbrains-mono hyprshot tlp libdbusmenu-gtk3 libdbusmenu-glib base-devel rust yazi neovim firefox fish
+mkdir ~/.local/share/applications/
 cd $HOME
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
@@ -12,8 +13,8 @@ sudo mv target/release/eww /usr/bin/
 sudo rm -rf $HOME/.config/hypr
 cd $HOME/dotfiles
 stow .
-link $HOME/dotfiles/applications/keybinds.desktop $HOME/.local/share/applications/keybinds.desktop
-link $HOME/dotfiles/applications/settings.desktop $HOME/.local/share/applications/settings.desktop
+mv $HOME/dotfiles/applications/keybinds.desktop $HOME/.local/share/applications/keybinds.desktop
+mv $HOME/dotfiles/applications/settings.desktop $HOME/.local/share/applications/settings.desktop
 $HOME/.config/eww/themes/night_sky/application.sh
 
 echo 'hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
