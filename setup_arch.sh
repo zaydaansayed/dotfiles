@@ -1,8 +1,10 @@
-sudo pacman -S gtk-layer-shell udiskie socat jq ttf-jetbrains-mono hyprshot tlp base-devel git rust yazi neovim firefox fish
+sudo pacman -S gtk-layer-shell udiskie socat jq ttf-jetbrains-mono hyprshot tlp base-devel rust yazi neovim firefox fish
+cd $HOME
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
 makepkg -si
 yay -S weather-cli bibata-cursor-theme otf-monocraft pixora-icons-git
+cd $HOME
 git clone https://github.com/elkowar/eww
 cd $HOME/eww
 cargo build --release --no-default-features --features=wayland
