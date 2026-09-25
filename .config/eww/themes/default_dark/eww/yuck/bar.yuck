@@ -14,8 +14,36 @@
          :spacing 5
          (player) (workspaces))
     (box :space-evenly false 
-         :tooltip date 
-      (label :text timenum))
+         :tooltip date
+         :spacing 6
+         :class "bar_module"
+      (button :onclick {clock_toggle ? "eww close clock && eww update clock_toggle=false" : "eww open --no-daemonize clock && eww update clock_toggle=true"}
+              :class {clock_toggle ? "transparent_btn on" : "transparent_btn"}
+        timenum)
+      (button :onclick {clock_toggle ? "eww close clock && eww update clock_toggle=false" : "eww open --no-daemonize clock && eww update clock_toggle=true stopwatch_toggle=true time_toggle=false timer_toggle=false"}
+              :visible {stopwatch_state.status != "idle"}
+              :tooltip "Stopwatch: ${stopwatch_state.status} (${stopwatch_state.time}) — click to open"
+              :class {stopwatch_state.status == "running" ? "sw_chip running" : "sw_chip paused"}
+        (box :orientation "h" :spacing 12 :space-evenly false
+          (label :text "")
+          (label :text {stopwatch_state.time})
+          (label :text {stopwatch_state.status == "running" ? "●" : "❚❚"}
+                 :class {stopwatch_state.status == "running" ? "chip_dot running" : "chip_dot paused"})))
+      ;; timer status chip
+      (button :onclick {clock_toggle ? "eww close clock && eww update clock_toggle=false" : "eww open --no-daemonize clock & eww update clock_toggle=true timer_toggle=true time_toggle=false stopwatch_toggle=false"}
+              :visible {timer_state.status != "idle"}
+              :tooltip "Timer: ${timer_state.status} (${timer_state.time}) — click to open"
+              :class {timer_state.status == "running" ? "tm_chip running" : timer_state.status == "paused" ? "tm_chip paused" : "tm_chip done"}
+        (box :orientation "h" :spacing 12 :space-evenly false
+          (label :text "󰁫")
+          (label :text {timer_state.time})
+          (label :text {timer_state.status == "running" ? "●" : timer_state.status == "paused" ? "❚❚" : " "}
+                 :class {timer_state.status == "running" ? "chip_dot running" : timer_state.status == "paused" ? "chip_dot paused" : "chip_dot done"})))
+      (button :visible {obs_state.running}
+                   :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "class:com.obsproject.Studio" })'`
+                   :class {obs_state.recording ? "obsicon on" : "obsicon"}
+                   :tooltip {obs_state.recording ? "OBS — recording ● (click to focus)" : "OBS running (click to focus)"}
+            "󰻃"))
     (box :space-evenly false 
          :halign "end"
          :spacing 3
@@ -31,13 +59,7 @@
                  :visible {airplane_mode == "󰀝"}
                  :class "planeicon"
                  :tooltip "Airplane Mode on")
-          (label  :text batinfo)
-          ;; OBS indicator — visible only while OBS runs (red while recording).
-          (button :visible {obs_state.running}
-                  :onclick "pgrep -x obs >/dev/null && hyprctl dispatch 'hl.dsp.focus({ window = \"class:^(obs)$\" })' || obs &"
-                  :class {obs_state.recording ? "obsicon rec" : "obsicon"}
-                  :tooltip {obs_state.recording ? "OBS — recording ● (click to focus)" : "OBS running (click to focus)"}
-            "󰻃")
+          (label  :text batinfo) 
           (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"

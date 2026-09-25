@@ -44,3 +44,22 @@
   margin-right: 4px;
   padding: 2px 0;
 }
+
+// Spotlight side (details) panel.
+.launcher_detail {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.launcher_detail_hint {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.launcher_detail_icon {
+  min-width: 64px;
+  min-height: 64px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}

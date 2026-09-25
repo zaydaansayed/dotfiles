@@ -10,13 +10,13 @@
   :geometry (geometry :x "0px" :y "0px" :width "700px" :height "520px" :anchor "center")
   :stacking "fg"
   :focusable true
-  (box :class "kb_window"
+  (box :class "window kb"
        :orientation "v"
        :spacing 10
        :space-evenly false
     (box :orientation "h"
          :space-evenly false
-      (label :text "Keybinds  (SUPER = 󰖳)"
+      (label :text "Keybinds"
              :hexpand true
              :halign "start"
              :class "kb_title")
@@ -43,7 +43,6 @@
         (box :orientation "v" :spacing 4 :space-evenly false :class "kb_group"
           (label :text "Windows" :halign "start" :class "kb_heading")
           (label :text "SUPER + F ......... float toggle" :halign "start" :class "kb_row")
-          (label :text "SUPER + E ......... borderless zen mode (toggle)" :halign "start" :class "kb_row")
           (label :text "SUPER + P ......... pseudotile" :halign "start" :class "kb_row")
           (label :text "SUPER + D ......... toggle split" :halign "start" :class "kb_row")
           (label :text "SUPER + arrows .... focus window" :halign "start" :class "kb_row")

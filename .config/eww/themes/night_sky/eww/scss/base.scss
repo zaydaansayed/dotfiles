@@ -20,6 +20,7 @@ button {
   }
 
   &.on:hover {
+    transition: background-color 0.3s ease-in-out;
     background-color: c.$on_hover;
   }
 
@@ -74,6 +75,11 @@ entry:focus {
   border: #ffffff 1px solid;
 }
 
+entry selection {
+  background-color: c.$on;
+  color: #000000;
+}
+
 tooltip {
   background-color: rgba(9, 4, 9, 0.7);
   border-radius: 7px;
@@ -122,13 +128,15 @@ menu {
 }
 
 progressbar {
-  progress {
+  border-radius: 100px;
+  trough progress {
     border-radius: 100px;
-}
+    background-color: c.$on;
+  }
 
   trough {
-    background-color: c.$l2;
     border-radius: 100px;
+    background-color: c.$l2;
   }
 }
 

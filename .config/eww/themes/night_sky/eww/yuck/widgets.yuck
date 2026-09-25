@@ -16,8 +16,9 @@
                      :width "220px" :height "110px" :anchor "top right")
   :stacking "bottom"
   :focusable false
-  (box :class "dwidget"
+  (box :class "window widget"
        :orientation "v"
+       :valign "center"
        :space-evenly false
     (label :text timenum
            :class "dwidget_clock_time")
@@ -30,7 +31,7 @@
                      :width "220px" :height "150px" :anchor "top right")
   :stacking "bottom"
   :focusable false
-  (box :class "dwidget"
+  (box :class "window widget"
        :orientation "v"
        :spacing 8
        :space-evenly false
@@ -60,17 +61,30 @@
                      :width "260px" :height "90px" :anchor "bottom right")
   :stacking "bottom"
   :focusable false
-  (box :class "dwidget"
-       :orientation "v"
+  (box :class "music_player_window"
+       :orientation "h"
        :space-evenly false
-    (label :text "Now playing"
-           :halign "start"
-           :class "dwidget_title")
-    (button :onclick "playerctl play-pause"
-            :class "dwidget_music_btn"
-            :tooltip "Play/Pause"
-      (label :text {player_data.visible ? "${player_data.icon}  ${player_data.text}" : "nothing playing"}
-             :limit-width 30))))
+       :visible {player_data.visible}
+       :style "background-color: ${player_bg}; color: ${player_text};"
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 5
+         :valign "center"
+      (album_art)
+      (music_buttons)
+      (box :orientation "v"
+        (label :text {player_data.artist}
+               :limit-width 0
+               :visible {strlength(player_data.artist) > 0})
+      (label :text {player_data.title}
+             :limit-width 0)))
+    (lyrics)))
+
+(defwindow widget_calendar 
+  :monitor 0
+  :geometry (geometry :x "20px" :y "50px" :width "260px" :height "90px" :anchor "top left")
+  :stacking "bottom"
+  (calendar :class "main_cal"))
 
 ;; =============================================================================
 ;; Made by Zaydaan Sayed 2026

@@ -1,0 +1,118 @@
+;; =============================================================================
+;; profile_picker.yuck — launcher-style image picker for the profile picture.
+;; Mirrors launcher.yuck: search input on top, scrollable results on the
+;; left, preview + actions side panel on the right.
+;; Opened by scripts/update_profile.sh (no zenity).
+;; Click a row to preview it (› fills the side panel), then Apply.
+;; =============================================================================
+
+(defwindow profile_picker
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "500px" :height "500px" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "window"
+       :orientation "h"
+       :spacing 12
+       :space-evenly false
+    ;; LEFT: search input + image results.
+    (box :orientation "v"
+         :spacing 10
+         :space-evenly false
+         :hexpand true
+      (box :orientation "h"
+           :spacing 5
+           :space-evenly false
+        (box :space-evenly false
+             :spacing 20
+             :hexpand true
+          (label :text ">"
+                 :class "launcher_searchicon")
+          (input :hexpand true
+                 :onchange "$HOME/.config/eww/scripts/profile-picker-query.sh '${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'")))
+      (scroll :vscroll true
+              :vexpand true
+              :hscroll false
+        (box :orientation "v"
+             :spacing 4
+             :space-evenly false
+          (box :orientation "v"
+               :space-evenly false
+               :spacing 3
+            (label :text "Images"
+                   :halign "start"
+                   :class "launcher_section")
+            (for f in profile_images_json
+              (box :orientation "h"
+                   :space-evenly false
+                   :spacing 5
+                (button :class "focusable launcher_app"
+                        :hexpand true
+                        :onclick `eww update selected_profile_path='${replace(replace(f.path, "\\\\", "\\\\\\\\"), "'", "'\\''")}' && eww update selected_profile_name='${replace(replace(f.name, "\\\\", "\\\\\\\\"), "'", "'\\''")}'`
+                        :tooltip {f.path}
+                  (box :orientation "h"
+                       :spacing 10
+                       :space-evenly false
+                    (image :path {f.path}
+                           :image-width 48
+                           :image-height 48
+                           :valign "center"
+                           :class "profile_picker_thumb")
+                    (box :orientation "v"
+                         :space-evenly false
+                      (label :text {f.name}
+                             :halign "start"
+                             :limit-width 40)
+                      (label :text {f.path}
+                             :limit-width 55
+                             :class "launcher_filepath"))))
+                ;; › fills the side panel (vars below) without applying.
+                (button :onclick `eww update selected_profile_path='${replace(replace(f.path, "\\\\", "\\\\\\\\"), "'", "'\\''")}' && eww update selected_profile_name='${replace(replace(f.name, "\\\\", "\\\\\\\\"), "'", "'\\''")}'`
+                        :class {selected_profile_path == f.path ? "focusable app_pin on" : "focusable app_pin"}
+                        :tooltip "Preview"
+                  "›")))))))
+    ;; RIGHT: side panel with preview + actions.
+    (box :orientation "v"
+         :spacing 8
+         :space-evenly false
+         :width 210
+         :class "launcher_detail"
+         :visible {selected_profile_path != ""}
+      (box :orientation "h"
+           :space-evenly false
+        (label :text "Preview"
+               :hexpand true
+               :halign "start"
+               :class "launcher_section")
+        (button :onclick "eww update selected_profile_path='' && eww update selected_profile_name=''"
+                :class "app_pin"
+                :tooltip "Clear selection"
+          ""))
+      (box :orientation "v"
+           :spacing 8
+           :space-evenly false
+           :visible {selected_profile_path != ""}
+        (image :path {selected_profile_path}
+               :image-width 180
+               :image-height 180
+               :halign "center"
+               :class "profile_picker_preview")
+        (label :text {selected_profile_name}
+               :halign "center"
+               :limit-width 24)
+        (label :text {selected_profile_path}
+               :halign "center"
+               :limit-width 28
+               :class "launcher_filepath")
+        (button :class "focusable launcher_app"
+                :onclick `$HOME/.config/eww/scripts/profile-picker.sh apply '${replace(replace(selected_profile_path, "\\\\", "\\\\\\\\"), "'", "'\\''")}' &`
+                :tooltip "Set as profile picture"
+          "✔ Apply")
+        (button :class "focusable launcher_app"
+                :onclick "eww close profile_picker && eww update profile_picker_query='' && eww update profile_images_json='[]' && eww update selected_profile_path='' && eww update selected_profile_name=''"
+                :tooltip "Close without changing"
+          "✕ Cancel")))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

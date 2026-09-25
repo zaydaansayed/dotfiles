@@ -52,7 +52,7 @@
               :tooltip {netinfo.netname}
               {netinfo.icon})
       (button :class {netinfo.icon == "󰤭" ? "quick_extend net" : "quick_extend net on"}
-              :onclick "networkmanager_dmenu; eww close quick_settings || true; eww update quick_toggle=false"
+              :onclick "eww open --no-daemonize settings && eww close quick_settings && eww update quick_toggle=false"
               :tooltip {netinfo.netname}
               ">")
       (button :class {btinfo.icon == "󰂲" ? "quick_button bt" : "quick_button bt on"}
@@ -60,7 +60,7 @@
               :tooltip {btinfo.devcname}
               {btinfo.icon == "" ? "󰂯" : btinfo.icon})
       (button :class {btinfo.icon == "󰂲" ? "quick_extend bt" : "quick_extend bt on"}
-              :onclick "bzmenu -l rofi; eww close quick_settings || true; eww update quick_toggle=false"
+              :onclick "eww open --no-daemonize settings && eww close quick_settings && eww update quick_toggle=false"
               :tooltip {btinfo.devcname}
              ">")
       (button :onclick {airplane_mode == "󰀝" ? "rfkill unblock all" : "rfkill block all"}
@@ -150,9 +150,11 @@
                :space-evenly false
                :class "l2 nhis_box"
             (label :text {entry.app}
-                   :limit-width 0)
+                   :show-truncated false
+                   :wrap true)
             (label :text {entry.title}
-                   :limit-width 0)))))
+                   :show-truncated false
+                   :wrap true)))))
     (button :onclick "killall mako && mako"
       "Clear All")))
 

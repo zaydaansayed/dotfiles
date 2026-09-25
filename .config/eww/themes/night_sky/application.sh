@@ -13,6 +13,7 @@ echo "@use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/bar.scss';
 @use '$HOME/.config/eww/scss/clock.scss';
 @use '$HOME/.config/eww/scss/widgets.scss';
 @use '$HOME/.config/eww/scss/keybinds.scss';
+@use '$HOME/.config/eww/themes/night_sky/eww/scss/widgets/setup.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/base.scss';
 @use '$HOME/.config/eww/themes/night_sky/eww/scss/mixins.scss'" > $HOME/.config/eww/eww.scss
 
@@ -27,23 +28,19 @@ echo "(include './yuck/variables.yuck')
 (include './yuck/launcher.yuck')
 (include './yuck/clipboard.yuck')
 (include './yuck/clock.yuck')
-(include './yuck/widgets.yuck')
+(include './themes/night_sky/eww/yuck/widgets.yuck')
 (include './yuck/keybinds.yuck')
-(include './yuck/setup.yuck')
+(include './themes/night_sky/eww/yuck/setup.yuck')
 (include './yuck/emoji.yuck')
 (include './themes/night_sky/eww/yuck/settings.yuck')" > $HOME/.config/eww/eww.yuck
 
 sed -i '14s/.*/            active_border   = { colors = {"rgb(E99AFF)", "rgb(549D9D)"}, angle = 0 },/' $HOME/.config/hypr/modules/look_feel.lua
 
-# Absolute wallpaper path (hyprpaper does not expand $HOME) + detached restart
-# so the new hyprpaper survives the terminal that runs this script.
 sed -i "3c\    path = $HOME/.config/eww/themes/night_sky/images/wallpaper.png" $HOME/.config/hypr/hyprpaper.conf
 echo "source = $HOME/.config/eww/themes/night_sky/hypr/hyprlock.conf" > $HOME/.config/hypr/hyprlock.conf
 
-killall hyprpaper 2>/dev/null || true
-sleep 0.5
-setsid nohup hyprpaper >/dev/null 2>&1 < /dev/null &
-disown 2>/dev/null || true
+killall hyprpaper
+hyprpaper &
 
 gsettings set org.gnome.desktop.interface icon-theme "pixora"
 gsettings set org.gnome.desktop.interface font-name "Monocraft 11"
@@ -74,4 +71,4 @@ sed -i "s|^; theme = 'none'$|theme = 'night_sky'|" "$HOME/.config/cava/config"
 echo '{"$schema": "https://opencode.ai/tui.json", "theme": "night-sky"}' > "$HOME/.config/opencode/tui.json"
 
 echo "night_sky" > $HOME/.config/eww/themes/current_theme.txt
-eww update connections_vis=false ui_vis=true
+eww update connections_vis=false ui_vis=true setup_step=2

@@ -21,7 +21,7 @@
           "")
         (box :class "dock_separator")
         (apps)
-        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle"
+        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle dock_busy"
                 :class "tray_button"
                 :valign "center"
                 :tooltip "System tray"
@@ -31,7 +31,7 @@
   (box :orientation "h"
        :space-evenly false
        :spacing 5
-    (box
+    (box :spacing 3
       (for app in {apps.pinned}
         (button :timeout "5s" :onclick {app.count > 1 ? "~/.config/eww/scripts/apps-preview.sh ${app.id} && eww open --no-daemonize app_multiple_instances" : "/home/zaydaansayed/dotfiles/.config/eww/scripts/pinned_apps.sh launch ${app.id} &"}
                   :onrightclick "eww update selected_app_id='${app.id}' selected_app_name='${app.name}' selected_app_icon=${app.icon} selected_app_desktop=${app.desktop} selected_app_pinned=true dock_busy=true && eww open --no-daemonize app_rightclick"
@@ -41,7 +41,7 @@
                    :icon-size "dialog"))))
     (box :class "dock_separator"
          :visible {arraylength(apps.active) > 0})
-    (box
+    (box :spacing 3
       (for app in {apps.active}
         (button :timeout "5s" :onclick {app.count > 1 ? "~/.config/eww/scripts/apps-preview.sh ${app.desktop} && eww open --no-daemonize app_multiple_instances" : "hyprctl dispatch \"hl.dsp.focus({ window = \\\"address:${app.focus_address}\\\" })\""}
                 :onrightclick "eww update selected_app_id='${app.desktop}' selected_app_name='${app.name}' selected_app_icon=${app.icon} selected_app_desktop='${app.desktop}' selected_app_pinned=false dock_busy=true && eww open --no-daemonize app_rightclick"
@@ -69,10 +69,10 @@
            :space-evenly false
            :spacing 10
            :visible {selected_app_pinned == "false"}
-        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh add ${selected_app_desktop} && eww close app_rightclick"
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh add ${selected_app_desktop} && eww close app_rightclick && eww update dock_busy=false &"
                 :class "long_btn"
           "Pin app 󰤱")
-        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww close app_rightclick"
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww close app_rightclick && eww update dock_busy=false &"
                 :class "long_btn"
           "End Task"))
       (box :orientation "v"
@@ -86,7 +86,7 @@
                :spacing 10
             (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh open ${selected_app_id}"
                     :class "long_btn"
-              "Open new window")
+              "Open")
             (button :visible {p.active}
                     :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
                     :class "long_btn"
@@ -94,11 +94,11 @@
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} -"
                 :class "long_btn"
                 :visible {selected_app_id != apps.is_first}
-          "  Move Left") 
+          "   Move Left") 
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} +"
                 :class "long_btn"
                 :visible {selected_app_id != apps.is_last}
-          "Move Right  ")
+          "Move Right   ")
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh rm ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
                 :class "long_btn"
           "Unpin 󰤰")))))
@@ -134,7 +134,7 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
-  (eventbox :onhoverlost "eww close systemtray || true; eww update tray_toggle=false"
+  (eventbox :onhoverlost "eww close systemtray && eww update tray_toggle=false && eww update dock_busy=false"
     (systray :spacing 4
              :prepend-new true
              :class "window")))

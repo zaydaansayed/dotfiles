@@ -33,6 +33,11 @@
   &.b {
     color: #000000;
   }
+
+  &.extra {
+    background-color: c.$accent_2;
+    color: #000000;
+  }
 }
 
 .workspace:hover {
@@ -146,11 +151,7 @@
 
 // OBS indicator (visible only while OBS runs; red while recording).
 .obsicon {
-  padding: 2px 8px;
-  margin: 0px 2px;
-
-  &.rec {
-    color: #ff5f5f;
-  }
+  min-width: 23px;
+  padding-right: 3px;
+  color: c.$accent_3;
 }
-

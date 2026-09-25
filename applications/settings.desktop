@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Settings
+Exec=eww open --no-daemonize settings
+Icon=settings
+Comment=Open the eww settings menu
+Terminal=false
+Categories=Settings;Utility;

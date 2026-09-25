@@ -138,9 +138,6 @@ do_pick() {
     eww update emoji_query="" 2>/dev/null || true
     hyprctl dispatch 'hl.dsp.submap ("reset")' 2>/dev/null || true
   }
-  # Let focus return to the previous window, then type the emoji.
-  sleep 0.25
-  wtype "$char" 2>/dev/null || true
 }
 
 case "${1:-list}" in

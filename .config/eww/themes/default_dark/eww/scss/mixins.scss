@@ -24,6 +24,7 @@
   border-radius: 7px;
 
   &.nhis_box {
+    padding: 5px;
     margin-bottom: 5px;
   }
 
@@ -72,6 +73,11 @@
   &.settings_list button:hover {
     background-color: c.$l4;
   }
+
+  &.setup_pfp {
+    border-radius: 15px;
+    padding: 15px;
+  }
 }
 
 .l2 button {
@@ -115,6 +121,11 @@
   &.launcher button:focus:hover {
     background-color: c.$on_hover;
   }
+
+  &.widget {
+    padding: 16px 18px;
+    margin: 4px;
+  }
 }
 
 .window_small {
@@ -143,6 +154,12 @@
   &.profile_picture {
     background-image: url('./images/profile_picture.png');
     min-height: 150px;
+  }
+
+  &.setup_profile_picture {
+    background-image: url('./images/profile_picture.png');
+    min-height: 300px;
+    min-width: 300px;
   }
 
   &.default_dark {

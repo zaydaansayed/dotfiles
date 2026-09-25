@@ -17,7 +17,7 @@
     (box :space-evenly false 
          :tooltip date
          :spacing 6
-         :class "bar_module time"
+         :class "bar_module"
       (button :onclick {clock_toggle ? "eww close clock && eww update clock_toggle=false" : "eww open --no-daemonize clock && eww update clock_toggle=true"}
               :class {clock_toggle ? "transparent_btn on" : "transparent_btn"}
         timenum)
@@ -39,7 +39,12 @@
           (label :text "󰁫")
           (label :text {timer_state.time})
           (label :text {timer_state.status == "running" ? "●" : timer_state.status == "paused" ? "❚❚" : " "}
-                 :class {timer_state.status == "running" ? "chip_dot running" : timer_state.status == "paused" ? "chip_dot paused" : "chip_dot done"}))))
+                 :class {timer_state.status == "running" ? "chip_dot running" : timer_state.status == "paused" ? "chip_dot paused" : "chip_dot done"})))
+      (button :visible {obs_state.running}
+                   :onclick `hyprctl dispatch 'hl.dsp.focus({ window = "class:com.obsproject.Studio" })'`
+                   :class {obs_state.recording ? "obsicon on" : "obsicon"}
+                   :tooltip {obs_state.recording ? "OBS — recording ● (click to focus)" : "OBS running (click to focus)"}
+            "󰻃"))
     (box :space-evenly false 
          :halign "end"
          :class "bar_module bar_end"
@@ -56,21 +61,15 @@
                  :visible {airplane_mode == "󰀝"}
                  :class "planeicon"
                  :tooltip "Airplane Mode on")
-          (label  :text batinfo)
-           ;; OBS indicator — visible only while OBS runs (red while recording).
-           (button :visible {obs_state.running}
-                   :onclick "pgrep -x obs >/dev/null && hyprctl dispatch 'hl.dsp.focus({ window = \"class:^(obs)$\" })' || obs &"
-                   :class {obs_state.recording ? "obsicon rec" : "obsicon"}
-                   :tooltip {obs_state.recording ? "OBS — recording ● (click to focus)" : "OBS running (click to focus)"}
-            "󰻃")
-           (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
+         (label  :text batinfo) 
+         (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh quick_settings quick_toggle"
                  :class {quick_toggle ? "quick_center on" : "quick_center"}
                  :tooltip "Open Quick Settings"
            "") 
-          (button :onclick "kitty -d $HOME -e opencode &"
-                   :class "ai_center"
-                   :tooltip "Open Isaac AI"
-            "󰚩"))))
+         (button :onclick "kitty -d $HOME -e opencode &"
+                 :class "ai_center"
+                 :tooltip "Open Isaac AI"
+           "󰚩"))))
 
 ; Workspaces widget
 (defwidget workspaces []
@@ -101,10 +100,10 @@
             :style "background-image: url('${EWW_CONFIG_DIR}/themes/night_sky/images/workspace5.png');"
             :tooltip "Switch to workspace 5"
               "5")
-    ;; Dynamic buttons for workspaces above 5 (no background-image — add your own).
+    ;; Dynamic buttons for workspaces above 5.
     (for i in ws_extra
       (button :onclick `hyprctl dispatch 'hl.dsp.focus({ workspace = ${i} })'`
-              :class {active_workspace == "${i}" ? "workspace a ws_on" : "workspace a off"}
+              :class {active_workspace == "${i}" ? "workspace extra ws_on" : "workspace extra off"}
               :tooltip "Switch to workspace ${i}"
         "${i}"))))
 

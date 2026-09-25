@@ -26,7 +26,7 @@
 |"
                :class "main_btn_separator")
         (apps)
-        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle"
+        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle dock_busy"
                 :class "tray_button"
                 :valign "center"
                 :tooltip "System tray"
@@ -79,10 +79,10 @@
            :space-evenly false
            :spacing 10
            :visible {selected_app_pinned == "false"}
-        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh add ${selected_app_desktop} && eww close app_rightclick"
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh add ${selected_app_desktop} && eww close app_rightclick && eww update dock_busy=false &"
                 :class "long_btn"
           "Pin app 󰤱")
-        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww close app_rightclick"
+        (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww close app_rightclick && eww update dock_busy=false &"
                 :class "long_btn"
           "End Task"))
       (box :orientation "v"
@@ -96,7 +96,7 @@
                :spacing 10
             (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh open ${selected_app_id}"
                     :class "long_btn"
-              "Open new window")
+              "Open")
             (button :visible {p.active}
                     :onclick "$HOME/.config/eww/scripts/pinned_apps.sh close ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
                     :class "long_btn"
@@ -104,11 +104,11 @@
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} -"
                 :class "long_btn"
                 :visible {selected_app_id != apps.is_first}
-          " Move Left") 
+          "<- Move Left")
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh move ${selected_app_id} +"
                 :class "long_btn"
                 :visible {selected_app_id != apps.is_last}
-          "Move Right ")
+          "Move Right ->")
         (button :onclick "$HOME/.config/eww/scripts/pinned_apps.sh rm ${selected_app_id} && eww update dock_busy=false && eww close app_rightclick"
                 :class "long_btn"
           "Unpin 󰤰")))))

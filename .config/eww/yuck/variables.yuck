@@ -7,7 +7,7 @@
 (deflisten audio_state :initial '{"sink_vol":50,"source_vol":50,"sink_mute":false,"source_mute":false,"sinks":[],"sources":[],"cards":[]}' "~/.config/eww/scripts/audio_state.sh")
 (deflisten active_workspace :initial "1" "~/.config/eww/scripts/workspaces.sh")
 (deflisten obs_state :initial '{"running":false,"recording":false}' "~/.config/eww/scripts/obs_state.sh")
-(deflisten idle_awake :initial "false" "~/.config/eww/scripts/idle_state.sh")
+;; Widget visibility polls for the Settings > Widgets page.
 (deflisten sysmon :initial '{"cpu":0,"mem":0,"disk":0}' "~/.config/eww/scripts/sysmon.sh")
 (deflisten ws_extra :initial '[]' "~/.config/eww/scripts/workspaces_list.sh")
 (deflisten player_data :initial '{"text":"","artist":"","title":"","icon":"","shuffle_icon":"","repeat_icon":"","image":"none","visible":"false"}' "~/.config/eww/scripts/player_data.sh")
@@ -15,11 +15,12 @@
 (deflisten notif_history :initial "[]" "~/.config/eww/scripts/notif_history.sh")
 (deflisten airplane_mode :initial "󰀞" "~/.config/eww/scripts/airplane_mode.sh")
 (deflisten apps :initial '{"pinned":[],"active":[],"is_first":"","is_last":"","focused":"","dock_clear":true}' "~/.config/eww/scripts/apps.sh")
-(deflisten lyrics :initial '{"past":"","current":"","future":""}' "~/.config/eww/scripts/lyrics.py")
+(deflisten lyrics :initial '{"past":"","current":"","future":""}' "~/.config/eww/scripts/lyrics.py 2>/dev/null")
 (deflisten dns :initial '{"con":"","servers":[],"auto":true,"preset":"auto"}' "~/.config/eww/scripts/dns.sh")
 (deflisten clipboard_list :initial "[]" "~/.config/eww/scripts/clipboard.sh listen 50")
 (deflisten stopwatch_state :initial '{"time":"00:00:00","status":"idle"}' "~/.config/eww/scripts/clock.sh stopwatch-listen")
 (deflisten timer_state :initial '{"time":"00:05:00","status":"idle","total":300,"remaining":300,"progress":100}' "~/.config/eww/scripts/clock.sh timer-listen")
+(deflisten emoji_list :initial '[]' "~/.config/eww/scripts/emoji.sh list")
 
 ;; =============================================================================
 ;; POLLERS
@@ -61,7 +62,12 @@
 (defvar files_json "[]")
 (defvar emoji_query "")
 (defvar emoji_toggle false)
-(deflisten emoji_list :initial '[]' "~/.config/eww/scripts/emoji.sh list")
+;; Spotlight side panel — filled in when picking › on an app row.
+(defvar selected_launcher_id "")
+(defvar selected_launcher_name "")
+(defvar selected_launcher_exec "")
+(defvar selected_launcher_icon "")
+(defvar selected_launcher_desktop "")
 (defvar clipboard_query "")
 (defvar player_bg "rgba(9, 4, 9, 0.5)")
 (defvar player_text "#ffffff")
@@ -69,8 +75,7 @@
 (defvar audio_vis false)
 (defvar ui_vis false)
 (defvar as_vis false)
-(defvar sys_vis false)
-(defpoll wallpaper_name :interval "30s" "grep -m1 'path' ~/.config/hypr/hyprpaper.conf 2>/dev/null | awk '{print $NF}' | xargs basename 2>/dev/null || echo wallpaper.png")
+(defvar widget_vis false)
 (defvar dock_busy false)
 (defvar selected_app_icon "")
 (defvar selected_app_pinned true)
@@ -81,6 +86,16 @@
 (defvar timer_h 0)
 (defvar timer_m 5)
 (defvar timer_s 0)
+(defvar widget_clock_open false)
+(defvar widget_sys_open false)
+(defvar widget_music_open false)
+(defvar widget_calendar_open false)
+(defvar setup_step 1)
+;; Profile picture picker (launcher-style) — query, results, selection.
+(defvar profile_picker_query "")
+(defvar profile_images_json "[]")
+(defvar selected_profile_path "")
+(defvar selected_profile_name "")
 
 ; For more info go to https://github.com/zaydaansayed/dotfiles/blob/main/SUPPORT.md
 

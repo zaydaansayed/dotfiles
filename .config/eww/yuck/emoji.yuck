@@ -15,9 +15,9 @@
        :spacing 10
        :space-evenly false
     (box :orientation "h"
-         :spacing 5
+         :spacing 20
          :space-evenly false
-      (label :text "😀"
+      (label :text ">"
              :class "launcher_searchicon")
       (input :hexpand true
              :onchange "eww update emoji_query='${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'"))

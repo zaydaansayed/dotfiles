@@ -1,0 +1,62 @@
+@use "../colors.scss" as c;
+
+.fullscreen_window {
+  padding: 10px;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+}
+
+.setup_welcome {
+  font-size: 100px;
+}
+
+.setup_getstarted {
+  min-width: 300px;
+  font-size: 17px;
+  padding: 10px 0px;
+}
+
+.setup_back {
+  min-width: 300px;
+  font-size: 17px;
+  padding: 10px 0px;
+}
+
+.setup_getstarted:hover {
+  background-color: c.$on;
+  transition: background-color 0.3s ease-in-out;
+  box-shadow: 0 0 14px c.$accent_3_glow;
+  color: #000000;
+}
+
+.setup_bigtxt {
+  font-size: 50px;
+  margin-top: 150px;
+}
+
+.setup_theme_btn {
+  min-width: 500px;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.setup_image {
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  min-width: 100px;
+  margin-bottom: 5px;
+  min-height: 300px;
+
+  &.default_dark {
+    background-color: #1a1a1a;
+  }
+
+  &.night_sky {
+    background-image: url('./themes/night_sky/images/wallpaper.png');
+  }
+}
+
+.setup_end_message {
+  font-size: 100px;
+  margin-top: 315px;
+}

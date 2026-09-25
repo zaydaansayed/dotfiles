@@ -133,7 +133,7 @@ for d in dirs:
             age_days = max(0, (now - last) / 86400) if last else 9999
             apps.append({
                 "id": fn[:-len(".desktop")] if fn.endswith(".desktop") else fn, "name": name, "exec": exec_clean,
-                "terminal": terminal, "icon": icon,
+                "terminal": terminal, "icon": icon, "desktop": path,
                 "_score": (count * 100 - min(age_days, 365), name.lower()),
             })
             seen.add(fn)

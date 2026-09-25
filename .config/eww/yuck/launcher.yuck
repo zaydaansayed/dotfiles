@@ -1,5 +1,8 @@
 ;; =============================================================================
-;; launcher.yuck
+;; launcher.yuck — spotlight: apps + files + web search + app side panel.
+;; Opens with SUPER+SPACE. Typing filters apps (matches) and refreshes
+;; files_json via scripts/launcher-query.sh. Click an app to launch it,
+;; › opens its details in the side panel, + pins it (dock + main menu).
 ;; =============================================================================
 
 (defwindow launcher
@@ -8,80 +11,130 @@
   :stacking "fg"
   :focusable true
   (box :class "window"
-       :orientation "v"
-       :spacing 10
+       :orientation "h"
+       :spacing 12
        :space-evenly false
-     (box :orientation "h"
-          :spacing 5
-          :space-evenly false
-       (box :space-evenly false
-            :spacing 20
-            :hexpand true
-         (label :text ">"
-                :class "launcher_searchicon")
+    ;; LEFT: search input + results (apps first, then files, then web).
+    (box :orientation "v"
+         :spacing 10
+         :space-evenly false
+         :hexpand true
+      (box :orientation "h"
+           :spacing 5
+           :space-evenly false
+        (box :space-evenly false
+             :spacing 20
+             :hexpand true
+          (label :text ">"
+                 :class "launcher_searchicon")
           (input :hexpand true
                  :onchange "$HOME/dotfiles/.config/eww/scripts/launcher-query.sh '${replace(replace({}, "\\\\", "\\\\\\\\"), "'", "'\\''")}'")))
-    (scroll :vscroll true
-            :hscroll false
-            :vexpand true
-      (box :orientation "v"
-           :spacing 4
-           :space-evenly false
-        (for app in launcher_list
-          (box :orientation "h"
+      (scroll :vscroll true
+              :vexpand true
+              :hscroll false
+        (box :orientation "v"
+             :spacing 4
+             :space-evenly false 
+          (box :orientation "v"
                :space-evenly false
-               :spacing 5
-               :visible {matches(app.name, "(?i)${launcher_query}")}
-            (button :class "focusable launcher_app"
-                    :hexpand true 
-                    :onclick "$HOME/.config/eww/scripts/launcher.sh launch ${app.id}"
+               :spacing 3
+            (for app in launcher_list
               (box :orientation "h"
-                   :spacing 10
                    :space-evenly false
-                (image :icon {app.icon}
-                       :icon-size "dialog"
-                       :valign "center"
-                       :class "launcher_icon")
-                  (label :text {app.name})))
-            (button :onclick `~/.config/eww/scripts/pinned_apps.sh add ${app.id} && eww close launcher && eww update launcher_query="" 2>/dev/null || true && hyprctl dispatch 'hl.dsp.submap ("reset")'`
-                    :class "focusable app_pin"
-                    :tooltip "Pin to dock + main menu"
-                    :visible {jq(apps.pinned, "any(.id == \"${app.id}\")") == false}
-              "+")
-            (button :onclick `$HOME/dotfiles/.config/eww/scripts/websearch.sh '${replace(replace(app.name, "\\\\", "\\\\\\\\"), "'", "'\\''")}'`
-                    :class "focusable app_pin"
-                    :tooltip "Search the web for this app"
-              "⌕")))
-      ;; Web search fallback — searches the browser for the raw query.
-      (button :visible {launcher_query != ""}
-              :class "focusable launcher_app launcher_web"
-              :onclick `$HOME/dotfiles/.config/eww/scripts/websearch.sh '${replace(replace(launcher_query, "\\\\", "\\\\\\\\"), "'", "'\\''")}'`
-              :tooltip "Open in browser"
-        "⌕  Search web for '${launcher_query}'")
-      ;; File results — proper file search under $HOME (2+ chars).
-      (box :orientation "v"
-           :spacing 6
+                   :spacing 5
+                   :visible {matches(app.name, "(?i)${launcher_query}")}
+                (button :class "focusable launcher_app"
+                        :hexpand true
+                        :onclick "$HOME/.config/eww/scripts/launcher.sh launch ${app.id} &"
+                  (box :orientation "h"
+                       :spacing 10
+                       :space-evenly false
+                    (image :icon {app.icon}
+                           :icon-size "dialog"
+                           :valign "center"
+                           :class "launcher_icon")
+                      (label :text {app.name}))) 
+                ;; › fills the side panel (vars below) without launching.
+                (button :onclick `eww update selected_launcher_id='${app.id}' && eww update selected_launcher_name='${replace(replace(app.name, "\\\\", "\\\\\\\\"), "'", "'\\''")}' && eww update selected_launcher_exec='${replace(replace(app.exec, "\\\\", "\\\\\\\\"), "'", "'\\''")}' && eww update selected_launcher_icon='${app.icon}' && eww update selected_launcher_desktop='${app.desktop}'`
+                        :class {selected_launcher_id == app.id ? "focusable app_pin on" : "focusable app_pin"}
+                        :tooltip "Show details"
+                  "›"))))
+          (box :orientation "v"
+               :spacing 6
+               :space-evenly false
+               :visible {launcher_query != ""}
+            (label :text "Files"
+                   :halign "start"
+                   :class "launcher_section")
+            (for f in files_json
+              (button :class "focusable launcher_app"
+                      :hexpand true
+                      :onclick `xdg-open "${f.path}" && eww close launcher && eww update launcher_query="" && eww update files_json="[]" 2>/dev/null || true && hyprctl dispatch 'hl.dsp.submap ("reset")'`
+                      :tooltip {f.path}
+                (box :orientation "h"
+                     :spacing 10
+                     :space-evenly false
+                  (label :text "󰈙")
+                  (box :orientation "v"
+                       :space-evenly false
+                    (label :text {f.name}
+                           :halign "start"
+                           :limit-width 40)
+                    (label :text {f.path}
+                           :limit-width 55
+                           :class "launcher_filepath"))))))
+          ;; Web search fallback, last — apps stay before everything else.
+          (button :visible {launcher_query != ""}
+                  :class "focusable launcher_app launcher_web"
+                  :onclick `$HOME/dotfiles/.config/eww/scripts/websearch.sh '${replace(replace(launcher_query, "\\\\", "\\\\\\\\"), "'", "'\\''")}' &`
+                  :tooltip "Open in browser"
+            "⌕  Search web for '${launcher_query}'"))))
+    ;; RIGHT: side panel with the selected app's details + actions.
+    (box :orientation "v"
+         :spacing 8
+         :space-evenly false
+         :width 210
+         :class "launcher_detail"
+         :visible {selected_launcher_id != ""}
+      (box :orientation "h"
            :space-evenly false
-           :visible {launcher_query != ""}
-        (label :text "Files"
+        (label :text "Details"
+               :hexpand true
                :halign "start"
                :class "launcher_section")
-        (for f in files_json
-          (button :class "focusable launcher_app"
-                  :hexpand true
-                  :onclick `xdg-open "${f.path}" && eww close launcher && eww update launcher_query="" && eww update files_json="[]" 2>/dev/null || true && hyprctl dispatch 'hl.dsp.submap ("reset")'`
-                  :tooltip {f.path}
-            (box :orientation "h"
-                 :spacing 10
-                 :space-evenly false
-              (label :text "󰈙")
-              (box :orientation "v"
-                   :space-evenly false
-                (label :text {f.name}
-                       :limit-width 40)
-                (label :text {f.path}
-                       :limit-width 55
-                       :class "launcher_filepath"))))))))))
+        (button :onclick "eww update selected_launcher_id='' && eww update selected_launcher_name='' && eww update selected_launcher_exec='' && eww update selected_launcher_icon='' && eww update selected_launcher_desktop=''"
+                :class "app_pin"
+                :tooltip "Clear selection"
+          "")) 
+      (box :orientation "v"
+           :spacing 8
+           :space-evenly false
+           :visible {selected_launcher_id != ""}
+        (image :icon {selected_launcher_icon}
+               :icon-size "dialog"
+               :halign "center"
+               :class "launcher_detail_icon")
+        (label :text {selected_launcher_name}
+               :halign "center"
+               :limit-width 24)
+        (label :text {selected_launcher_exec}
+               :halign "center"
+               :limit-width 28
+               :class "launcher_filepath")
+        (button :class "focusable launcher_app"
+                :onclick "$HOME/.config/eww/scripts/launcher.sh launch ${selected_launcher_id}"
+                :tooltip "Launch now"
+          "▶ Launch")
+        (button :class "focusable launcher_app"
+                :visible {jq(apps.pinned, "any(.id == \"${selected_launcher_id}\")") == false}
+                :onclick `~/.config/eww/scripts/pinned_apps.sh add ${selected_launcher_id}`
+                :tooltip "Pin to dock + main menu"
+          "+ Pin")
+        (button :class "focusable launcher_app"
+                :visible {jq(apps.pinned, "any(.id == \"${selected_launcher_id}\")") == true}
+                :onclick `~/.config/eww/scripts/pinned_apps.sh rm ${selected_launcher_id}`
+                :tooltip "Unpin from dock + main menu"
+          "− Unpin")))))
 
 ;; =============================================================================
 ;; Made by Zaydaan Sayed 2026

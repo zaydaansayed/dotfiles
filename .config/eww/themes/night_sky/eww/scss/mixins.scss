@@ -28,6 +28,7 @@
   border-radius: 7px;
 
   &.nhis_box {
+    padding: 5px;
     margin-bottom: 5px;
   }
 
@@ -70,6 +71,11 @@
   &.settings_list {
     padding: 5px;
     padding-left: 10px;
+  }
+
+  &.setup_pfp {
+    border-radius: 15px;
+    padding: 15px;
   }
 }
 
@@ -116,6 +122,15 @@
   &.clock {
     color: c.$accent_3;
   }
+
+  &.kb {
+    padding: 20px 22px;
+  }
+
+  &.widget {
+    padding: 16px 18px;
+    margin: 4px;
+  }
 }
 
 .window_small {
@@ -144,6 +159,12 @@
   &.profile_picture {
     background-image: url('./images/profile_picture.png');
     min-height: 150px;
+  }
+
+  &.setup_profile_picture {
+    background-image: url('./images/profile_picture.png');
+    min-height: 300px;
+    min-width: 300px;
   }
 
   &.default_dark {

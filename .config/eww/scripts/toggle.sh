@@ -4,17 +4,22 @@
 # Avoids desync from boolean vars going stale after hoverlost/Escape/reload.
 # Returns 0 always so `&&` chains never break the close.
 set -u
-WIN="${1:-}"
-VAR="${2:-}"
-[[ -z "$WIN" ]] && { echo "usage: toggle.sh <window> [var]" >&2; exit 1; }
 
-is_open() { eww active-windows 2>/dev/null | grep -q ": $WIN\$"; }
+WIN="${1:-}"
+shift 1 || true
+
+is_open() { eww active-windows 2>/dev/null | grep -q ": $WIN$"; }
 
 if is_open; then
-  eww close "$WIN" 2>/dev/null || true
-  [[ -n "$VAR" ]] && eww update "$VAR=false" 2>/dev/null || true
+    eww close "$WIN" 2>/dev/null || true
+    for var in "$@"; do
+        eww update "$var=false" 2>/dev/null || true
+    done
 else
-  eww open --no-daemonize "$WIN" 2>/dev/null || true
-  [[ -n "$VAR" ]] && eww update "$VAR=true" 2>/dev/null || true
+    eww open "$WIN" 2>/dev/null || true
+    for var in "$@"; do
+        eww update "$var=true" 2>/dev/null || true
+    done
 fi
+
 exit 0

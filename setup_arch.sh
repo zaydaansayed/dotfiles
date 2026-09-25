@@ -1,0 +1,32 @@
+sudo pacman -S gtk-layer-shell udiskie socat jq ttf-jetbrains-mono hyprshot tlp base-devel git rust yazi neovim firefox fish
+git clone https://aur.archlinux.org/yay.git
+cd $HOME/yay
+makepkg -si
+yay -S weather-cli bibata-cursor-theme otf-monocraft pixora-icons-git
+git clone https://github.com/elkowar/eww
+cd $HOME/eww
+cargo build --release --no-default-features --features=wayland
+sudo mv target/release/eww /usr/bin/
+cd $HOME/dotfiles
+stow .
+link $HOME/dotfiles/applications/keybinds.desktop $HOME/.local/share/applications/keybinds.desktop
+link $HOME/dotfiles/applications/settings.desktop $HOME/.local/share/applications/settings.desktop
+$HOME/.config/eww/themes/night_sky/application.sh
+
+echo 'hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
+hl.exec_cmd("wl-paste --watch cliphist store")
+hl.exec_cmd("hypridle")
+hl.exec_cmd("mako")
+hl.exec_cmd("~/dotfiles/.config/eww/scripts/notification_popup.sh")
+hl.exec_cmd("eww daemon")
+hl.exec_cmd("eww open --no-daemonize setup")
+hl.exec_cmd("hyprpaper")
+hl.exec_cmd("udiskie --tray")' > $HOME/.config/hypr/modules/autostart.lua
+
+echo "firefox
+yazi
+nvim"
+
+echo "#############################################
+##PLEASE RESTART HYPRLAND TO FINISH SETUP!!##
+#############################################"

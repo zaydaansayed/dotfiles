@@ -1,0 +1,16 @@
+// profile_picker.scss — mirrors launcher.scss so the picker looks identical
+// to the launcher. Most rows reuse .launcher_app / .launcher_detail /
+// .launcher_section / .launcher_filepath directly in the yuck file; only
+// image-specific sizing lives here.
+
+.profile_picker_thumb {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 6px;
+}
+
+.profile_picker_preview {
+  border-radius: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}

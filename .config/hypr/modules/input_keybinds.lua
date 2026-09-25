@@ -38,53 +38,6 @@ hl.bind(mainMod .. " + A",      hl.dsp.exec_cmd("kitty"))
 hl.bind(mainMod .. " + S",      hl.dsp.window.close())
 hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + F",      hl.dsp.window.float({ action = "toggle" }))
-
-local zen_mode = false
-local zen_normal = {
-    gaps_in = 5,
-    gaps_out = 5,
-    border_size = 2,
-    rounding = 9,
-    active_border = { colors = { "rgb(E99AFF)", "rgb(549D9D)" }, angle = 0 },
-    inactive_border = "rgb(090409)",
-}
-
-hl.bind(mainMod .. " + E", function()
-    zen_mode = not zen_mode
-    if zen_mode then
-        hl.exec_cmd("eww close bar dock")
-        hl.config({
-            general = {
-                gaps_in = 0,
-                gaps_out = 0,
-                border_size = 1,
-                col = {
-                    active_border = "rgb(ffffff)",
-                    inactive_border = "rgb(ffffff)",
-                },
-            },
-            decoration = {
-                rounding = 0,
-            },
-        })
-    else
-        hl.exec_cmd("eww open-many bar dock --no-daemonize")
-        hl.config({
-            general = {
-                gaps_in = zen_normal.gaps_in,
-                gaps_out = zen_normal.gaps_out,
-                border_size = zen_normal.border_size,
-                col = {
-                    active_border = zen_normal.active_border,
-                    inactive_border = zen_normal.inactive_border,
-                },
-            },
-            decoration = {
-                rounding = zen_normal.rounding,
-            },
-        })
-    end
-end, { description = "Toggle borderless zen mode" })
 hl.bind(mainMod .. " + SPACE",  hl.dsp.exec_cmd("eww open --no-daemonize launcher"))
 hl.bind(mainMod .. " + SPACE",  hl.dsp.submap("eww_close_launcher"))
 hl.bind(mainMod .. " + P",      hl.dsp.window.pseudo())
@@ -92,8 +45,9 @@ hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize clipboard"))
 hl.bind(mainMod .. " + V",      hl.dsp.submap("eww_close_clipboard"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize setup"))
 hl.bind(mainMod .. " + I",      hl.dsp.exec_cmd("~/.config/hypr/scripts/hypridle-toggle.sh"), { description = "Toggle hypridle awake mode (no auto dim/lock)" })
--- Emoji picker (offline, copies + types via wtype); Escape closes via submap below
+-- Emoji picker (offline, copies); Escape closes via submap below
 hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd("~/.config/eww/scripts/toggle.sh emoji emoji_toggle"))
 hl.bind(mainMod .. " + PERIOD", hl.dsp.submap("eww_close_emoji"))
 

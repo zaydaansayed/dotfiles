@@ -1,0 +1,153 @@
+;; =============================================================================
+;; setup.yuck — first-run setup window for this rice.
+;; Open with: eww open --no-daemonize setup
+;; =============================================================================
+
+(defwindow setup
+  :monitor 0
+  :geometry (geometry :x "0px" :y "0px" :width "100%" :height "100%" :anchor "center")
+  :stacking "fg"
+  :focusable true
+  (box :class "fullscreen_window"
+       :orientation "v"
+       :spacing 10
+       :space-evenly false
+    (welcome)
+    (theme_selection)
+    (pfp_selection)
+    (setup_end)))
+
+(defwidget welcome []
+  (box :orientation "v"
+       :space-evenly false
+       :vexpand true
+       :visible {setup_step == 1}
+    (label :text "Welcome to THE goated rice"
+           :class "placeholder_txt"
+           :valign "start")
+    (label :text "welcome"
+           :class "setup_welcome"
+           :valign "center"
+           :vexpand true
+           :halign "center")
+    (button :onclick "eww update setup_step=2"
+            :class "setup_getstarted"
+            :halign "center"
+      "Get started  ")))
+
+(defwidget theme_selection []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 30
+       :vexpand true
+       :visible {setup_step == 2}
+    (label :text "Select a theme:"
+           :class "setup_bigtxt")
+    (box :orientation "h"
+         :space-evenly false
+         :halign "center"
+         :spacing 20
+      (button :onclick "$HOME/.config/eww/themes/default_dark/application.sh &"
+              :class {current_theme == "default_dark" ? "setup_theme_btn on" : "setup_theme_btn"}
+        (box :orientation "v"
+                   :space-evenly false 
+                (box :class "setup_image default_dark")
+                (box :orientation "v"
+                     :space-evenly false
+                     :spacing 8
+                  (label :text "Default dark")
+                  (label :text "A simple theme, themed after the 
+    simplicity of the world."
+                         :wrap true
+                         :halign "center"
+                         :class "placeholder_txt"))))
+      (button :onclick "$HOME/.config/eww/themes/night_sky/application.sh &"
+              :width 500
+              :class {current_theme == "night_sky" ? "setup_theme_btn on" : "setup_theme_btn"}
+              (box :orientation "v"
+                   :space-evenly false
+                (box :class "setup_image night_sky")
+                (box :orientation "v"
+                     :space-evenly false
+                     :spacing 8
+                  (label :text "Night sky")
+                  (label :text "A beutiful theme, themed after the 
+darkness and beauty of the night sky."
+                         :wrap true
+                         :halign "center"
+                         :class "placeholder_txt")))))
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 5
+         :halign "center"
+         :valign "end"
+         :vexpand true
+      (button :onclick "eww update setup_step=1"
+              :class "setup_back"
+        "   Back")
+      (button :onclick "eww update setup_step=3"
+              :class "setup_getstarted"
+        "Next  "))))
+
+(defwidget pfp_selection []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 30
+       :vexpand true
+       :visible {setup_step == 3}
+    (label :text "Choose a profile picture:"
+           :class "setup_bigtxt")
+    (box :orientation "v"
+         :space-evenly false
+         :spacing 10
+         :class "l2 setup_pfp"
+         :halign "center"
+      (box :class "image setup_profile_picture")
+      (label :text "Current profile picture
+ (the guy in the snow 
+  is the default one)"
+             :class "placeholder_txt"))
+    (button :onclick "$HOME/.config/eww/scripts/update_profile.sh &"
+            :class "setup_back"
+            :halign "center"
+        "Select a profile picture")
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 5
+         :halign "center"
+         :valign "end"
+         :vexpand true
+      (button :onclick "eww update setup_step=2"
+              :class "setup_back"
+        "   Back")
+      (button :onclick "eww update setup_step=4"
+              :class "setup_getstarted"
+        "Next  "))))
+
+(defwidget setup_end []
+  (box :orientation "v"
+       :space-evenly false
+       :vexpand true
+       :visible {setup_step == 4}
+    (label :text "Hope you enjoy"
+           :class "placeholder_txt"
+           :valign "start")
+    (label :text "You're all set"
+           :class "setup_end_message"
+           :halign "center")
+    (box :orientation "h"
+         :space-evenly false
+         :spacing 5
+         :halign "center"
+         :valign "end"
+         :vexpand true
+      (button :onclick "eww update setup_step=3"
+              :class "setup_back"
+        "   Back")
+      (button :onclick "eww close setup"
+              :class "setup_getstarted"
+        "Go to desktop"))))
+
+;; =============================================================================
+;; Made by Zaydaan Sayed 2026
+;; =============================================================================

@@ -22,8 +22,7 @@
         "Timer"))
     (stopwatch)
     (time)
-    (timer)
-    ))
+    (timer)))
 
 (defwidget time []
   (box :orientation "v"

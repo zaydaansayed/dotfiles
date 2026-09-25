@@ -18,20 +18,20 @@
              :halign "start"
              :class "settings_title")
        (button :class {connections_vis ? "settings_nav on" : "settings_nav"}
-               :onclick "eww update connections_vis=true audio_vis=false ui_vis=false as_vis=false sys_vis=false"
+               :onclick "eww update connections_vis=true audio_vis=false ui_vis=false as_vis=false widget_vis=false"
          "󱘖 Connections")
        (button :class {audio_vis ? "settings_nav on" : "settings_nav"}
-               :onclick "eww update connections_vis=false audio_vis=true ui_vis=false as_vis=false sys_vis=false"
+               :onclick "eww update connections_vis=false audio_vis=true ui_vis=false as_vis=false widget_vis=false"
          " Audio")
        (button :class {ui_vis ? "settings_nav on" : "settings_nav"}
-               :onclick "eww update connections_vis=false audio_vis=false ui_vis=true as_vis=false sys_vis=false"
+               :onclick "eww update connections_vis=false audio_vis=false ui_vis=true as_vis=false widget_vis=false"
          "󱂬 UI")
-       (button :class {sys_vis ? "settings_nav on" : "settings_nav"}
-               :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=false sys_vis=true"
-         "󰒓 System")
+       (button :class {widget_vis ? "settings_nav on" : "settings_nav"}
+               :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=false widget_vis=true && $HOME/.config/eww/scripts/open_widgets_get.sh &"
+         "󱍕 Widgets")
        (button :class {as_vis ? "settings_nav on" : "settings_nav"}
-               :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=true sys_vis=false"
-        (label :text "  About and support"
+               :onclick "eww update connections_vis=false audio_vis=false ui_vis=false as_vis=true widget_vis=false"
+        (label :text " About and support"
                :limit-width 0))
       (button :onclick "eww close settings"
               :class "settings_nav"
@@ -43,7 +43,7 @@
        (connections)
        (audio)
        (ui)
-       (systemset)
+       (widgetset)
        (about_support))))
 
 (defwidget connections []
@@ -475,14 +475,15 @@
                   :class "long_btn"
             "󱍕 Eww config"))))))
 
-; System settings page — brightness slider, hypridle awake toggle (SUPER+I),
-; wallpaper cycler. Sidebar button above toggles sys_vis.
-(defwidget systemset []
+; Widget settings page — show/hide the desktop widgets (clock/system/music).
+; Positions are edited in yuck/widgets.yuck (see HOW TO MOVE there).
+; Sidebar button above toggles widget_vis.
+(defwidget widgetset []
   (box :orientation "v"
        :space-evenly false
        :spacing 10
-       :visible sys_vis
-    (label :text "System"
+       :visible widget_vis
+    (label :text "Widgets"
            :halign "start"
            :class "settings_heading")
     (scroll :hscroll false
@@ -497,61 +498,96 @@
              :class "l2 settings_card"
           (box :orientation "h"
                :space-evenly false
-               :spacing 10
-            (label :text "󰃠"
+               :spacing 20
+            (label :text ""
                    :class "settings_big_icon")
             (box :orientation "v"
                  :space-evenly false
                  :hexpand true
-              (label :text "Display brightness — ${briginfo.brightness}%"
+              (label :text "Clock widget"
                      :halign "start")
-              (scale :value {briginfo.brightness}
-                     :min 5
-                     :max 100
-                     :hexpand true
-                     :onchange "brightnessctl set {}% &"))))
+              (label :text {widget_clock_open == "true" ? "Shown on desktop" : "Hidden"}
+                     :halign "start"
+                     :class "placeholder_txt")))
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh widget_clock widget_clock_open &"
+                  :class {widget_clock_open == "true" ? "long_btn on" : "long_btn"}
+            {widget_clock_open == "true" ? "Hide" : "Show"}))
         (box :orientation "v"
              :space-evenly false
              :spacing 8
              :class "l2 settings_card"
           (box :orientation "h"
                :space-evenly false
-               :spacing 10
-            (label :text "󰒓"
+               :spacing 20
+            (label :text ""
                    :class "settings_big_icon")
             (box :orientation "v"
                  :space-evenly false
                  :hexpand true
-              (label :text "Idle & lock"
+              (label :text "System monitor widget"
                      :halign "start")
-              (label :text {idle_awake == "true" ? "Awake — never dims or locks" : "Auto dim after 2m, lock after 10m"}
+              (label :text {widget_sys_open == "true" ? "Shown on desktop" : "Hidden"}
                      :halign "start"
                      :class "placeholder_txt")))
-          (button :onclick "$HOME/.config/hypr/scripts/hypridle-toggle.sh &"
-                  :class {idle_awake == "true" ? "long_btn on" : "long_btn"}
-                  :tooltip "Also bound to SUPER+I"
-            {idle_awake == "true" ? "Disable awake mode" : "Enable awake mode"}))
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh widget_sys widget_sys_open &"
+                  :class {widget_sys_open == "true" ? "long_btn on" : "long_btn"}
+            {widget_sys_open == "true" ? "Hide" : "Show"}))
         (box :orientation "v"
              :space-evenly false
              :spacing 8
              :class "l2 settings_card"
           (box :orientation "h"
                :space-evenly false
-               :spacing 10
-            (label :text ""
+               :spacing 20
+            (label :text ""
                    :class "settings_big_icon")
             (box :orientation "v"
                  :space-evenly false
                  :hexpand true
-              (label :text "Wallpaper"
+              (label :text "Now-playing widget"
                      :halign "start")
-              (label :text {wallpaper_name}
+              (label :text {widget_music_open == "true" ? "Shown on desktop" : "Hidden"}
                      :halign "start"
                      :class "placeholder_txt")))
-          (button :onclick "$HOME/dotfiles/.config/eww/scripts/wallpaper-next.sh &"
-                  :class "long_btn"
-                  :tooltip "Cycle ~/Pictures/Wallpapers + theme wallpapers"
-            "Next wallpaper"))))))
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh widget_music widget_music_open &"
+                  :class {widget_music_open == "true" ? "long_btn on" : "long_btn"}
+            {widget_music_open == "true" ? "Hide" : "Show"}))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (box :orientation "h"
+               :space-evenly false
+               :spacing 20
+            (label :text ""
+                   :class "settings_big_icon")
+            (box :orientation "v"
+                 :space-evenly false
+                 :hexpand true
+              (label :text "Calendar widget"
+                     :halign "start")
+              (label :text {widget_calendar_open == "true" ? "Shown on desktop" : "Hidden"}
+                     :halign "start"
+                     :class "placeholder_txt")))
+          (button :onclick "$HOME/dotfiles/.config/eww/scripts/toggle.sh widget_calendar widget_calendar_open &"
+                  :class {widget_calendar_open == "true" ? "long_btn on" : "long_btn"}
+            {widget_calendar_open == "true" ? "Hide" : "Show"}))
+        (box :orientation "v"
+             :space-evenly false
+             :spacing 8
+             :class "l2 settings_card"
+          (label :text "Move widgets"
+                 :halign "start")
+          (label :text "Edit the (geometry ...) lines in yuck/widgets.yuck, then reopen the widget."
+                 :halign "start"
+                 :show-truncated false
+                 :wrap true
+                 :class "placeholder_txt"))
+        (label :text "*To make widgets not open on startup edit ~/.config/hypr/modules/autostart.lua*"
+               :halign "start"
+               :show-truncated false
+               :wrap true
+               :class "placeholder_txt")))))
 
 (defwidget about_support []
   (box :orientation "v"
