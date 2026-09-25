@@ -1,4 +1,4 @@
-sudo pacman -S gtk-layer-shell udiskie socat stow jq ttf-jetbrains-mono hyprshot tlp libdbusmenu-gtk3 libdbusmenu-glib base-devel rust yazi neovim firefox fish
+sudo pacman -S gtk-layer-shell udiskie socat stow jq ttf-jetbrains-mono hyprshot tlp libdbusmenu-glib base-devel rust yazi neovim firefox fish
 cd $HOME
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
@@ -9,6 +9,7 @@ git clone https://github.com/elkowar/eww
 cd $HOME/eww
 cargo build --release --no-default-features --features=wayland
 sudo mv target/release/eww /usr/bin/
+sudo rm -rf $HOME/.config/hypr
 cd $HOME/dotfiles
 stow .
 link $HOME/dotfiles/applications/keybinds.desktop $HOME/.local/share/applications/keybinds.desktop
@@ -24,10 +25,6 @@ hl.exec_cmd("eww daemon")
 hl.exec_cmd("eww open --no-daemonize setup")
 hl.exec_cmd("hyprpaper")
 hl.exec_cmd("udiskie --tray")' > $HOME/.config/hypr/modules/autostart.lua
-
-echo "firefox
-yazi
-nvim"
 
 echo "#############################################
 ##PLEASE RESTART HYPRLAND TO FINISH SETUP!!##
