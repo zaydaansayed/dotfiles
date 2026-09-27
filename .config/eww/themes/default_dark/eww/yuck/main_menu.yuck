@@ -38,19 +38,19 @@
        :class "main"
        :vexpand true
        :hexpand true
-    (button :onclick "fuzzel & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "eww open launcher && hyprctl dispatch 'hl.dsp.submap(\"eww_close_launcher\")' && eww close main_menu || true; eww update main_toggle=false"
             :tooltip "List all apps"
             :class "main_app_launcher"
             :hexpand true
       "")
-    (button :onclick "firefox & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Firefox"
             :class "main_buttons"
             :hexpand true
       (box :orientation "h"
            :space-evenly false
            :spacing 3
-        (image :icon "firefox")
+        (image :icon "zen-browser")
         (label :text "Firefox")))
     (button :onclick "kitty & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Kitty"
@@ -207,17 +207,17 @@
   (box :orientation "h"
        :spacing 5
        :hexpand true
-    (button :onclick "firefox https://github.com & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://github.com & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Github"
             :class "main_shortcut github"
             :hexpand true
       "")
-    (button :onclick "firefox https://elkowar.github.io/eww/ & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://elkowar.github.io/eww/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Eww-documentation"
             :class "main_shortcut"
             :hexpand true
       "󰂺")
-    (button :onclick "firefox https://www.nerdfonts.com/cheat-sheet & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://www.nerdfonts.com/cheat-sheet & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Nerd fonts"
             :class "main_shortcut rest"
             :hexpand true
@@ -225,17 +225,17 @@
   (box :orientation "h"
        :spacing 5
        :hexpand true
-    (button :onclick "firefox https://www.reddit.com/r/unixporn/ & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://www.reddit.com/r/unixporn/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "r/unixporn"
             :class "main_shortcut rest"
             :hexpand true
       "")
-    (button :onclick "firefox https://www.reddit.com/r/thinkpad/ & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://www.reddit.com/r/thinkpad/ & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "r/thinkPad"
             :class "main_shortcut thinkpad"
             :hexpand true
       "")
-    (button :onclick "firefox https://www.youtube.com & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "zen-browser https://www.youtube.com & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "YouTube"
             :class "main_shortcut_yt"
             :hexpand true

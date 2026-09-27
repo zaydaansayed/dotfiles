@@ -1,5 +1,5 @@
 cd $HOME
-sudo pacman -S gtk-layer-shell npm udiskie stow lazygit socat imagemagick jq playerctl resvg hypridle brightnessctl ttf-jetbrains-mono-nerd hyprlock hyprshot mako tlp base-devel rust yazi neovim firefox fish cliphist
+sudo pacman -S gtk-layer-shell npm udiskie stow lazygit socat imagemagick jq playerctl resvg hypridle brightnessctl ttf-jetbrains-mono-nerd hyprlock hyprshot mako tlp base-devel rust yazi neovim zen-browser fish cliphist
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
 makepkg -si
@@ -33,7 +33,7 @@ hl.exec_cmd("eww open --no-daemonize setup")
 hl.exec_cmd("hyprpaper")
 hl.exec_cmd("udiskie --tray")' > $HOME/.config/hypr/modules/autostart.lua
 
-echo "firefox
+echo "zen
 yazi
 nvim" > $HOME/.config/eww/scripts/pinned_apps.conf
 

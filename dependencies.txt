@@ -18,7 +18,7 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - rust 
 - yazi 
 - neovim 
-- firefox 
+- zen-browser 
 - fish 
 - cliphist
 - playerctl
@@ -30,5 +30,5 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - pixora-icons-git 
 - ttf-google-sans
 - eww
-(you can experiment by not installing some dependencies like firefox isnt really required, but this isnt reccommended)
+(you can experiment by not installing some dependencies like zen-browser isnt really required, but this isnt reccommended)
 once you have installed all the dependencies you make run setup_unsupported.sh to get a fresh new looking rice.
