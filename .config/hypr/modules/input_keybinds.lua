@@ -45,7 +45,6 @@ hl.bind(mainMod .. " + D",      hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + V",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize clipboard"))
 hl.bind(mainMod .. " + V",      hl.dsp.submap("eww_close_clipboard"))
 hl.bind(mainMod .. " + L",      hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mainMod .. " + B",      hl.dsp.exec_cmd("eww open --toggle --no-daemonize setup"))
 hl.bind(mainMod .. " + I",      hl.dsp.exec_cmd("~/.config/hypr/scripts/hypridle-toggle.sh"), { description = "Toggle hypridle awake mode (no auto dim/lock)" })
 -- Emoji picker (offline, copies); Escape closes via submap below
 hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd("~/.config/eww/scripts/toggle.sh emoji emoji_toggle"))
