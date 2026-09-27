@@ -28,7 +28,8 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - weather-cli
 - hypruler
 - bibata-cursor-theme 
-- otf-monocraft 
+- otf-monocraft
+- hyprpicker
 - pixora-icons-git 
 - ttf-google-sans
 - eww

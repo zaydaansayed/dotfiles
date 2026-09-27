@@ -174,7 +174,7 @@
                 :class "small_btn"
                 :halign "start"
           "")
-        (button :onclick " eww close color_picker && sleep 0.2 && hyprpicker -a &"
+        (button :onclick " eww close color_picker && sleep 0.5 && hyprpicker -a &"
                 :tooltip "Pick a color"
                 :class "color_picker_btn"
           ""))
