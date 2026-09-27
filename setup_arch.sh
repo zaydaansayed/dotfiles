@@ -4,7 +4,7 @@ git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
 makepkg -si
 cd $HOME
-yay -S weather-cli bibata-cursor-theme otf-monocraft wallust-git pixora-icons-git ttf-google-sans zen-browser-bin
+yay -S weather-cli bibata-cursor-theme otf-monocraft hypruler wallust-git pixora-icons-git ttf-google-sans zen-browser-bin
 git clone https://github.com/elkowar/eww
 cd $HOME/eww
 cargo build --release --no-default-features --features=wayland

@@ -25,7 +25,8 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - playerctl
 - wallust
 - lazygit
-- weather-cli 
+- weather-cli
+- hypruler
 - bibata-cursor-theme 
 - otf-monocraft 
 - pixora-icons-git 
