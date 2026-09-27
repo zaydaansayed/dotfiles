@@ -1,10 +1,10 @@
 cd $HOME
-sudo pacman -S gtk-layer-shell npm udiskie stow socat imagemagick jq playerctl resvg brightnessctl ttf-jetbrains-mono-nerd hyprlock hyprshot mako tlp base-devel rust yazi neovim firefox fish cliphist
+sudo pacman -S gtk-layer-shell npm udiskie stow lazygit socat imagemagick jq playerctl resvg brightnessctl ttf-jetbrains-mono-nerd hyprlock hyprshot mako tlp base-devel rust yazi neovim firefox fish cliphist
 git clone https://aur.archlinux.org/yay.git
 cd $HOME/yay
 makepkg -si
 cd $HOME
-yay -S weather-cli bibata-cursor-theme otf-monocraft pixora-icons-git ttf-google-sans
+yay -S weather-cli bibata-cursor-theme otf-monocraft wallust-git pixora-icons-git ttf-google-sans
 git clone https://github.com/elkowar/eww
 cd $HOME/eww
 cargo build --release --no-default-features --features=wayland
