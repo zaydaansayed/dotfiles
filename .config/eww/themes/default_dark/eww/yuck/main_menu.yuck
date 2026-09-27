@@ -51,7 +51,7 @@
            :space-evenly false
            :spacing 3
         (image :icon "zen-browser")
-        (label :text "Firefox")))
+        (label :text "Zen browser")))
     (button :onclick "kitty -d $HOME & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Kitty"
             :class "main_buttons"
@@ -249,27 +249,27 @@
        :class "main"
        :hexpand true
        :vexpand true
-    (button :onclick "cd $HOME/Downloads && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME/Downloads -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Downloads folder"
             :hexpand true
       "󰉍   Downloads")
-    (button :onclick "cd $HOME/Documents && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME/Documents -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Documents folder"
             :hexpand true
       "󰈙  Documents")
-    (button :onclick "cd $HOME/Pictures && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME/Pictures -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Pictures folder"
             :hexpand true
       "   Pictures")
-    (button :onclick "cd $HOME/Desktop && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME/Desktop -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Desktop folder"
             :hexpand true
       "   Desktop")
-    (button :onclick "cd $HOME/Videos && kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME/Videos -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :class "main_buttons"
             :tooltip "Videos folder"
             :hexpand true
