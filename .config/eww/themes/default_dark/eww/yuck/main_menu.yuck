@@ -44,7 +44,7 @@
             :hexpand true
       "")
     (button :onclick "zen-browser & eww close main_menu || true; eww update main_toggle=false"
-            :tooltip "Firefox"
+            :tooltip "Zen browser"
             :class "main_buttons"
             :hexpand true
       (box :orientation "h"
@@ -52,7 +52,7 @@
            :spacing 3
         (image :icon "zen-browser")
         (label :text "Firefox")))
-    (button :onclick "kitty & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Kitty"
             :class "main_buttons"
             :hexpand true
@@ -70,7 +70,7 @@
            :spacing 3
         (image :icon "spotify-launcher")
         (label :text "Spotify")))
-    (button :onclick "kitty -e yazi & eww close main_menu || true; eww update main_toggle=false"
+    (button :onclick "kitty -d $HOME -e yazi & eww close main_menu || true; eww update main_toggle=false"
             :tooltip "Yazi"
             :class "main_buttons"
             :hexpand true
