@@ -19,7 +19,8 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - yazi 
 - neovim 
 - zen-browser 
-- fish 
+- fish
+- opencode
 - cliphist
 - playerctl
 - wallust
