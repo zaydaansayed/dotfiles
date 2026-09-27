@@ -1,7 +1,7 @@
 # zaydaansayed's rice
 
 Hyprland + eww desktop rice with two themes (`night_sky`, `default_dark`),
-a spotlight launcher, desktop widgets, and a one-command setup script.
+a spotlight launcher, desktop widgets, and a one-command setup script(for arch only).
 
 ![desktop preview](preview.png)
 
@@ -19,15 +19,23 @@ a spotlight launcher, desktop widgets, and a one-command setup script.
 - **Keybinds window** — via the Rice Keybinds app entry
 - **Emoji picker** (`SUPER+.`) — offline, copies + types your pick
 - **Awake mode** (`SUPER+I`) — toggles hypridle auto dim/lock with restart
-- **Zen mode** (`SUPER+E`) — borderless look toggle (gaps 0, 1px white border)
-- **Setup window + script** — `setup.sh [deps|link|theme|apps|all]` for new machines
+- **Setup window + script** for new machines
 
-## Install
+## Install on arch
 
 ```bash
-git clone <your-repo-url> ~/dotfiles
-cd ~/dotfiles
-./setup.sh all        # needs sudo for packages (or run steps separately)
+git clone zaydaansayed/dotfiles
+~/dotfiles/setup_arch.sh
+```
+
+Then log out and pick the **Hyprland** session.
+
+## Install on non-arch
+
+```bash
+git clone zaydaansayed/dotfiles
+# install dependencies from dependencies.txt
+~/dotfiles/setup_unsupported.sh
 ```
 
 Then log out and pick the **Hyprland** session.
@@ -41,7 +49,6 @@ Then log out and pick the **Hyprland** session.
 | SUPER+M | shutdown menu |
 | SUPER+L | lock |
 | SUPER+I | awake mode (no auto dim/lock) |
-| SUPER+E | borderless zen mode |
 | SUPER+F | float toggle |
 | SUPER+P / D | pseudotile / togglesplit |
 | SUPER+SPACE | spotlight launcher |
@@ -57,13 +64,16 @@ Full list lives in the Rice Keybinds app and `.config/hypr/modules/input_keybind
 
 ```text
 .config/
-  hypr/            Hyprland Lua config (hyprland.lua + modules/)
-  eww/             widgets + scripts (yuck/, scss/, scripts/)
-  eww/themes/      night_sky + default_dark (application.sh applies a theme)
-applications/      .desktop entries (installed by setup.sh link)
-setup.sh           new-machine setup (deps/link/theme/apps)
-preview.png        screenshot for posts like this one
-support.md         contact + issue links
+  hypr/              Hyprland Lua config (hyprland.lua + modules/)
+  eww/               widgets + scripts (yuck/, scss/, scripts/)
+  eww/themes/        night_sky + default_dark (application.sh applies a theme)
+applications/        .desktop entries (installed by setup.sh link)
+setup_arch.sh        new-machine setup (arch only)
+setup_unsupported.sh new-machine setup (non-arch)
+dependencies.txt     dependencies for non-arch users
+icon/                nvim icons cause i hate the default ones
+preview.png          screenshot for posts like this one
+support.md           contact + issue links
 ```
 
 Theme files are generated — `application.sh` rewrites `eww/eww.yuck` and

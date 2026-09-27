@@ -1,8 +1,11 @@
 .git
 applications
+setup_unsupported.sh
+icons
+dependencies.txt
 .stow-local-ignore
 LICENSE
 preview.png
 README.md
-setup.sh
+setup_arch.sh
 support.md

@@ -1,0 +1,31 @@
+If you're reading you probably arent using arch linux so that means that your distro hasnt been tested with this rice so if you encounter any problems please inform me at https://github.com/zaydaansayed/dotfiles/blob/main/support.md
+so here are all the dependencies you need before running setup_unsupported.sh:
+- gtk-layer-shell 
+- npm 
+- udiskie 
+- stow 
+- socat 
+- imagemagick 
+- jq 
+- resvg 
+- brightnessctl 
+- ttf-jetbrains-mono-nerd 
+- hyprlock 
+- hyprshot 
+- mako 
+- tlp 
+- base-devel 
+- rust 
+- yazi 
+- neovim 
+- firefox 
+- fish 
+- cliphist
+- weather-cli 
+- bibata-cursor-theme 
+- otf-monocraft 
+- pixora-icons-git 
+- ttf-google-sans
+- eww
+(you can experiment by not installing some dependencies like firefox isnt really required, but this isnt reccommended)
+once you have installed all the dependencies you make run setup_unsupported.sh to get a fresh new looking rice.

@@ -26,7 +26,7 @@
 |"
                :class "main_btn_separator")
         (apps)
-        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle dock_busy"
+        (button :onclick "$HOME/.config/eww/scripts/toggle.sh systemtray tray_toggle &"
                 :class "tray_button"
                 :valign "center"
                 :tooltip "System tray"
