@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Rice
+Exec=cd $HOME/dotfiles/.config/ && nvim
+Icon=nvim
+Terminal=true
+Categories=Settings;Utility;

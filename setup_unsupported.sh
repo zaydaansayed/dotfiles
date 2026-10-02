@@ -22,7 +22,7 @@ hl.exec_cmd("eww open --no-daemonize setup")
 hl.exec_cmd("hyprpaper")
 hl.exec_cmd("udiskie --tray")' > $HOME/.config/hypr/modules/autostart.lua
 
-echo "firefox
+echo "zen
 yazi
 nvim" > $HOME/.config/eww/scripts/pinned_apps.conf
 
