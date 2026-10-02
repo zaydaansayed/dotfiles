@@ -144,10 +144,9 @@
   :monitor 0
   :geometry (geometry :x "0px" :y "70px" :width "0px" :height "0px" :anchor "bottom center")
   :stacking "fg"
-  (eventbox :onhoverlost "eww close systemtray || true; eww update tray_toggle=false"
-    (systray :spacing 4
-             :prepend-new true
-             :class "window")))
+  (systray :spacing 4
+           :prepend-new true
+           :class "window"))
 
 ; Most other files will be in the variables.yuck file
 

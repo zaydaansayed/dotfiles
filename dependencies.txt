@@ -11,7 +11,8 @@ so here are all the dependencies you need before running setup_unsupported.sh:
 - brightnessctl 
 - ttf-jetbrains-mono-nerd 
 - hyprlock 
-- hyprshot 
+- hyprshot
+- imv
 - mako 
 - tlp 
 - base-devel 

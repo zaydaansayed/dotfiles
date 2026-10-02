@@ -5,6 +5,8 @@ vim.opt.conceallevel = 2
 
 require("config.lazy")
 
+require("config.cpp")
+
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 
