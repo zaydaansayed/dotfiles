@@ -1,5 +1,6 @@
 .git
 applications
+quickshell
 setup_unsupported.sh
 icons
 dependencies.txt
