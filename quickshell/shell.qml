@@ -2,26 +2,34 @@ import Quickshell
 import Quickshell.Io
 
 ShellRoot {
-    Variants {
-        model: Quickshell.screens
+  Variants {
+    model: Quickshell.screens
 
-        Bar {
-            required property var modelData
-            screen: modelData
-        }
+    Bar {
+      required property var modelData
+      screen: modelData
     }
+  }
 
-    LazyLoader {
-        id: launcherLoader
-        active: false
+  Popups { id: popups }
 
-        Launcher {
-            onCloseRequested: launcherLoader.active = false
-        }
+  IpcHandler {
+    target: "popups"
+    function vol(): void { popups.showVol() }
+    function brig(): void { popups.showBrig() }
+  }
+
+  LazyLoader {
+    id: launcherLoader
+    active: false
+
+    Launcher {
+      onCloseRequested: launcherLoader.active = false
     }
+  }
 
-    IpcHandler {
-        target: "launcher"
-        function toggle(): void { launcherLoader.active = !launcherLoader.active }
-    }
+  IpcHandler {
+    target: "launcher"
+    function open(): void { launcherLoader.active = true }
+  }
 }
